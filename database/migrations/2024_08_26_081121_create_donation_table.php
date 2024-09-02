@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('donation', function (Blueprint $table) {
+        Schema::create('donations', function (Blueprint $table) {
             $table->unsignedBigInteger('donation_id')->autoIncrement()->unique()->index();
             $table->string('donation_external_id',20)->comment("20YYMMDD-ABC123");
             $table->unsignedBigInteger('donor_id');
@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('tax_deduction_certificate_url',1023);
             $table->foreign('donor_id')->references('donor_id')->on('donors');
             $table->foreign('donor_external_id')->references('donor_external_id')->on('donors');
-            $table->foreign('subscription_external_id')->references('subscription_external_id')->on('subscription');
-            $table->foreign('stripe_subscription_id')->references('stripe_subscription_id')->on('subscription');
+            $table->foreign('subscription_external_id')->references('subscription_external_id')->on('subscriptions');
+            $table->foreign('stripe_subscription_id')->references('stripe_subscription_id')->on('subscriptions');
             $table->charset('utf8mb4');
             $table->collation('utf8mb4_general_ci');
             $table->timestamps();
@@ -39,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('donation');
+        Schema::dropIfExists('donations');
     }
 };

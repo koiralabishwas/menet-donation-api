@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscription', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->unsignedBigInteger('subscription_id')->autoIncrement();
             $table->string('subscription_external_id',36)->unique()->comment('uuid')->nullable();
             $table->string('stripe_subscription_id',100)->comment('Stripe Subscription Id')->unique()->nullable();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscription');
+        Schema::dropIfExists('subscriptions');
     }
 };
