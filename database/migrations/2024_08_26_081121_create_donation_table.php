@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('currency',3);
             $table->enum('type',['ONE_TIME','MONTHLY' , 'YEARLY']);
             $table->string('tax_deduction_certificate_url',1023);
-            $table->foreign('donor_id')->references('donor_id')->on('donor');
-            $table->foreign('donor_external_id')->references('donor_external_id')->on('donor');
+            $table->foreign('donor_id')->references('donor_id')->on('donors');
+            $table->foreign('donor_external_id')->references('donor_external_id')->on('donors');
             $table->foreign('subscription_external_id')->references('subscription_external_id')->on('subscription');
             $table->foreign('stripe_subscription_id')->references('stripe_subscription_id')->on('subscription');
             $table->charset('utf8mb4');

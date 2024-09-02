@@ -21,8 +21,8 @@ return new class extends Migration
             $table->unsignedInteger('amount');
             $table->string('currency' , 3);
             $table->unsignedTinyInteger('is_cancelled')->default(0);
-            $table->foreign('donor_id')->references('donor_id')->on('donor');
-            $table->foreign('donor_external_id')->references('donor_external_id')->on('donor');
+            $table->foreign('donor_id')->references('donor_id')->on('donors');
+            $table->foreign('donor_external_id')->references('donor_external_id')->on('donors');
             $table->charset('utf8mb4');
             $table->collation('utf8mb4_general_ci');
             $table->timestamps();

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('donor', function (Blueprint $table) {
+        Schema::create('donors', function (Blueprint $table) {
             $table->unsignedBigInteger('donor_id')->autoIncrement();
             $table->string('donor_external_id' , 36)->comment('uuid')->unique()->index();
             $table->string('name' , 255);
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('donor');
+        Schema::dropIfExists('donors');
     }
 };
