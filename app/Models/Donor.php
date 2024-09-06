@@ -5,30 +5,36 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
+/**
+ * @method static create(array $all)
+ */
 class Donor extends Model
 {
     use HasFactory;
+    // Table name, if not following Laravel naming convention
+    protected $table = 'donors';
 
-    // Fields that can be mass assigned
+    protected $primaryKey = 'donor_id';
+
+    // Primary key column name, if not 'id'
     protected $fillable = [
-        "donor_external_id",
-        "name",
-        "email",
-        "phone",
-        "country_code",
-        "postal_code",
-        "address",
-        "is_public",
-        "display_name",
-        "corporate_no",
-        "message",
+        'donor_external_id',
+        'name',
+        'email',
+        'phone',
+        'country_code',
+        'postal_code',
+        'address',
+        'is_public',
+        'display_name',
+        'corporate_no',
+        'message',
     ];
 
-    // Guarded fields, usually auto-incrementing IDs and timestamps
-    protected $guarded = [
-        'donor_id',
-        'created_at',
-        'updated_at',
+    // Cast is_public as a boolean
+    protected $casts = [
+        'is_public' => 'boolean',
     ];
 
 

@@ -5,11 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Donor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class DonorController extends Controller
 {
-    public function register(Request $request): JsonResponse
+
+    // GET all Donors
+    public function index(): JsonResponse
+    {
+        $donors = Donor::all();
+        return response()->json($donors);
+    }
+
+    // Get donor/{donor_external_id}
+    public function show(string $donor_external_id) : JsonResponse
+    {
+        $donor = DB::table("donors")->where("donor_external_id", $donor_external_id)->first();
+        return response()->json($donor);
+    }
+
+
+    public function store(Request $request): JsonResponse
     {
         // Define validation rules
         $validator = Validator::make($request->all(), [
@@ -37,6 +54,7 @@ class DonorController extends Controller
         // Create a new donor record
         $donor = Donor::create($request->all());
 
+
         // Return the newly created donor as JSON
         return response()->json([
             'status' => 'success',
@@ -44,7 +62,6 @@ class DonorController extends Controller
         ], 201); // 201 Created
     }
 
-    public function list(){
-        return response()->json(["hello" => "world"]);
-    }
+
+
 }
