@@ -19,14 +19,14 @@ class DonorController extends Controller
     }
 
     // Get donor/{donor_external_id}
-    public function show(string $donor_external_id) : JsonResponse
+    public function get(string $donor_external_id) : JsonResponse
     {
         $donor = DB::table("donors")->where("donor_external_id", $donor_external_id)->first();
         return response()->json($donor);
     }
 
 
-    public function store(Request $request): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         // Define validation rules
         $validator = Validator::make($request->all(), [
