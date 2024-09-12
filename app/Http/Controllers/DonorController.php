@@ -55,6 +55,7 @@ class DonorController extends Controller
         $donor = Donor::create($request->all());
 
 
+
         // Return the newly created donor as JSON
         return response()->json([
             'status' => 'success',

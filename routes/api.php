@@ -9,7 +9,7 @@ Route::get('/donor',[DonorController::class,'index']);
 Route::get('donor/{donor_external_id}',[DonorController::class,'get']);
 Route::post('/donor',[DonorController::class,'create']);
 
-Route::get('/checkout-session',[CheckoutSessionController::class,'create']);
+Route::post('/checkout-session',[CheckoutSessionController::class,'create']);
 
 
 //use for debugging functions or routes
