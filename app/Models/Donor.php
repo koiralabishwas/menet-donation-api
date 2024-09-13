@@ -20,6 +20,7 @@ class Donor extends Model
     // Primary key column name, if not 'id'
     protected $fillable = [
         'donor_external_id',
+        'stripe_customer_id',
         'name',
         'email',
         'phone',
@@ -30,6 +31,7 @@ class Donor extends Model
         'display_name',
         'corporate_no',
         'message',
+        'stripe_customer_object',
     ];
 
     // Cast is_public as a boolean

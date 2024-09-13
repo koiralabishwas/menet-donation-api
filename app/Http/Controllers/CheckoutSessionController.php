@@ -7,6 +7,7 @@ use App\Models\Donor;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Stripe\Customer;
@@ -17,7 +18,7 @@ class CheckoutSessionController extends Controller
     /**
      * @throws ValidationException
      */
-    public function create(Request $request) : JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'customer.name' => 'required|string',
@@ -42,11 +43,16 @@ class CheckoutSessionController extends Controller
 
         $data = $validator->validated();
 
+        $donor = new Donor();
+
         // Initialize strip
         try {
             Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-            // first create a custom external_id
+
+            // Generate a custom external_id for tracking
             $external_id = Helpers::generateUuid();
+
+            // Create the customer in Stripe
             $customer = Customer::create([
                 'name' => $data['customer']['name'],
                 'email' => $data['customer']['email'],
@@ -61,34 +67,37 @@ class CheckoutSessionController extends Controller
                 'metadata' => ['donor_external_id' => $external_id],
             ]);
 
-//            $donor = Donor::create([
-//                'donor_external_id' => $external_id,
-//                'stripe_customer_id' => $customer->id,
-//                'name' => $data['customer']['name'],
-//                'email' => $data['customer']['email'],
-//                'phone' => $data['customer']['phone'],
-//                'country_code' => $data['customer']['address']['country'],
-//                'postal_code' => $data['customer']['address']['postal_code'],
-//                'address' => implode(', ', [
-//                    $data['customer']['address']['city'],
-//                    $data['customer']['address']['line1'],
-//                    $data['customer']['address']['line2'],
-//                ]),
-//                'is_public' => $data['customer']['is_public'],
-//                'display_name' => $data['customer']['display_name'],
-//                'corporate_no' => $data['customer']['corporate_no'],
-//                'message' => $data['customer']['message'],
-//                'stripe_customer_object' => json_encode($customer),
-//            ]);
+            // Store the customer information in the database
+            $donor = Donor::create([
+                'donor_external_id' => $external_id,  // Custom external ID
+                'stripe_customer_id' => $customer->id, // Stripe customer ID
+                'name' => $customer->name,             // Customer name from Stripe response
+                'email' => $customer->email,           // Customer email from Stripe response
+                'phone' => $customer->phone,           // Customer phone from Stripe response
+                'country_code' => $customer->address['country'],  // Country code from Stripe address
+                'postal_code' => $customer->address['postal_code'], // Postal code from Stripe address
+                'address' => implode(', ', [
+                    $customer->address['city'],        // City from Stripe address
+                    $customer->address['line1'],       // Line 1 from Stripe address
+                    $customer->address['line2'],       // Line 2 from Stripe address
+                ]),
+                'is_public' => $data['customer']['is_public'],     // Is public from request data
+                'display_name' => $data['customer']['display_name'], // Display name from request data
+                'corporate_no' => $data['customer']['corporate_no'], // Corporate number from request data
+                'message' => $data['customer']['message'],         // Message from request data
+                'stripe_customer_object' => json_encode($customer), // Entire Stripe customer object as JSON
+            ]);
+
+            $donor->stripe_customer_object = json_decode($donor->stripe_customer_object , true);
 
 
 
 
-        }catch (Exception $e) {
+            return response()->json(['donor' => $donor])->setStatusCode(201);
+        } catch (Exception $e) {
+            // Log the error and return a 500 error response
+            Log::error('Error creating donor and Stripe customer: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
-
-
-        return response()->json($customer);
     }
 }
