@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Stripe\Customer;
-use Stripe\Stripe;
+use App\Providers\StripeProvider;
 
 class CheckoutSessionController extends Controller
 {
@@ -20,6 +19,7 @@ class CheckoutSessionController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
+//        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
         $validator = Validator::make($request->all(), [
             'customer.name' => 'required|string',
             'customer.email' => 'required|email',
@@ -43,17 +43,14 @@ class CheckoutSessionController extends Controller
 
         $data = $validator->validated();
 
-        $donor = new Donor();
-
         // Initialize strip
         try {
-            Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
             // Generate a custom external_id for tracking
             $external_id = Helpers::generateUuid();
 
             // Create the customer in Stripe
-            $customer = Customer::create([
+            $customer  = StripeProvider::createCustomer([
                 'name' => $data['customer']['name'],
                 'email' => $data['customer']['email'],
                 'phone' => $data['customer']['phone'],
@@ -89,11 +86,10 @@ class CheckoutSessionController extends Controller
             ]);
 
             $donor->stripe_customer_object = json_decode($donor->stripe_customer_object , true);
+            $price = StripeProvider::createPrice($data['product_id'], $data['price']);
 
+            return response()->json(['createdPrice' => $price , "donor" => $donor]);
 
-
-
-            return response()->json(['donor' => $donor])->setStatusCode(201);
         } catch (Exception $e) {
             // Log the error and return a 500 error response
             Log::error('Error creating donor and Stripe customer: ' . $e->getMessage());

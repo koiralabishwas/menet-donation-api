@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Stripe\Customer;
 use Stripe\StripeClient;
 
 class StripeProvider extends ServiceProvider
@@ -12,10 +13,9 @@ class StripeProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(StripeClient::class,function(){
+        $this->app->singleton(StripeClient::class, function () {
             return new StripeClient(env('STRIPE_SECRET_KEY'));
         });
-
     }
 
     /**
@@ -26,9 +26,46 @@ class StripeProvider extends ServiceProvider
         //
     }
 
-    public static function createCustomer(array $customerData)
+    /**
+     * Create a Stripe customer.
+     *
+     * @param array $customerData
+     * @return Customer
+     */
+    public static function createCustomer(array $customerData): Customer
     {
         $stripe = app(StripeClient::class);
         return $stripe->customers->create($customerData);
+    }
+
+
+    public static function searchPrice(string $productId , int $amount)
+    {
+        $stripe = app(StripeClient::class);
+        $existingPrice = $stripe->prices->search([
+            'query' => "active:\"true\" AND product:\"$productId\" AND metadata[\"amount\"]:\"$amount\"",
+        ]);
+        if ($existingPrice->data){
+            return ($existingPrice->data[0]);
+        }
+        return null;
+    }
+
+    public static function createPrice(string $productId , int $amount)
+    {
+        $stripe = app(StripeClient::class);
+
+        $existingPrice = self::searchPrice($productId, $amount);
+
+        if ($existingPrice) {
+            return $existingPrice;
+        }
+
+        return $stripe->prices->create([
+            'product' => $productId,
+            'currency' => "jpy",
+            'unit_amount' => $amount,
+            'metadata' => ['amount' => $amount],
+        ]);
     }
 }
