@@ -7,10 +7,10 @@ use App\Models\Donor;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Providers\StripeProvider;
+use Stripe\StripeClient;
 
 class CheckoutSessionController extends Controller
 {
@@ -45,6 +45,7 @@ class CheckoutSessionController extends Controller
 
         // Initialize strip
         try {
+            $stripe = new StripeClient(env('STRIPE_SECRET_KEY'));
 
             // Generate a custom external_id for tracking
             $external_id = Helpers::generateUuid();
@@ -88,21 +89,24 @@ class CheckoutSessionController extends Controller
             $donor->stripe_customer_object = json_decode($donor->stripe_customer_object, true);
             $price = StripeProvider::createPrice($data['product_id'], $data['price']);
 
-            $checkoutSession = StripeProvider::createCheckoutSession([
-                'success_url' => route('https://example.com/success'),
-                'line_items' => [
+            $checkoutSession = $stripe->checkout->sessions->create([
+                'success_url' => 'https://www.google.com',
+                'ui_mode' => "embedded",
+                'customer' => $customer->id,
+                'payment_method_types' => ['card'],
+                'line_items' => [[
                     'price' => $price->id,
                     'quantity' => 1
-                ],
+                ]],
                 'automatic_tax' => ['enabled' => false],
                 'mode' => 'payment',
-                'return_url' => route('https://localhost:3000/'),
-                'metadata' => [
-                    'donor_id' => $donor->id,
-                    'donor_external_id' => $external_id,
-//                    'subscription_id' => $data['///////'],
-                ]
+                'return_url' => 'https://www.google.com',
+//                'metadata' => [
+//                    'donor_id' => $donor->donor_id,
+//                    'donor_external_id' => $external_id,
+//                ]
             ]);
+
 
 
             return response()->json([
@@ -115,8 +119,7 @@ class CheckoutSessionController extends Controller
 
         } catch (Exception $e) {
             // Log the error and return a 500 error response
-            Log::error('Error creating donor and Stripe customer: ' . $e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => $e->getMessage() , "error detail" => $e], 500);
         }
     }
 }

@@ -70,8 +70,8 @@ class StripeProvider extends ServiceProvider
         ]);
     }
 
-    public static function createCheckoutSession($params) : Session {
-        $stripe = app(StripeClient::class);
-        return $stripe->checkout->sessions->create($params);
-    }
+//    public static function createCheckoutSession($params) : Session {
+//        $stripe = app(StripeClient::class);
+//        return $stripe->checkout->sessions->create($params);
+//    }
 }
