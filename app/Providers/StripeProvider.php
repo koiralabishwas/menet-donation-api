@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\StripeClient;
 
@@ -67,5 +68,10 @@ class StripeProvider extends ServiceProvider
             'unit_amount' => $amount,
             'metadata' => ['amount' => $amount],
         ]);
+    }
+
+    public static function createCheckoutSession($params) : Session {
+        $stripe = app(StripeClient::class);
+        return $stripe->checkout->sessions->create($params);
     }
 }

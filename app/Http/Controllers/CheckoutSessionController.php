@@ -50,7 +50,7 @@ class CheckoutSessionController extends Controller
             $external_id = Helpers::generateUuid();
 
             // Create the customer in Stripe
-            $customer  = StripeProvider::createCustomer([
+            $customer = StripeProvider::createCustomer([
                 'name' => $data['customer']['name'],
                 'email' => $data['customer']['email'],
                 'phone' => $data['customer']['phone'],
@@ -85,10 +85,33 @@ class CheckoutSessionController extends Controller
                 'stripe_customer_object' => json_encode($customer), // Entire Stripe customer object as JSON
             ]);
 
-            $donor->stripe_customer_object = json_decode($donor->stripe_customer_object , true);
+            $donor->stripe_customer_object = json_decode($donor->stripe_customer_object, true);
             $price = StripeProvider::createPrice($data['product_id'], $data['price']);
 
-            return response()->json(['createdPrice' => $price , "donor" => $donor]);
+            $checkoutSession = StripeProvider::createCheckoutSession([
+                'success_url' => route('https://example.com/success'),
+                'line_items' => [
+                    'price' => $price->id,
+                    'quantity' => 1
+                ],
+                'automatic_tax' => ['enabled' => false],
+                'mode' => 'payment',
+                'return_url' => route('https://localhost:3000/'),
+                'metadata' => [
+                    'donor_id' => $donor->id,
+                    'donor_external_id' => $external_id,
+//                    'subscription_id' => $data['///////'],
+                ]
+            ]);
+
+
+            return response()->json([
+                'createdPrice' => $price,
+                "donor" => $donor,
+                "id" => $checkoutSession->id,
+                'client_secret' => $checkoutSession->client_secret,
+                'priceId' => $price->id
+            ]);
 
         } catch (Exception $e) {
             // Log the error and return a 500 error response
