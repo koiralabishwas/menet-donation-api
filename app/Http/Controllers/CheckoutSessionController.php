@@ -91,7 +91,7 @@ class CheckoutSessionController extends Controller
 
             $checkoutSession = $stripe->checkout->sessions->create([
                 'success_url' => 'https://www.google.com',
-                'ui_mode' => "embedded",
+                'ui_mode' => "hosted",
                 'customer' => $customer->id,
                 'payment_method_types' => ['card'],
                 'line_items' => [[
@@ -100,11 +100,6 @@ class CheckoutSessionController extends Controller
                 ]],
                 'automatic_tax' => ['enabled' => false],
                 'mode' => 'payment',
-                'return_url' => 'https://www.google.com',
-//                'metadata' => [
-//                    'donor_id' => $donor->donor_id,
-//                    'donor_external_id' => $external_id,
-//                ]
             ]);
 
 
@@ -114,7 +109,8 @@ class CheckoutSessionController extends Controller
                 "donor" => $donor,
                 "id" => $checkoutSession->id,
                 'client_secret' => $checkoutSession->client_secret,
-                'priceId' => $price->id
+                'priceId' => $price->id,
+                "checkout-session" => $checkoutSession
             ]);
 
         } catch (Exception $e) {
