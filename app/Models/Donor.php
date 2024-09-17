@@ -13,6 +13,7 @@ class Donor extends Model
 {
     use HasFactory;
     // Table name, if not following Laravel naming convention
+    public mixed $stripe_customer_object;
     protected $table = 'donors';
 
     protected $primaryKey = 'donor_id';
