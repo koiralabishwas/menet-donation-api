@@ -13,8 +13,6 @@ class Donor extends Model
 {
     use HasFactory;
 
-    public mixed $stripe_customer_object = null;
-
     protected $table = 'donors';
 
     protected $primaryKey = 'donor_id';
