@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
+use Stripe\Price;
 use Stripe\StripeClient;
 
 class StripeProvider extends ServiceProvider
@@ -31,12 +32,25 @@ class StripeProvider extends ServiceProvider
      * Create a Stripe customer.
      *
      * @param array $customerData
+     * @param string $externalId
      * @return Customer
      */
-    public static function createCustomer(array $customerData): Customer
+    public static function createCustomer(array $customerData , string $externalId): Customer
     {
         $stripe = app(StripeClient::class);
-        return $stripe->customers->create($customerData);
+        return $stripe->customers->create([
+            'name' => $customerData['name'],
+            'email' => $customerData['email'],
+            'phone' => $customerData['phone'],
+            'address' => [
+                'country' => $customerData['address']['country'],
+                'postal_code' => $customerData['address']['postal_code'],
+                'city' => $customerData['address']['city'],
+                'line1' => $customerData['address']['line1'],
+                'line2' => $customerData['address']['line2'],
+            ],
+            'metadata' => ['donor_external_id' => $externalId],
+        ]);
     }
 
 
@@ -52,7 +66,7 @@ class StripeProvider extends ServiceProvider
         return null;
     }
 
-    public static function createPrice(string $productId , int $amount)
+    public static function createPrice(string $productId , int $amount) : Price
     {
         $stripe = app(StripeClient::class);
 
@@ -70,8 +84,20 @@ class StripeProvider extends ServiceProvider
         ]);
     }
 
-//    public static function createCheckoutSession($params) : Session {
-//        $stripe = app(StripeClient::class);
-//        return $stripe->checkout->sessions->create($params);
-//    }
+    public static function createCheckoutSession(string $customerId , string $priceId) : Session {
+        $stripe = app(StripeClient::class);
+        return $stripe->checkout->sessions->create([
+            'success_url' => 'https://www.google.com',
+            'ui_mode' => "hosted",
+            'customer' => $customerId,
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price' => $priceId,
+                'quantity' => 1
+            ]],
+            'automatic_tax' => ['enabled' => false],
+            'mode' => 'payment',
+        ]);
+
+    }
 }
