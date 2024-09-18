@@ -21,7 +21,7 @@ class CheckoutSessionController extends Controller
         try {
             $externalId = Helpers::generateUuid();
 
-            $stripeCustomer = StripeProvider::createCustomer($data['customer'], $externalId);
+            $stripeCustomer = StripeProvider::createCustomer($data->customer, $externalId);
 
             $donor = DonorRepository::storeDonor($data, $stripeCustomer , $externalId);
             /**
@@ -48,7 +48,12 @@ class CheckoutSessionController extends Controller
             ], 201);
 
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage() , "error detail" => $e->getFile()], 500);
+            return response()->json([
+                'status' => 500,
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], 500);
         }
     }
 }
