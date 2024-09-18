@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 /**
- * @method static create(array $all)
+ * @method static Donor updateOrCreate(array $attributes, array $values = [])
  */
 class Donor extends Model
 {
