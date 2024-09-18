@@ -12,8 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 class Donor extends Model
 {
     use HasFactory;
-    // Table name, if not following Laravel naming convention
-    public mixed $stripe_customer_object;
+
+    public mixed $stripe_customer_object = null;
+
     protected $table = 'donors';
 
     protected $primaryKey = 'donor_id';

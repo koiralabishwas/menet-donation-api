@@ -21,10 +21,12 @@ class CheckoutSessionController extends Controller
         try {
             $externalId = Helpers::generateUuid();
 
-            $stripeCustomer = StripeProvider::createCustomer($data['customer'] , $externalId);
-            $donor = DonorRepository::storeDonor($data, $stripeCustomer , $externalId);
+            $stripeCustomer = StripeProvider::createCustomer($data->customer, $externalId);
 
-            $stripePrice = StripeProvider::createPrice($data['product_id'], $data['price']);
+            $donor = DonorRepository::storeDonor($data, $stripeCustomer , $externalId);
+            $donor["stripe_customer_object"] = json_decode($donor->stripe_customer_object);
+
+            $stripePrice = StripeProvider::createPrice($data->product_id, $data->price);
 
             $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id);
 
