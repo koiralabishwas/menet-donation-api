@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class Helpers
 {
-    public static function generateUuid() : string
+    public static function CreateExternalIdfromDate() : string
     {
         $fullYear = date('Y');
         $date = date('md');
@@ -14,5 +14,10 @@ class Helpers
         $randomPart = Str::upper(Str::random(6));
 
         return "$fullYear$date-$randomPart";
+    }
+
+    public static function createUuid() : String
+    {
+        return Str::uuid()->toString();
     }
 }

@@ -14,12 +14,12 @@ class CheckoutSessionController extends Controller
 
     public function create(DonationFormRequest $request): JsonResponse
     {
-        // Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
         $data = $request->validated();
 
         try {
-            $externalId = Helpers::generateUuid();
+            //TO FIX? : 毎回おなじdonorで新しいexternalID作られるから、DBとmetadataに保存したところでよ、、、、、
+            $externalId = Helpers::createUuid();
 
             $stripeCustomer = StripeProvider::createCustomer($data['customer'], $externalId);
 
