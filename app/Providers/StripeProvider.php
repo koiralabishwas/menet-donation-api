@@ -7,6 +7,7 @@ use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Price;
 use Stripe\StripeClient;
+use Stripe\Webhook;
 
 class StripeProvider extends ServiceProvider
 {
@@ -52,7 +53,6 @@ class StripeProvider extends ServiceProvider
             'metadata' => ['donor_external_id' => $externalId],
         ]);
     }
-
 
     public static function searchPrice(string $productId , int $amount)
     {
@@ -100,4 +100,6 @@ class StripeProvider extends ServiceProvider
         ]);
 
     }
+
+
 }

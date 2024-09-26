@@ -3,6 +3,7 @@
 use App\Http\Controllers\CheckoutSessionController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\DonorController;
+use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/donor',[DonorController::class,'index']);
@@ -14,3 +15,5 @@ Route::post('/checkout-session',[CheckoutSessionController::class,'create']);
 
 //use for debugging functions or routes
 Route::get('/debug' ,[DebugController::class,'index'] );
+
+Route::post('/webhook',[WebhookController::class,'create'] );
