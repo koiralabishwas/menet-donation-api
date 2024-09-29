@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\SignatureVerificationException;
-use Stripe\StripeClient;
 use Stripe\Webhook;
 
 class WebhookController extends Controller
 {
     /**
-     * @param Request $request
      * @throws SignatureVerificationException
      */
-    public function create(Request $request): \Illuminate\Http\JsonResponse
+    public function create(): JsonResponse
     {
-        $stripe = new StripeClient(env('STRIPE_SECRET_KEY'));
 
         $endpoint_secret = 'whsec_66d1bc562f01853a93c4c10ab740b0bbd30aa4084a2fd9e5a300473917bc2f8f';
 

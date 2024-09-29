@@ -1,0 +1,4 @@
+1.donor external ID changing every time with donor of same email
+    寄付証明書取得の際に、donationテーブルに紐付いているexternalID ばらばら
+
+2.多分webhook の方で, 設計⑭やらなければ行けないかも
