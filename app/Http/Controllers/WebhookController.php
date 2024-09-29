@@ -31,8 +31,9 @@ class WebhookController extends Controller
                 return response()->json($paymentIntent);
             // ... handle other event types
             default:
-                echo 'Received unknown event type ' . $event->type;
-                return response()->json($event->data);
-        };
+                return response()->json($event->type);
+        }
+
+
     }
 }
