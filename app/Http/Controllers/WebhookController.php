@@ -26,8 +26,8 @@ class WebhookController extends Controller
 
         switch ($event->type) {
             case 'payment_intent.succeeded':
-                $paymentIntent = $event->data;
-                Log::info('Payment Intent Succeeded', ['payment_intent' => $paymentIntent]);
+                $paymentIntent = json_encode($event->data);
+                Log::info('Payment Intent Succeeded', [$paymentIntent]);
                 return response()->json($paymentIntent);
             // ... handle other event types
             default:
