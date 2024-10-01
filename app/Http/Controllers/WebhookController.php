@@ -25,6 +25,7 @@ class WebhookController extends Controller
         );
 
         switch ($event->type) {
+            // for onetime payment
             case 'payment_intent.succeeded':
             $paymentIntent = json_encode($event->data);
                 Log::info('Payment Intent Succeeded', [$paymentIntent]);
