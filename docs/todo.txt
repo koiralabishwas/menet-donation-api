@@ -1,0 +1,1 @@
+1. check existing donor from db and return {stripe_customer_object} if existing.
