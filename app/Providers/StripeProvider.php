@@ -41,9 +41,11 @@ class StripeProvider extends ServiceProvider
     public static function createCustomer(array $customerData): Customer
     {
         $stripe = app(StripeClient::class);
+
+        // db から取得して返したほうが確実？
         $existing = StripeProvider::searchCustomerFromEmail($customerData['email']);
 
-        if ($existing->data[0]->email) {
+        if (!empty($existing->data[0])) {
             return $existing->data[0];
         }
         $externalId = Helpers::createUuid();

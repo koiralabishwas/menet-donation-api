@@ -10,7 +10,7 @@ class DebugController extends Controller
 {
     public function index(): JsonResponse
     {
-        $customer = StripeProvider::searchCustomerFromEmail("c@gmail.com");
+        $customer = StripeProvider::searchCustomerFromEmail("cafasdaa@gmail.com");
 
         return response()->json($customer);
 
