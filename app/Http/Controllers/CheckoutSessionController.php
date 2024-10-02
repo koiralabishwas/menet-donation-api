@@ -19,11 +19,11 @@ class CheckoutSessionController extends Controller
 
         try {
             //TO FIX? : 毎回おなじdonorで新しいexternalID作られるから、DBとmetadataに保存したところでよ、、、、、
-            $externalId = Helpers::createUuid();
 
-            $stripeCustomer = StripeProvider::createCustomer($data['customer'], $externalId);
 
-            $donor = DonorRepository::storeDonor($data, $stripeCustomer , $externalId);
+            $stripeCustomer = StripeProvider::createCustomer($data['customer']);
+
+            $donor = DonorRepository::storeDonor($data, $stripeCustomer);
             $donor['stripe_customer_object'] = json_decode($donor['stripe_customer_object']);
 
             $stripePrice = StripeProvider::createPrice($data['product_id'], $data['price']);

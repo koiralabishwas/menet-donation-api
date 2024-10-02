@@ -12,17 +12,16 @@ class DonorRepository
      *
      * @param array $DonorData
      * @param Customer $stripeCustomer
-     * @param string $externalId
      * @return Donor
      */
-    public static function storeDonor(array $DonorData , Customer $stripeCustomer , string $externalId): Donor
+    public static function storeDonor(array $DonorData , Customer $stripeCustomer ): Donor
     {
         return Donor::updateOrCreate(
             [
                 'email' => $stripeCustomer->email, // If email exists, update it
             ],
             [
-                'donor_external_id' => $externalId,  // Custom external ID
+                'donor_external_id' => $stripeCustomer->metadata['donor_external_id'],  // Custom external ID
                 'stripe_customer_id' => $stripeCustomer->id, // Stripe customer ID
                 'name' => $stripeCustomer->name,             // Customer name from Stripe response
                 'email' => $stripeCustomer->email,           // Customer email from Stripe response

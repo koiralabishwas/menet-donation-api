@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\Helpers;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Stripe\Checkout\Session;
@@ -35,12 +36,17 @@ class StripeProvider extends ServiceProvider
      * Create a Stripe customer.
      *
      * @param array $customerData
-     * @param string $externalId
      * @return Customer
      */
-    public static function createCustomer(array $customerData, string $externalId): Customer
+    public static function createCustomer(array $customerData): Customer
     {
         $stripe = app(StripeClient::class);
+        $existing = StripeProvider::searchCustomerFromEmail($customerData['email']);
+
+        if ($existing->data[0]->email) {
+            return $existing->data[0];
+        }
+        $externalId = Helpers::createUuid();
         return $stripe->customers->create([
             'name' => $customerData['name'],
             'email' => $customerData['email'],
