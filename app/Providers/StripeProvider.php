@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Price;
 use Stripe\StripeClient;
 use Stripe\Webhook;
@@ -36,7 +38,7 @@ class StripeProvider extends ServiceProvider
      * @param string $externalId
      * @return Customer
      */
-    public static function createCustomer(array $customerData , string $externalId): Customer
+    public static function createCustomer(array $customerData, string $externalId): Customer
     {
         $stripe = app(StripeClient::class);
         return $stripe->customers->create([
@@ -54,19 +56,48 @@ class StripeProvider extends ServiceProvider
         ]);
     }
 
-    public static function searchPrice(string $productId , int $amount)
+    public static function searchCustomerFromEmail(string $email)
+    {
+        $stripe = app(StripeClient::class);
+        return $stripe->customers->search([
+            'query' => 'email:\'' . $email . '\''
+        ]);
+    }
+
+    public static function deleteAllCustomers(): string
+        // TODO: delete in production
+    {
+        $stripe = app(StripeClient::class);
+        $count = 0;
+        while ($count < 6) {
+            $customers = $stripe->customers->all(['limit' => 100]);
+            foreach ($customers as $customer) {
+                try {
+                    $stripe->customers->delete($customer->id);
+                } catch (ApiErrorException $e) {
+                    Log::error("failed $customer->id &&& $e" );
+                }
+            }
+
+            $count = $count + 1;
+
+        }
+        return "all customers deleted";
+    }
+
+    public static function searchPrice(string $productId, int $amount)
     {
         $stripe = app(StripeClient::class);
         $existingPrice = $stripe->prices->search([
             'query' => "active:\"true\" AND product:\"$productId\" AND metadata[\"amount\"]:\"$amount\"",
         ]);
-        if ($existingPrice->data){
+        if ($existingPrice->data) {
             return ($existingPrice->data[0]);
         }
         return null;
     }
 
-    public static function createPrice(string $productId , int $amount) : Price
+    public static function createPrice(string $productId, int $amount): Price
     {
         $stripe = app(StripeClient::class);
 
@@ -84,7 +115,8 @@ class StripeProvider extends ServiceProvider
         ]);
     }
 
-    public static function createCheckoutSession(string $customerId , string $priceId) : Session {
+    public static function createCheckoutSession(string $customerId, string $priceId): Session
+    {
         $stripe = app(StripeClient::class);
         return $stripe->checkout->sessions->create([
             'success_url' => 'https://www.google.com',
