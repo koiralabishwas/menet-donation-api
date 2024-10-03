@@ -42,4 +42,16 @@ class DonorRepository
         );
     }
 
+    public static function getDonorByEmail(string $email)
+    {
+        $donor = Donor::query()->where('email', $email)->first();
+
+        if (!empty($donor)){
+            return json_decode($donor["stripe_customer_object"]);
+
+        }
+        return null;
+
+    }
+
 }
