@@ -16,6 +16,8 @@ class DonorRepository
      */
     public static function storeDonor(array $DonorData , object $stripeCustomer ): object
     {
+        // NOTE :リーピータ客の場合、 上書きしたい項目は $DonorData　から渡す
+        // NOTE : 上書き必要ないものは一回$stripeCustomerのままで
         return Donor::updateOrCreate(
             [
                 'email' => $stripeCustomer->email, // If email exists, update it
