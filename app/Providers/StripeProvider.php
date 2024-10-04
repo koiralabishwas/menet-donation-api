@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Helpers\Helpers;
+use App\Repositories\DonorRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use PhpParser\Node\Expr\Cast\Object_;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
@@ -35,12 +38,19 @@ class StripeProvider extends ServiceProvider
      * Create a Stripe customer.
      *
      * @param array $customerData
-     * @param string $externalId
-     * @return Customer
+     * @return object
      */
-    public static function createCustomer(array $customerData, string $externalId): Customer
+    public static function createCustomer(array $customerData): object
     {
         $stripe = app(StripeClient::class);
+
+        // db から取得して返したほうが確実？
+        $existingDonor = DonorRepository::getDonorByEmail($customerData['email']);
+//        $existing = StripeProvider::searchCustomerFromEmail($customerData['email']);
+        if ($existingDonor) {
+            return $existingDonor;
+        }
+        $externalId = Helpers::createUuid();
         return $stripe->customers->create([
             'name' => $customerData['name'],
             'email' => $customerData['email'],
@@ -119,7 +129,7 @@ class StripeProvider extends ServiceProvider
     {
         $stripe = app(StripeClient::class);
         return $stripe->checkout->sessions->create([
-            'success_url' => 'https://www.google.com',
+            'success_url' => env('FRONT_END_URL'),
             'ui_mode' => "hosted",
             'customer' => $customerId,
             'payment_method_types' => ['card'],

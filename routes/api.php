@@ -12,8 +12,9 @@ Route::post('/donor',[DonorController::class,'create']);
 
 Route::post('/checkout-session',[CheckoutSessionController::class,'create']);
 
+Route::post('/webhook',[WebhookController::class,'create'] );
 
 //use for debugging functions or routes
-Route::get('/debug' ,[DebugController::class,'index'] );
+Route::post('/debug/createCustomer' ,[DebugController::class,'checkCreateCustomer'] );
+Route::get('/debug/email' ,[DebugController::class,'getDbCustomerObjFromEmail'] );
 
-Route::post('/webhook',[WebhookController::class,'create'] );
