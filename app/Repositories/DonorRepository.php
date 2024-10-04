@@ -12,9 +12,9 @@ class DonorRepository
      *
      * @param array $DonorData
      * @param object $stripeCustomer
-     * @return object
+     * @return Donor
      */
-    public static function storeDonor(array $DonorData , object $stripeCustomer ): object
+    public static function storeDonor(array $DonorData , object $stripeCustomer ): Donor
     {
         // NOTE :リーピータ客の場合、 上書きしたい項目は $DonorData　から渡す
         // NOTE : 上書き必要ないものは一回$stripeCustomerのままで

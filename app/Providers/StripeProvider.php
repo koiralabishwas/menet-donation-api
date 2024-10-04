@@ -47,7 +47,6 @@ class StripeProvider extends ServiceProvider
         // db から取得して返したほうが確実？
         $existingDonor = DonorRepository::getDonorByEmail($customerData['email']);
 //        $existing = StripeProvider::searchCustomerFromEmail($customerData['email']);
-
         if ($existingDonor) {
             return $existingDonor;
         }

@@ -15,22 +15,21 @@ class CheckoutSessionController extends Controller
     public function create(DonationFormRequest $request): JsonResponse
     {
 
-        $data = $request->validated();
+        $formData = $request->validated();
 
         try {
             //TO FIX? : 毎回おなじdonorで新しいexternalID作られるから、DBとmetadataに保存したところでよ、、、、、
 
+            $stripeCustomer = StripeProvider::createCustomer($formData['customer']);
 
-            $stripeCustomer = StripeProvider::createCustomer($data['customer']);
-
-            $donor = DonorRepository::storeDonor($data, $stripeCustomer);
+            $donor = DonorRepository::storeDonor($formData, $stripeCustomer);
             $donor['stripe_customer_object'] = json_decode($donor['stripe_customer_object']);
 
-            $stripePrice = StripeProvider::createPrice($data['product_id'], $data['price']);
+            $stripePrice = StripeProvider::createPrice($formData['product_id'], $formData['price']);
 
             $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id);
 
-            $data = [
+            $formData = [
                 "donor" => $donor,
                 "stripe_checkout_session" => $checkoutSession,
                 'stripe_price' => $stripePrice,
@@ -40,7 +39,7 @@ class CheckoutSessionController extends Controller
             return response()->json([
                 'status' => 201,
                 'message' => 'success',
-                'data' => $data,
+                'data' => $formData,
             ], 201);
 
         } catch (Exception $e) {
