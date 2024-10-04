@@ -17,6 +17,14 @@ class DebugController extends Controller
         return response()->json($customer->data[0]);
 
     }
+
+    public function checkCreateCustomer(Request $request) : JsonResponse
+    {
+        $customer = StripeProvider::createCustomer($request['customer']);
+        return response()->json($customer);
+    }
+
+
     public function getDbCustomerObjFromEmail(Request $request): JsonResponse
     {
         $email = $request->query('email');

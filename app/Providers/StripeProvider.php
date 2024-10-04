@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Helpers\Helpers;
+use App\Repositories\DonorRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use PhpParser\Node\Expr\Cast\Object_;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
@@ -36,17 +38,18 @@ class StripeProvider extends ServiceProvider
      * Create a Stripe customer.
      *
      * @param array $customerData
-     * @return Customer
+     * @return object
      */
-    public static function createCustomer(array $customerData): Customer
+    public static function createCustomer(array $customerData): object
     {
         $stripe = app(StripeClient::class);
 
         // db から取得して返したほうが確実？
-        $existing = StripeProvider::searchCustomerFromEmail($customerData['email']);
+        $existingDonor = DonorRepository::getDonorByEmail($customerData['email']);
+//        $existing = StripeProvider::searchCustomerFromEmail($customerData['email']);
 
-        if (!empty($existing->data[0])) {
-            return $existing->data[0];
+        if ($existingDonor) {
+            return $existingDonor;
         }
         $externalId = Helpers::createUuid();
         return $stripe->customers->create([
