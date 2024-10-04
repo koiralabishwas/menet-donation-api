@@ -129,7 +129,7 @@ class StripeProvider extends ServiceProvider
     {
         $stripe = app(StripeClient::class);
         return $stripe->checkout->sessions->create([
-            'success_url' => 'https://www.google.com',
+            'success_url' => env('FRONT_END_URL'),
             'ui_mode' => "hosted",
             'customer' => $customerId,
             'payment_method_types' => ['card'],
