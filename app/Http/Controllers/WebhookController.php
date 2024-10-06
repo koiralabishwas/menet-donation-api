@@ -30,26 +30,16 @@ class WebhookController extends Controller
 
         switch ($event->type) {
             // for one-time payment
-            case 'payment_intent.succeeded':
+            case 'checkout.session.completed':
                 // Access the payment intent data
-                $paymentIntent = $event->data->object;
+                $checkoutSession = $event->data;
 
                 // Access customer data from the payment intent
-                $customerData = $paymentIntent->customer;
-
                 // Log customer data
-                Log::info('Customer Data', ['customer' => $customerData]);
+                Log::info($checkoutSession);
 
-                // Optionally retrieve additional customer info from Stripe (if needed)
-                // $customer = Customer::retrieve($customerData);
 
-                // Example of saving to the database
-                // Donation::create([
-                //     "donation_external_id" => Helpers::CreateExternalIdfromDate(),
-                //     "donor_id" => $customer->id, // or $paymentIntent->customer if you don't need to retrieve additional data
-                // ]);
-
-                return response()->json(['customer' => $customerData]);
+                return response()->json(['data' => $checkoutSession]);
 
             // ... handle other event types
             default:

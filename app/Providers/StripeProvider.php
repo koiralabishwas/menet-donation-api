@@ -44,9 +44,9 @@ class StripeProvider extends ServiceProvider
     {
         $stripe = app(StripeClient::class);
 
-        // db から取得して返したほうが確実？
+        // db から取得して返したほうが確実。ストライプから取得すると、作成した直後は帰ってこない
         $existingDonor = DonorRepository::getDonorByEmail($customerData['email']);
-//        $existing = StripeProvider::searchCustomerFromEmail($customerData['email']);
+
         if ($existingDonor) {
             return $existingDonor;
         }
