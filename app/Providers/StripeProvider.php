@@ -125,7 +125,7 @@ class StripeProvider extends ServiceProvider
         ]);
     }
 
-    public static function createCheckoutSession(string $customerId, string $priceId): Session
+    public static function createCheckoutSession(string $customerId, string $priceId ): Session
     {
         $stripe = app(StripeClient::class);
         return $stripe->checkout->sessions->create([
@@ -139,9 +139,16 @@ class StripeProvider extends ServiceProvider
             ]],
             'automatic_tax' => ['enabled' => false],
             'mode' => 'payment',
+            "payment_intent_data" => [
+                "metadata" => [
+                    "testMetadata" => "inside payment intent through session"
+                ]
+            ]
         ]);
 
     }
+
+
 
 
 }

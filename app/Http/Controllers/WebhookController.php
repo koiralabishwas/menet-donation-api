@@ -30,16 +30,17 @@ class WebhookController extends Controller
 
         switch ($event->type) {
             // for one-time payment
-            case 'checkout.session.completed':
+            case 'payment_intent.succeeded':
+//            case 'checkout.session.completed':
                 // Access the payment intent data
-                $checkoutSession = $event->data;
+                $paymentIntent = $event->data;
 
                 // Access customer data from the payment intent
                 // Log customer data
-                Log::info($checkoutSession);
+                Log::info($paymentIntent);
 
 
-                return response()->json(['data' => $checkoutSession]);
+                return response()->json(['data' => $paymentIntent]);
 
             // ... handle other event types
             default:

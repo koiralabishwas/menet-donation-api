@@ -27,7 +27,15 @@ class CheckoutSessionController extends Controller
 
             $stripePrice = StripeProvider::createPrice($formData['product_id'], $formData['price']);
 
-            $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id);
+//            $paymentIntentMetaData = [
+//                // product_name ?
+//                // donor_id
+//                // currency
+//                // donor_external_id
+//                //
+//            ];
+
+            $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id  );
 
             $formData = [
                 "donor" => $donor,
