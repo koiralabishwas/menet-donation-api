@@ -147,7 +147,7 @@ class StripeProvider extends ServiceProvider
                     "amount" => $paymentIntentMetaData['amount'],
                     "currency" => $paymentIntentMetaData["currency"],
                     "type" => $paymentIntentMetaData["type"],
-                    "tax_deduction_certificate" => $paymentIntentMetaData['donor_external_id'],
+                    "tax_deduction_certificate_url" => $paymentIntentMetaData['tax_deduction_certificate_url'],
                 ]
             ]
         ]);

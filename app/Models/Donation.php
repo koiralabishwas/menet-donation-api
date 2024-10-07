@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,24 +27,9 @@ class Donation extends Model
         "donation_project",
         "amount",
         "currency",
-        "tax_deduction_certificate",
+        "type",
+        "tax_deduction_certificate_url",
         "stripe_donation_object",
-
-
     ];
 
-    public static function boot(): void
-    {
-        parent::boot();
-
-        static::updating(function ($model) {
-            // Check if donor_external_id is being changed
-            if ($model->isDirty('donor_external_id')) {
-                // Prevent updating donor_external_id if it is already set
-                if ($model->getOriginal('donor_external_id') !== null) {
-                    throw new Exception('The donor_external_id field can only be set once.');
-                }
-            }
-        });
-    }
 }
