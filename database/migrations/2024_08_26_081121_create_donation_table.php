@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('currency',3);
             $table->enum('type',['ONE_TIME','MONTHLY' , 'YEARLY']);
             $table->string('tax_deduction_certificate_url',1023);
-            $table->json('stripe_object'); //payment_intent or invoice
+            $table->json('stripe_donation_object'); //payment_intent or invoice
             $table->foreign('donor_id')->references('donor_id')->on('donors');
             $table->foreign('donor_external_id')->references('donor_external_id')->on('donors');
             $table->foreign('subscription_external_id')->references('subscription_external_id')->on('subscriptions');

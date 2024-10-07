@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('display_name', 255)->nullable();
             $table->string('corporate_no', 20)->nullable();
             $table->text('message')->nullable();
+            // table->image(customerPic)
             $table->json('stripe_customer_object');  // No nullable() modifier ensures it's required
             $table->charset('utf8mb4');
             $table->collation('utf8mb4_general_ci');

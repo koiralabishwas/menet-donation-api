@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Helpers;
 use App\Http\Requests\DonationFormRequest;
 use App\Repositories\DonorRepository;
 use Exception;
@@ -27,7 +26,19 @@ class CheckoutSessionController extends Controller
 
             $stripePrice = StripeProvider::createPrice($formData['product_id'], $formData['price']);
 
-            $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id);
+
+            $paymentIntentMetaData = [
+                "donor_id" => $donor['donor_id'],
+                "donor_external_id" => $donor['donor_external_id'],
+                "donation_project" => "donation_project_name",
+                "amount" => $formData['price'],
+                "currency" => "jpy",
+                "type" => "ONE_TIME",
+                "tax_deduction_certificate_url" => "www.localhost:8000/".$donor['donor_external_id'],
+            ];
+
+
+            $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id , $paymentIntentMetaData);
 
             $formData = [
                 "donor" => $donor,

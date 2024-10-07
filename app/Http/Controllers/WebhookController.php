@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Helpers;
-use App\Models\Donation;
+use App\Repositories\DonationRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Stripe\Customer;
-use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\SignatureVerificationException;
-use Stripe\Stripe;
 use Stripe\Webhook;
 
 class WebhookController extends Controller
@@ -30,16 +26,18 @@ class WebhookController extends Controller
 
         switch ($event->type) {
             // for one-time payment
-            case 'checkout.session.completed':
+            case 'payment_intent.succeeded':
+//            case 'checkout.session.completed':
                 // Access the payment intent data
-                $checkoutSession = $event->data;
+                $paymentIntent = $event->data;
 
                 // Access customer data from the payment intent
                 // Log customer data
-                Log::info($checkoutSession);
+                Log::info($paymentIntent["object"]->metadata);
+                DonationRepository::storeDonation($paymentIntent['object']->metadata , $paymentIntent["object"]);
 
 
-                return response()->json(['data' => $checkoutSession]);
+                return response()->json(['data' => $paymentIntent]);
 
             // ... handle other event types
             default:
