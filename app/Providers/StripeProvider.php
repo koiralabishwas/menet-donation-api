@@ -125,7 +125,7 @@ class StripeProvider extends ServiceProvider
         ]);
     }
 
-    public static function createCheckoutSession(string $customerId, string $priceId ): Session
+    public static function createCheckoutSession(string $customerId, string $priceId ,  $paymentIntentMetaData ): Session
     {
         $stripe = app(StripeClient::class);
         return $stripe->checkout->sessions->create([
@@ -141,7 +141,13 @@ class StripeProvider extends ServiceProvider
             'mode' => 'payment',
             "payment_intent_data" => [
                 "metadata" => [
-                    "testMetadata" => "inside payment intent through session"
+                    "donor_id" => $paymentIntentMetaData['donor_id'],
+                    "donor_external_id" => $paymentIntentMetaData['donor_external_id'],
+                    "donation_project" => $paymentIntentMetaData["donation_project"],
+                    "amount" => $paymentIntentMetaData['amount'],
+                    "currency" => $paymentIntentMetaData["currency"],
+                    "type" => $paymentIntentMetaData["type"],
+                    "tax_deduction_certificate" => $paymentIntentMetaData['donor_external_id'],
                 ]
             ]
         ]);
