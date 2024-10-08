@@ -12,7 +12,7 @@ class DebugController extends Controller
 {
     public function getStripeProductNameFromProductId(Request $request): JsonResponse{
         $productId = $request->query('product-id');
-        $productName = StripeProvider::getProductNameFromProductId($productId);
+        $productName = StripeProvider::getProductNameFromId($productId);
 
         return response()->json($productName);
     }

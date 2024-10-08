@@ -152,7 +152,7 @@ class StripeProvider extends ServiceProvider
 
     }
 
-    public static function getProductNameFromProductId(string $productId): string
+    public static function getProductNameFromId(string $productId): string
     {
         $stripe = app(StripeClient::class);
         $product =  $stripe->products->retrieve($productId);
