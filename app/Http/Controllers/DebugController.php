@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class DebugController extends Controller
 {
+    public function getStripeProductNameFromProductId(Request $request): JsonResponse{
+        $productId = $request->query('product-id');
+        $productName = StripeProvider::getProductNameFromProductId($productId);
+
+        return response()->json($productName);
+    }
     public function getStripeCustomerFromEmail(Request $request) : JsonResponse
     {
         $email = $request->query('email');

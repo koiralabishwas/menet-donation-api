@@ -17,4 +17,5 @@ Route::post('/webhook',[WebhookController::class,'create'] );
 //use for debugging functions or routes
 Route::post('/debug/createCustomer' ,[DebugController::class,'checkCreateCustomer'] );
 Route::get('/debug/email' ,[DebugController::class,'getDbCustomerObjFromEmail'] );
+Route::get('/debug/product-name' ,[DebugController::class,'getStripeProductNameFromProductId'] );
 
