@@ -1,1 +1,1 @@
-1.retrieve product(donation_project_name) dynamically // only get it from db
+1.retrieve product(donation_project_name) dynamically

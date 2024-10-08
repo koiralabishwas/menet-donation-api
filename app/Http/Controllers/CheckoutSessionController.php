@@ -30,7 +30,7 @@ class CheckoutSessionController extends Controller
             $paymentIntentMetaData = [
                 "donor_id" => $donor['donor_id'],
                 "donor_external_id" => $donor['donor_external_id'],
-                "donation_project" => "donation_project_name",
+                "donation_project" => StripeProvider::getProductNameFromId($formData['product_id']) ,
                 "amount" => $formData['price'],
                 "currency" => "jpy",
                 "type" => "ONE_TIME",
