@@ -1,1 +1,1 @@
-1. check existing donor from db and return {stripe_customer_object} if existing.
+1.retrieve product(donation_project_name) dynamically // only get it from db
