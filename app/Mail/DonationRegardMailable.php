@@ -14,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
     /**
      * Create a new message instance.
      */
-    public function __construct(array $donationMetadata)
+    public function __construct($donationMetadata)
     {
         $this->donorName = $donationMetadata['donor_name'];
         $this->donationProject = $donationMetadata['donation_project'];

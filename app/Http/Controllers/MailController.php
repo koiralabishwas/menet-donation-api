@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Mail\DonationRegardMailable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use JetBrains\PhpStorm\NoReturn;
 
 class MailController extends Controller
 {
-    public function index(Request $request)
+    #[NoReturn] public function index(Request $request)
     {
         $donationMetadata =[
             'donor_name' => "Bishwas Koirala Hello World",
