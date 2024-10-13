@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 
@@ -30,11 +32,14 @@ class WebhookController extends Controller
 //            case 'checkout.session.completed':
                 // Access the payment intent data
                 $paymentIntent = $event->data;
+                $metaData = $paymentIntent['object']->metadata;
 
                 // Access customer data from the payment intent
                 // Log customer data
                 Log::info($paymentIntent["object"]->metadata);
-                DonationRepository::storeDonation($paymentIntent['object']->metadata , $paymentIntent["object"]);
+                DonationRepository::storeDonation($metaData , $paymentIntent["object"]);
+                Mail::to('wasubisu69@gmail.com')->send(new DonationRegardMailable($metaData));
+
 
 
                 return response()->json(['data' => $paymentIntent]);
