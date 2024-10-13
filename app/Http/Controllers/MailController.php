@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\MailSender;
+use App\Mail\DonationRegardMailable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use JetBrains\PhpStorm\NoReturn;
 
 class MailController extends Controller
 {
-    public function index(Request $request)
+    #[NoReturn] public function index(Request $request)
     {
-        $mailData = [
-            'title' => 'test mail from laravel',
-            'body' => 'I am testing email from gmail',
+        $donationMetadata =[
+            'donor_name' => "Bishwas Koirala Hello World",
+            'donation_project' => 'altervoice',
+            'amount' => 1000,
+            'tax_deduction_certificate_url' => 'www.google.com'
         ];
 
-        Mail::to('wasubisu69@gmail.com')->send(new MailSender());
+
+        Mail::to('wasubisu69@gmail.com')->send(new DonationRegardMailable($donationMetadata));
 
         dd('Email sent successfully!');
     }

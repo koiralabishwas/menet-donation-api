@@ -10,7 +10,6 @@ use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Price;
 use Stripe\StripeClient;
-use Stripe\Webhook;
 
 class StripeProvider extends ServiceProvider
 {
@@ -140,6 +139,7 @@ class StripeProvider extends ServiceProvider
             "payment_intent_data" => [
                 "metadata" => [
                     "donor_id" => $paymentIntentMetaData['donor_id'],
+                    "donor_name" => $paymentIntentMetaData['donor_name'],
                     "donor_external_id" => $paymentIntentMetaData['donor_external_id'],
                     "donation_project" => $paymentIntentMetaData["donation_project"],
                     "amount" => $paymentIntentMetaData['amount'],

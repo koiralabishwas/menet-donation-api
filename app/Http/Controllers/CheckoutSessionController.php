@@ -29,12 +29,13 @@ class CheckoutSessionController extends Controller
 
             $paymentIntentMetaData = [
                 "donor_id" => $donor['donor_id'],
+                "donor_name" => $donor['name'],
                 "donor_external_id" => $donor['donor_external_id'],
                 "donation_project" => StripeProvider::getProductNameFromId($formData['product_id']) ,
                 "amount" => $formData['price'],
                 "currency" => "jpy",
                 "type" => "ONE_TIME",
-                "tax_deduction_certificate_url" => "www.localhost:8000/".$donor['donor_external_id'],
+                "tax_deduction_certificate_url" => "https://www.google.com//".$donor['donor_external_id'],
             ];
 
 
