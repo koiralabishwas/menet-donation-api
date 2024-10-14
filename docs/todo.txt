@@ -1,6 +1,0 @@
-0. setup smtp in gmail
-
-1. send a email to donated user
-
-2. make some info dynamic there
-

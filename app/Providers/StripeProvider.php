@@ -137,16 +137,7 @@ class StripeProvider extends ServiceProvider
             'automatic_tax' => ['enabled' => false],
             'mode' => 'payment',
             "payment_intent_data" => [
-                "metadata" => [
-                    "donor_id" => $paymentIntentMetaData['donor_id'],
-                    "donor_name" => $paymentIntentMetaData['donor_name'],
-                    "donor_external_id" => $paymentIntentMetaData['donor_external_id'],
-                    "donation_project" => $paymentIntentMetaData["donation_project"],
-                    "amount" => $paymentIntentMetaData['amount'],
-                    "currency" => $paymentIntentMetaData["currency"],
-                    "type" => $paymentIntentMetaData["type"],
-                    "tax_deduction_certificate_url" => $paymentIntentMetaData['tax_deduction_certificate_url'],
-                ]
+                "metadata" => $paymentIntentMetaData
             ]
         ]);
 
@@ -159,8 +150,4 @@ class StripeProvider extends ServiceProvider
         return $product->name;
 
     }
-
-
-
-
 }

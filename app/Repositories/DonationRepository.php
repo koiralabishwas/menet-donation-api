@@ -11,12 +11,12 @@ class DonationRepository
      *  store donation record in database
      *
      * @param object $DonationData
-     * @param object $StripeDonationObject
+     * @param object $StripePaymentIntentObject
      * @return Donation
      *
      *
      */
-    public static function storeDonation(object $DonationData , object $StripeDonationObject) : Donation
+    public static function storeDonation(object $DonationData , object $StripePaymentIntentObject) : Donation
     {
         return Donation::create(
             [
@@ -30,7 +30,7 @@ class DonationRepository
                 "currency" => $DonationData['currency'],
                 "type" => $DonationData['type'],
                 "tax_deduction_certificate_url" => $DonationData['tax_deduction_certificate_url'],
-                "stripe_donation_object" => json_encode($StripeDonationObject),
+                "stripe_donation_object" => json_encode($StripePaymentIntentObject),
             ]
         );
     }

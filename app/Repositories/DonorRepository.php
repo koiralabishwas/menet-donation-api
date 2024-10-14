@@ -50,7 +50,6 @@ class DonorRepository
 
         if (!empty($donor)){
             return json_decode($donor["stripe_customer_object"]);
-
         }
         return null;
 
