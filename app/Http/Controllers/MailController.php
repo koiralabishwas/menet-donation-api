@@ -9,7 +9,7 @@ use JetBrains\PhpStorm\NoReturn;
 
 class MailController extends Controller
 {
-    #[NoReturn] public function index(Request $request)
+    #[NoReturn] public function index(Request $request): void
     {
         $donationMetadata =[
             'donor_name' => "Bishwas Koirala Hello World",
