@@ -36,9 +36,10 @@ class WebhookController extends Controller
 
                 // Access customer data from the payment intent
                 // Log customer data
-                Log::info($paymentIntent["object"]->metadata);
+//                Log::info($paymentIntent["object"]->metadata);
+                Log::info($paymentIntent["object"]);
                 DonationRepository::storeDonation($metaData , $paymentIntent["object"]);
-                Mail::to('wasubisu69@gmail.com')->send(new DonationRegardMailable($metaData));
+                Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
 
 
 
