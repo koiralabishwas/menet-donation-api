@@ -17,15 +17,10 @@ class CheckoutSessionController extends Controller
         $formData = $request->validated();
 
         try {
-            //TO FIX? : 毎回おなじdonorで新しいexternalID作られるから、DBとmetadataに保存したところでよ、、、、、
-
             $stripeCustomer = StripeProvider::createCustomer($formData['customer']);
-
             $donor = DonorRepository::storeDonor($formData, $stripeCustomer);
             $donor['stripe_customer_object'] = json_decode($donor['stripe_customer_object']);
-
             $stripePrice = StripeProvider::createPrice($formData['product_id'], $formData['price']);
-
 
             $paymentIntentMetaData = [
                 "donor_id" => $donor['donor_id'],
@@ -38,9 +33,7 @@ class CheckoutSessionController extends Controller
                 "tax_deduction_certificate_url" => "https://www.google.com//".$donor['donor_external_id'],
             ];
 
-
             $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id , $paymentIntentMetaData);
-
             $formData = [
                 "donor" => $donor,
                 "stripe_checkout_session" => $checkoutSession,
@@ -53,7 +46,6 @@ class CheckoutSessionController extends Controller
                 'message' => 'success',
                 'data' => $formData,
             ], 201);
-
         } catch (Exception $e) {
             return response()->json([
                 'status' => 500,

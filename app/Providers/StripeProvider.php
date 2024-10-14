@@ -150,8 +150,4 @@ class StripeProvider extends ServiceProvider
         return $product->name;
 
     }
-
-
-
-
 }
