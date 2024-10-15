@@ -10,7 +10,9 @@
 
 <p>ここでは寄付控除証明書を表示します</p>
 <p>{{$data['name']}}</p>
-{{--<p>{{$data['donor-external-id']}}</p>--}}
+<p>{{$data['amount']}}</p>
+
+<p>{{$data['donor_external_id']}}</p>
 
 <p>{{ config('app.name') }}</p>
 </body>
