@@ -46,7 +46,7 @@
         }
 
         table, th, td {
-            border: 1px solid black;
+            border: 2px solid #000000;
             padding: 10px;
             text-align: left;
         }
