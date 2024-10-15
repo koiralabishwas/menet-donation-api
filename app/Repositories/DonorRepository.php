@@ -55,4 +55,9 @@ class DonorRepository
 
     }
 
+    public static function getDonorByExternalId(string $externalId)
+    {
+        return Donor::query()->where('donor_external_id', $externalId)->first();
+    }
+
 }
