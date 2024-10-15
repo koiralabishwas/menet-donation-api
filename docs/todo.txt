@@ -1,3 +1,3 @@
         1. fix 法人番号not rendering　
-2. send right link to pdf in mail
+        2. send right link to pdf in mail
 3. input logo in pdf

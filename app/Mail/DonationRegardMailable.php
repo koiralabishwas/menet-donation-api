@@ -19,6 +19,7 @@ use Illuminate\Queue\SerializesModels;
         $this->donorName = $donationMetadata['donor_name'];
         $this->donationProject = $donationMetadata['donation_project'];
         $this->donationAmount = $donationMetadata['amount'];
+        $this->donorExternalId = $donationMetadata['donor_external_id'];
         $this->donationCertificateUrl = $donationMetadata['tax_deduction_certificate_url'];
     }
 
@@ -34,6 +35,7 @@ use Illuminate\Queue\SerializesModels;
            'donationProject' => $this->donationProject,
            'donationAmount' => $this->donationAmount,
            'donationCertificateUrl' => $this->donationCertificateUrl,
+           'donorExternalId' => $this->donorExternalId
        ]);
    }
 }
