@@ -125,8 +125,9 @@ class StripeProvider extends ServiceProvider
     public static function createCheckoutSession(string $customerId, string $priceId ,  $paymentIntentMetaData ): Session
     {
         $stripe = app(StripeClient::class);
+        $donor_external_id = $paymentIntentMetaData['donor_external_id'];
         return $stripe->checkout->sessions->create([
-            'success_url' => env('FRONT_END_URL'),
+            'success_url' => env('FRONT_END_URL')."/pdf/$donor_external_id",
             'ui_mode' => "hosted",
             'customer' => $customerId,
             'payment_method_types' => ['card'],

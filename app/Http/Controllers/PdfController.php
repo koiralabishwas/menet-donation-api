@@ -14,7 +14,7 @@ use function Spatie\LaravelPdf\Support\pdf;
 
 class PdfController extends Controller
 {
-    public static function create(Request $request , $donor_external_id): PdfBuilder // donor externalId を渡す？
+    public static function create($donor_external_id): PdfBuilder // donor externalId を渡す？
     {
         $donor = DonorRepository::getDonorByExternalId($donor_external_id);
         $donations = DonationRepository::getDonationsByUserExternalId($donor_external_id);

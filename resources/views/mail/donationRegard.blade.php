@@ -15,7 +15,7 @@
 
 <p>皆様からのご支援は、プロジェクトの成功に向けて大変貴重です。心より感謝申し上げます。</p>
 
-<p><a href="{{ $donationCertificateUrl }}" target="_blank">寄付控除証明書を表示する</a></p>
+<p><a href="{{ env('APP_URL/pdf/') ."$donorExternalId" }}" target="_blank">寄付控除証明書を表示する</a></p>
 
 <p>引き続きよろしくお願いいたします。</p>
 

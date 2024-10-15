@@ -46,7 +46,7 @@
         }
 
         table, th, td {
-            border: 1px solid black;
+            border: 2px solid #000000;
             padding: 10px;
             text-align: left;
         }
@@ -81,7 +81,7 @@
     <p>寄附者ID: {{ $donor['donor_external_id'] }}</p>
     <p>寄附者住所: {{ $donor['address'] }}</p>
     <p>寄附者氏名または法人名: {{ $donor['name'] }} 様</p>
-    <p>寄附者法人番号: {{ $donor['corporation_id'] }}</p>
+    <p>寄附者法人番号: {{ $donor['corporate_no'] }}</p>
     <p>年間寄附総額: <span class="bold">{{ number_format($total_amount) }}円</span></p>
 </div>
 

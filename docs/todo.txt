@@ -1,0 +1,7 @@
+        1. fix 法人番号not rendering　
+        2. send right link to pdf in mail
+3. input logo in pdf
+
+4. /pdf/donor_external_id/年度別に
+
+        5. make table border thicker
