@@ -34,4 +34,9 @@ class DonationRepository
             ]
         );
     }
+
+    public static function getDonationsByUserExternalId(string $donor_external_id) : array
+    {
+        return Donation::query()->where('donor_external_id', $donor_external_id)->get()->toArray();
+    }
 }
