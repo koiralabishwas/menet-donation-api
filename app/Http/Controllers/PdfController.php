@@ -17,9 +17,7 @@ class PdfController extends Controller
     public static function create($donor_external_id , $year): PdfBuilder // donor externalId を渡す？
     {
         $donor = DonorRepository::getDonorByExternalId($donor_external_id);
-        $donations = DonationRepository::getDonationsByUserExternalId($donor_external_id);
         $certificateData = DonationRepository::getDonationCertificate($donor_external_id , $year);
-
         $total_amount = array_sum(array_column($certificateData, 'amount'));
 
 
