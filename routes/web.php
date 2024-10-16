@@ -8,5 +8,5 @@ Route::get('/', function () {
 });
 
 
-Route::get('/pdf/{donor_external_id}' , [PdfController::class , 'create']);
+Route::get('/pdf/{donor_external_id}/{year}' , [PdfController::class , 'create']);
 

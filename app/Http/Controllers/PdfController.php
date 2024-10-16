@@ -14,16 +14,18 @@ use function Spatie\LaravelPdf\Support\pdf;
 
 class PdfController extends Controller
 {
-    public static function create($donor_external_id): PdfBuilder // donor externalId を渡す？
+    public static function create($donor_external_id , $year): PdfBuilder // donor externalId を渡す？
     {
         $donor = DonorRepository::getDonorByExternalId($donor_external_id);
         $donations = DonationRepository::getDonationsByUserExternalId($donor_external_id);
-        $total_amount = array_sum(array_column($donations, 'amount'));
+        $certificateData = DonationRepository::getDonationCertificate($donor_external_id , $year);
+
+        $total_amount = array_sum(array_column($certificateData, 'amount'));
 
 
         return pdf()->view('pdf.testpdf',[
             'donor' => $donor,
-            'donations' => $donations,
+            'donations' => $certificateData,
             'total_amount' => $total_amount
         ])->format(Format::A4)->name('tested.pdf');
     }

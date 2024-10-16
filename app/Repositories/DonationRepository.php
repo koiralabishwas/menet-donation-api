@@ -39,4 +39,9 @@ class DonationRepository
     {
         return Donation::query()->where('donor_external_id', $donor_external_id)->get()->toArray();
     }
+
+    public static function getDonationCertificate(string $donor_external_id , string $year) : array
+    {
+        return Donation::query()->where('donor_external_id' , $donor_external_id)->whereyear('created_at', $year)->get()->toArray();
+    }
 }
