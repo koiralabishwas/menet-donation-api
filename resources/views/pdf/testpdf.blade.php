@@ -1,4 +1,4 @@
-@php use Carbon\Carbon; @endphp
+@php use App\Helpers\Helpers;use App\Helpers\PdfHelpers;use Carbon\Carbon; @endphp
     <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -73,16 +73,8 @@
 </head>
 <body>
 <div class="section text-right">
-    <p>{{ Carbon::now()->format('Y年m月d日') }}</p>
-    <h2>{{ Carbon::now()->format('Y') }}年分寄附金受領証明書</h2>
-</div>
-
-<div class="section">
-    <p>寄附者ID: {{ $donor['donor_external_id'] }}</p>
-    <p>寄附者住所: {{ $donor['address'] }}</p>
-    <p>寄附者氏名または法人名: {{ $donor['name'] }} 様</p>
-    <p>寄附者法人番号: {{ $donor['corporate_no'] }}</p>
-    <p>年間寄附総額: <span class="bold">{{ number_format($total_amount) }}円</span></p>
+    <p>{{ PdfHelpers::getJapaneseDate(Carbon::now()) }}</p>
+    <h2>{{ PdfHelpers::getJapaneseYear($certificateYear)}}年分寄附金受領証明書</h2>
 </div>
 
 <div class="section text-right">
@@ -99,6 +91,16 @@
     <p class="text-center">頂戴した貴重なご寄附は、当団体の諸事業の運営に有効に使わせて頂きます。</p>
     <p class="text-center">今後とも、変わらぬご支援、ご協力をどうぞよろしくお願い申し上げます。</p>
 </div>
+
+<div class="section">
+    <p>寄附者ID: {{ $donor['donor_external_id'] }}</p>
+    <p>寄附者住所: {{ $donor['address'] }}</p>
+    <p>寄附者氏名または法人名: {{ $donor['name'] }} 様</p>
+    <p>寄附者法人番号: {{ $donor['corporate_no'] }}</p>
+    <p>年間寄附総額: <span class="bold">{{ number_format($total_amount) }}円</span></p>
+</div>
+
+
 
 <div class="section">
     <h2>◯ 寄附の内訳</h2>
@@ -118,7 +120,7 @@
         <tbody>
         @foreach ($donations as $donation)
             <tr>
-                <td>{{ Carbon::parse($donation['created_at'])->format('Y年m月d日') }}</td>
+                <td>{{ PdfHelpers::getJapaneseDate($donation['created_at']) }}</td>
                 <td>{{ $donation['donation_external_id'] }}</td>
                 <td>{{ $donation['donation_project'] }}</td>
                 <td>{{ $donation['type'] }}</td>

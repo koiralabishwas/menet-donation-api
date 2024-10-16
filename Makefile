@@ -33,6 +33,10 @@ list-routes: ## ルートを一覧表示します
 clear-logs: ## storage/logs/laravel.logのログをクリアします
 	@echo "" > storage/logs/laravel.log
 
-.PHONY: run
-run: ## アプリを実行します
+.PHONY: run-server
+run-server: ## アプリを実行します
 	@php artisan serve
+
+.PHONY: run-webhook
+run-webhook: ## webhook を　実行
+	@stripe listen --forward-to localhost:8000/api/webhook
