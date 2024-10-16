@@ -1,4 +1,4 @@
-@php use Carbon\Carbon; @endphp
+@php use App\Helpers\Helpers;use Carbon\Carbon; @endphp
     <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -73,8 +73,8 @@
 </head>
 <body>
 <div class="section text-right">
-    <p>{{ Carbon::now()->format('Y年m月d日') }}</p>
-    <h2>{{ Carbon::now()->format('Y') }}年分寄附金受領証明書</h2>
+    <p>{{ Helpers::getJapaneseDate(Carbon::now()) }}</p>
+    <h2>{{ Helpers::getJapaneseYear(Carbon::now())}}年分寄附金受領証明書</h2>
 </div>
 
 <div class="section">
@@ -118,7 +118,7 @@
         <tbody>
         @foreach ($donations as $donation)
             <tr>
-                <td>{{ Carbon::parse($donation['created_at'])->format('Y年m月d日') }}</td>
+                <td>{{ Helpers::getJapaneseDate($donation['created_at']) }}</td>
                 <td>{{ $donation['donation_external_id'] }}</td>
                 <td>{{ $donation['donation_project'] }}</td>
                 <td>{{ $donation['type'] }}</td>
