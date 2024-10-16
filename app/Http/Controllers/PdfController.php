@@ -23,6 +23,7 @@ class PdfController extends Controller
 
         return pdf()->view('pdf.testpdf',[
             'donor' => $donor,
+            'certificateYear' => $year,
             'donations' => $certificateData,
             'total_amount' => $total_amount
         ])->format(Format::A4)->name('tested.pdf');
