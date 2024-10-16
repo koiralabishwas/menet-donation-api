@@ -1,16 +1,15 @@
-        1. fix 法人番号not rendering　
-        2. send right link to pdf in mail
-3. input logo in pdf
+fix PDf layout
+    add logo
+    fix font
 
-4. /pdf/donor_external_id/年度別に
-    japanese date
+updating donor on same email
+
+swagger api docs
+
+write docs in notion
 
 
 
-        5. make table border thicker
-
-        6. fix return to pdf link after checkout session
-        i.e path conataining date
 
 
 
