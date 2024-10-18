@@ -11,9 +11,9 @@ paths:
   /api/checkout-session:
     post:
       operationId: createCheckoutSession
-      summary: Create checkout session
+      summary: Create Checkout Session
       tags:
-        - Checkout
+        - Checkout Session
       requestBody:
         required: true
         content:
@@ -89,7 +89,7 @@ paths:
                   example: 9999.0
       responses:
         '201':
-          description: Session successfully created
+          description: Checkout Session successfully created
           content:
             application/json:
               schema:
