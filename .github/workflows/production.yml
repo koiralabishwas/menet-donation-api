@@ -50,7 +50,7 @@ jobs:
           passphrase: ${{ secrets.PASSWORD }}
           script: |
             cd laravel-project/api-donation.me-net.or.jp/
-            cp .env.develop .env
+            cp .env.production .env
             make install
             make update
             make clear
