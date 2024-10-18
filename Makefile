@@ -29,6 +29,13 @@ format-code: ## コードをフォーマットします
 list-routes: ## ルートを一覧表示します
 	@php artisan route:list
 
+.PHONY: clear
+clear: ## キャッシュをクリアします
+	@php artisan cache:clear
+	@php artisan config:clear
+	@php artisan route:clear
+	@php artisan view:clear
+
 .PHONY: clear-logs
 clear-logs: ## storage/logs/laravel.logのログをクリアします
 	@echo "" > storage/logs/laravel.log
