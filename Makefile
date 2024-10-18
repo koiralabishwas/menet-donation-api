@@ -5,6 +5,7 @@ help: ## help 表示 `make help` でタスクの一覧を確認できます
 
 .PHONY: install
 install: ## インストールします
+	@npm run install
 	@composer install
 
 .PHONY: update
@@ -28,6 +29,13 @@ format-code: ## コードをフォーマットします
 .PHONY: list-routes
 list-routes: ## ルートを一覧表示します
 	@php artisan route:list
+
+.PHONY: clear
+clear: ## キャッシュをクリアします
+	@php artisan cache:clear
+	@php artisan config:clear
+	@php artisan route:clear
+	@php artisan view:clear
 
 .PHONY: clear-logs
 clear-logs: ## storage/logs/laravel.logのログをクリアします

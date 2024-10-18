@@ -28,14 +28,14 @@ class WebhookController extends Controller
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data;
                 $metaData = $paymentIntent['object']->metadata;
-                Log::info($paymentIntent["object"]);
+                Log::info($paymentIntent['object']);
 
-                DonationRepository::storeDonation($metaData , $paymentIntent["object"]);
+                DonationRepository::storeDonation($metaData, $paymentIntent['object']);
                 Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
+
                 return;
 
-
-            // ... handle other event types
+                // ... handle other event types
             default:
         }
     }

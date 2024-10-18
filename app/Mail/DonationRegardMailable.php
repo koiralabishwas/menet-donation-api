@@ -26,16 +26,16 @@ use Illuminate\Queue\SerializesModels;
     /**
      * Get the message envelope.
      */
-   public function build(): DonationRegardMailable
-   {
-       $subject = '寄付完了のお知らせ';
+    public function build(): DonationRegardMailable
+    {
+        $subject = '寄付完了のお知らせ';
 
-       return $this->subject($subject)->markdown('mail.donationRegard')->with([
-           'donorName' => $this->donorName,
-           'donationProject' => $this->donationProject,
-           'donationAmount' => $this->donationAmount,
-           'donationCertificateUrl' => $this->donationCertificateUrl,
-           'donorExternalId' => $this->donorExternalId
-       ]);
-   }
+        return $this->subject($subject)->markdown('mail.donationRegard')->with([
+            'donorName' => $this->donorName,
+            'donationProject' => $this->donationProject,
+            'donationAmount' => $this->donationAmount,
+            'donationCertificateUrl' => $this->donationCertificateUrl,
+            'donorExternalId' => $this->donorExternalId,
+        ]);
+    }
 }

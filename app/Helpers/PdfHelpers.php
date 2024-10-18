@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 
 class PdfHelpers
 {
@@ -30,8 +29,9 @@ class PdfHelpers
         foreach ($eras as $era => $startYear) {
             if ($currentYear >= $startYear) {
                 $eraYear = $currentYear - $startYear + 1;
-                $japaneseYear = $era . ($eraYear === 1 ? '元' : $eraYear) . '年';
-                return $japaneseYear . $month . $day;
+                $japaneseYear = $era.($eraYear === 1 ? '元' : $eraYear).'年';
+
+                return $japaneseYear.$month.$day;
             }
         }
 
@@ -41,7 +41,7 @@ class PdfHelpers
 
     public static function getJapaneseYear(string $year): string
     {
-        $currentYear = (int)$year;
+        $currentYear = (int) $year;
 
         $eras = [
             '令和' => 2019,  // Reiwa started in 2019
@@ -54,7 +54,8 @@ class PdfHelpers
         foreach ($eras as $era => $startYear) {
             if ($currentYear >= $startYear) {
                 $eraYear = $currentYear - $startYear + 1;
-                return $era . $eraYear;
+
+                return $era.$eraYear;
             }
         }
 

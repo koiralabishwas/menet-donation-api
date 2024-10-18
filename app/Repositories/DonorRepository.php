@@ -9,12 +9,8 @@ class DonorRepository
 {
     /**
      * Store a new Donor record in the database.
-     *
-     * @param array $DonorData
-     * @param object $stripeCustomer
-     * @return Donor
      */
-    public static function storeDonor(array $DonorData , object $stripeCustomer ): Donor
+    public static function storeDonor(array $DonorData, object $stripeCustomer): Donor
     {
         // NOTE :リーピータ客の場合、 上書きしたい項目は $DonorData　から渡す
         // NOTE : 上書き必要ないものは一回$stripeCustomerのままで
@@ -48,9 +44,10 @@ class DonorRepository
     {
         $donor = Donor::query()->where('email', $email)->first();
 
-        if (!empty($donor)){
-            return json_decode($donor["stripe_customer_object"]);
+        if (! empty($donor)) {
+            return json_decode($donor['stripe_customer_object']);
         }
+
         return null;
 
     }
@@ -59,6 +56,4 @@ class DonorRepository
     {
         return Donor::query()->where('donor_external_id', $externalId)->first();
     }
-
-
 }

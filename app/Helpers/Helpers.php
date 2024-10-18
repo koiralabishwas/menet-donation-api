@@ -2,12 +2,11 @@
 
 namespace App\Helpers;
 
-use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class Helpers
 {
-    public static function CreateExternalIdfromDate() : string
+    public static function CreateExternalIdfromDate(): string
     {
         $fullYear = date('Y');
         $date = date('md');
@@ -17,11 +16,8 @@ class Helpers
         return "$fullYear$date-$randomPart";
     }
 
-    public static function createUuid() : String
+    public static function createUuid(): string
     {
         return Str::uuid()->toString();
     }
-
-
-
 }

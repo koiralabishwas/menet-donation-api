@@ -33,9 +33,6 @@ class StripeProvider extends ServiceProvider
 
     /**
      * Create a Stripe customer.
-     *
-     * @param array $customerData
-     * @return object
      */
     public static function createCustomer(array $customerData): object
     {
@@ -48,6 +45,7 @@ class StripeProvider extends ServiceProvider
             return $existingDonor;
         }
         $externalId = Helpers::createUuid();
+
         return $stripe->customers->create([
             'name' => $customerData['name'],
             'email' => $customerData['email'],
@@ -66,13 +64,14 @@ class StripeProvider extends ServiceProvider
     public static function searchCustomerFromEmail(string $email)
     {
         $stripe = app(StripeClient::class);
+
         return $stripe->customers->search([
-            'query' => 'email:\'' . $email . '\''
+            'query' => 'email:\''.$email.'\'',
         ]);
     }
 
     public static function deleteAllCustomers(): string
-        // TODO: delete in production
+    // TODO: delete in production
     {
         $stripe = app(StripeClient::class);
         $count = 0;
@@ -82,14 +81,15 @@ class StripeProvider extends ServiceProvider
                 try {
                     $stripe->customers->delete($customer->id);
                 } catch (ApiErrorException $e) {
-                    Log::error("failed $customer->id &&& $e" );
+                    Log::error("failed $customer->id &&& $e");
                 }
             }
 
             $count = $count + 1;
 
         }
-        return "all customers deleted";
+
+        return 'all customers deleted';
     }
 
     public static function searchPrice(string $productId, int $amount)
@@ -99,8 +99,9 @@ class StripeProvider extends ServiceProvider
             'query' => "active:\"true\" AND product:\"$productId\" AND metadata[\"amount\"]:\"$amount\"",
         ]);
         if ($existingPrice->data) {
-            return ($existingPrice->data[0]);
+            return $existingPrice->data[0];
         }
+
         return null;
     }
 
@@ -116,31 +117,32 @@ class StripeProvider extends ServiceProvider
 
         return $stripe->prices->create([
             'product' => $productId,
-            'currency' => "jpy",
+            'currency' => 'jpy',
             'unit_amount' => $amount,
             'metadata' => ['amount' => $amount],
         ]);
     }
 
-    public static function createCheckoutSession(string $customerId, string $priceId ,  $paymentIntentMetaData ): Session
+    public static function createCheckoutSession(string $customerId, string $priceId, $paymentIntentMetaData): Session
     {
         $stripe = app(StripeClient::class);
         $donor_external_id = $paymentIntentMetaData['donor_external_id'];
         $dateYear = date('Y');
+
         return $stripe->checkout->sessions->create([
             'success_url' => env('FRONT_END_URL')."/pdf/$donor_external_id/$dateYear",
-            'ui_mode' => "hosted",
+            'ui_mode' => 'hosted',
             'customer' => $customerId,
             'payment_method_types' => ['card'],
             'line_items' => [[
                 'price' => $priceId,
-                'quantity' => 1
+                'quantity' => 1,
             ]],
             'automatic_tax' => ['enabled' => false],
             'mode' => 'payment',
-            "payment_intent_data" => [
-                "metadata" => $paymentIntentMetaData
-            ]
+            'payment_intent_data' => [
+                'metadata' => $paymentIntentMetaData,
+            ],
         ]);
 
     }
@@ -148,7 +150,8 @@ class StripeProvider extends ServiceProvider
     public static function getProductNameFromId(string $productId): string
     {
         $stripe = app(StripeClient::class);
-        $product =  $stripe->products->retrieve($productId);
+        $product = $stripe->products->retrieve($productId);
+
         return $product->name;
 
     }

@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DonationFormRequest;
+use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use App\Providers\StripeProvider;
 
 class CheckoutSessionController extends Controller
 {
-
     public function create(DonationFormRequest $request): JsonResponse
     {
 
@@ -23,22 +22,22 @@ class CheckoutSessionController extends Controller
             $stripePrice = StripeProvider::createPrice($formData['product_id'], $formData['price']);
 
             $paymentIntentMetaData = [
-                "donor_id" => $donor['donor_id'],
-                "donor_name" => $donor['name'],
-                "donor_external_id" => $donor['donor_external_id'],
-                "donation_project" => StripeProvider::getProductNameFromId($formData['product_id']) ,
-                "amount" => $formData['price'],
-                "currency" => "jpy",
-                "type" => "ONE_TIME",
-                "tax_deduction_certificate_url" => "https://www.google.com//".$donor['donor_external_id'],
+                'donor_id' => $donor['donor_id'],
+                'donor_name' => $donor['name'],
+                'donor_external_id' => $donor['donor_external_id'],
+                'donation_project' => StripeProvider::getProductNameFromId($formData['product_id']),
+                'amount' => $formData['price'],
+                'currency' => 'jpy',
+                'type' => 'ONE_TIME',
+                'tax_deduction_certificate_url' => 'https://www.google.com//'.$donor['donor_external_id'],
             ];
 
-            $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id , $paymentIntentMetaData);
+            $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id, $paymentIntentMetaData);
             $formData = [
-                "donor" => $donor,
-                "stripe_checkout_session" => $checkoutSession,
+                'donor' => $donor,
+                'stripe_checkout_session' => $checkoutSession,
                 'stripe_price' => $stripePrice,
-                "stripe_customer" => $stripeCustomer,
+                'stripe_customer' => $stripeCustomer,
             ];
 
             return response()->json([

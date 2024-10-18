@@ -7,6 +7,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/pdf/{donor_external_id}/{year}' , [PdfController::class , 'create']);
-
+Route::get('/pdf/{donor_external_id}/{year}', [PdfController::class, 'create']);
