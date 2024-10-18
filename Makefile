@@ -5,6 +5,7 @@ help: ## help 表示 `make help` でタスクの一覧を確認できます
 
 .PHONY: install
 install: ## インストールします
+	@npm run install
 	@composer install
 
 .PHONY: update
