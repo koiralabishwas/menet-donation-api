@@ -8,16 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev-api-donation.me-net.or.jp
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           # XServerのNodeJSの最新バージョンは16.20.2
           node-version: 16.20.2
-          cache: "yarn"
+          cache: "npm"
 
       - name: Install
-        run: yarn install --frozen-lockfile
+        run: npm ci
         env:
           # CI上では husky を動かさないようにする
           HUSKY: 0
