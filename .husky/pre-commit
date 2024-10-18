@@ -1,5 +1,5 @@
 # テスト
-# make test
+make test
 
 # コードフォーマット
 make format-code
