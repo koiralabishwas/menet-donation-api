@@ -1,0 +1,58 @@
+name: develop
+on:
+  push:
+    branches: develop
+env:
+  URL: https://dev-api-donation.me-net.or.jp
+jobs:
+  build:
+    name: Install, check, build and deploy to Xserver
+    runs-on: ubuntu-latest
+    environment: ${{ env.URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # XServerのNodeJSの最新バージョンは16.20.2
+          node-version: 16.20.2
+          cache: "yarn"
+
+      - name: Install
+        run: yarn install --frozen-lockfile
+        env:
+          # CI上では husky を動かさないようにする
+          HUSKY: 0
+
+      - name: Build
+        run: yarn build
+
+      - name: Deploy exported folder to Xserver through FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.SERVER }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          server-dir: laravel-project/${{ env.URL }}/
+          local-dir: ./
+          exclude: |
+            .git*
+            .git*/**
+            .vscode/**
+            node_modules/**
+            vendor/**
+
+      - name: Install and clear cache
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSWORD }}
+          script: |
+            cd laravel-project/${{ env.URL }}/
+            cp .env.develop .env
+            make install
+            make update
+            make clear
