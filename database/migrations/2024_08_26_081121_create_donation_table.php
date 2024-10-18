@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('donations', function (Blueprint $table) {
             $table->unsignedBigInteger('donation_id')->autoIncrement()->unique()->index();
-            $table->string('donation_external_id',20)->comment("20YYMMDD-ABC123");
+            $table->string('donation_external_id', 20)->comment('20YYMMDD-ABC123');
             $table->unsignedBigInteger('donor_id');
-            $table->string('donor_external_id',36)->comment('uuid')->index();
-            $table->string('subscription_external_id',36)->comment('uuid')->nullable();
-            $table->string('stripe_subscription_id',100)->nullable();
-            $table->string('donation_project' , 50);
+            $table->string('donor_external_id', 36)->comment('uuid')->index();
+            $table->string('subscription_external_id', 36)->comment('uuid')->nullable();
+            $table->string('stripe_subscription_id', 100)->nullable();
+            $table->string('donation_project', 50);
             $table->unsignedInteger('amount');
-            $table->string('currency',3);
-            $table->enum('type',['ONE_TIME','MONTHLY' , 'YEARLY']);
-            $table->string('tax_deduction_certificate_url',1023);
+            $table->string('currency', 3);
+            $table->enum('type', ['ONE_TIME', 'MONTHLY', 'YEARLY']);
+            $table->string('tax_deduction_certificate_url', 1023);
             $table->json('stripe_donation_object'); //payment_intent or invoice
             $table->foreign('donor_id')->references('donor_id')->on('donors');
             $table->foreign('donor_external_id')->references('donor_external_id')->on('donors');

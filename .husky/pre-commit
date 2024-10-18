@@ -1,0 +1,7 @@
+# テスト
+make test
+
+# コードフォーマット
+make format-code
+
+git add .
