@@ -23,7 +23,7 @@ jobs:
           HUSKY: 0
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Deploy exported folder to Xserver through FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
