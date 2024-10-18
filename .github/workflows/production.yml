@@ -2,17 +2,15 @@ name: develop
 on:
   push:
     branches: develop
-env:
-  URL: https://api-donation.me-net.or.jp
 jobs:
   build:
     name: Install, check, build and deploy to Xserver
     runs-on: ubuntu-latest
-    environment: ${{ env.URL }}
+    environment: api-donation.me-net.or.jp
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
           # XServerのNodeJSの最新バージョンは16.20.2
           node-version: 16.20.2
@@ -33,7 +31,7 @@ jobs:
           server: ${{ secrets.SERVER }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          server-dir: laravel-project/${{ env.URL }}/
+          server-dir: laravel-project/api-donation.me-net.or.jp/
           local-dir: ./
           exclude: |
             .git*
@@ -51,7 +49,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSWORD }}
           script: |
-            cd laravel-project/${{ env.URL }}/
+            cd laravel-project/api-donation.me-net.or.jp/
             cp .env.develop .env
             make install
             make update
