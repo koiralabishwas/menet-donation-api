@@ -41,6 +41,11 @@ clear: ## キャッシュをクリアします
 clear-logs: ## storage/logs/laravel.logのログをクリアします
 	@echo "" > storage/logs/laravel.log
 
+.PHONY: run-server-with-webhook
+run-server-webhook:
+	@php artisan serve & stripe listen --forward-to localhost:8000/api/webhook
+
+
 .PHONY: run-server
 run-server: ## アプリを実行します
 	@php artisan serve
