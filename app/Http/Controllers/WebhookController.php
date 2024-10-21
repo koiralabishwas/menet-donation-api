@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
@@ -14,11 +14,11 @@ class WebhookController extends Controller
     /**
      * @throws SignatureVerificationException
      */
-    public function create(): void
+    public function create(Request $request): void
     {
-        $endpoint_secret = 'whsec_66d1bc562f01853a93c4c10ab740b0bbd30aa4084a2fd9e5a300473917bc2f8f';
-        $payload = @file_get_contents('php://input');
-        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+        $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
+        $payload = $request->getcontent();
+        $sig_header = $request->header('Stripe-Signature');
 
         $event = Webhook::constructEvent(
             $payload, $sig_header, $endpoint_secret
@@ -28,7 +28,7 @@ class WebhookController extends Controller
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data;
                 $metaData = $paymentIntent['object']->metadata;
-                Log::info($paymentIntent['object']);
+//                Log::info($paymentIntent['object']);
 
                 DonationRepository::storeDonation($metaData, $paymentIntent['object']);
                 Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
