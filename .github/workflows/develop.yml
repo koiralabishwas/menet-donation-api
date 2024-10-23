@@ -1,7 +1,10 @@
 name: develop
 on:
   push:
-    branches: develop
+    branches:
+      - develop
+      - fix/*
+      - feat/*
 jobs:
   build:
     name: Install, check, build and deploy to Xserver
