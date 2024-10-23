@@ -43,6 +43,9 @@ components:
             name:
               type: string
               example: "John Doe"
+            name_furigana:
+              type: string
+              example: "ジョン・ドー"
             email:
               type: string
               example: "john@example.com"
@@ -86,9 +89,9 @@ components:
                   type: string
                   nullable: true
                   example: null
-        product_id:
+        product:
           type: string
-          example: "prod_Q2GxSqbpfzdba4"
+          example: "altervoice"
         price:
           type: number
           example: 9999.0
