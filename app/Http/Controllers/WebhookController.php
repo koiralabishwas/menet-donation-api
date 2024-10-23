@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
@@ -28,7 +29,7 @@ class WebhookController extends Controller
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data;
                 $metaData = $paymentIntent['object']->metadata;
-//                Log::info($paymentIntent['object']);
+                Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
 
                 DonationRepository::storeDonation($metaData, $paymentIntent['object']);
                 Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
