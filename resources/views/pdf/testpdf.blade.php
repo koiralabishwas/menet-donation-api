@@ -10,10 +10,9 @@
         body {
             font-family: 'Noto Sans JP', sans-serif;
             line-height: 1.5;
-            margin: 20px;
         }
 
-        h1, h2 {
+        h1, h2,h3 {
             text-align: center;
         }
 
@@ -53,6 +52,7 @@
 
         th {
             background-color: #eef2ff;
+            margin-top: 20px;
         }
 
         .section-box {
@@ -69,6 +69,11 @@
         .bold {
             font-weight: bold;
         }
+
+        @page {
+            margin: 40px;
+        }
+
     </style>
 </head>
 <body>
@@ -103,7 +108,7 @@
 
 
 <div class="section">
-    <h2>◯ 寄附の内訳</h2>
+    <h3>◯ 寄附の内訳</h3>
 </div>
 
 <div class="table-wrapper">
