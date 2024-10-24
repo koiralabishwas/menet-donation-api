@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\StripeProducts;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DonationFormRequest extends FormRequest
 {
@@ -16,6 +18,7 @@ class DonationFormRequest extends FormRequest
         return [
             'customer' => 'required|array',
             'customer.name' => 'required|string',
+            'customer.name_furigana' => 'nullable|string',
             'customer.email' => 'required|email',
             'customer.phone' => 'required|string', // 海外の電話番号を考慮してstringのみ
             'customer.is_public' => 'required|boolean', // Validation for is_public field
@@ -28,7 +31,7 @@ class DonationFormRequest extends FormRequest
             'customer.address.city' => 'required|string',
             'customer.address.line1' => 'required|string',
             'customer.address.line2' => 'nullable|string',
-            'product_id' => 'required|string', // StripeのプロダクトID
+            'product' => ['required', 'string', Rule::in(StripeProducts::getAllKeys())], // StripeのプロダクトID
             'price' => 'required|numeric', // 寄付額
         ];
     }

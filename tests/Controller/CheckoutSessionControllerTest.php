@@ -26,7 +26,7 @@ class CheckoutSessionControllerTest extends TestCase
                 'corporate_no' => '1234567890',
                 'message' => 'Hello World!',
             ],
-            'product_id' => 'prod_Q2GxSqbpfzdba4',
+            'product' => 'altervoice',
             'price' => 1000,
         ];
 

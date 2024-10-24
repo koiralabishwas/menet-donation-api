@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StripeProducts;
 use App\Http\Requests\DonationFormRequest;
 use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
@@ -25,7 +26,7 @@ class CheckoutSessionController extends Controller
                 'donor_id' => $donor['donor_id'],
                 'donor_name' => $donor['name'],
                 'donor_external_id' => $donor['donor_external_id'],
-                'donation_project' => StripeProvider::getProductNameFromId($formData['product_id']),
+                'donation_project' => StripeProvider::getProductNameFromId(StripeProducts::getByKey($formData['product'])),
                 'amount' => $formData['price'],
                 'currency' => 'jpy',
                 'type' => 'ONE_TIME',
