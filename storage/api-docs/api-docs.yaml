@@ -34,7 +34,7 @@ components:
       type: object
       required:
         - customer
-        - product_id
+        - product
         - price
       properties:
         customer:
@@ -91,7 +91,11 @@ components:
                   example: null
         product:
           type: string
-          example: "altervoice"
+          enum:
+            - altervoice
+            - people_in_need
+            - educational_counseling
+            - all
         price:
           type: number
           example: 9999.0

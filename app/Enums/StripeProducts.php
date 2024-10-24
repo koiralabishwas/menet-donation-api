@@ -6,7 +6,7 @@ enum StripeProducts: string
 {
     case ALTERVOICE = 'prod_Q2GxSqbpfzdba4';
     case EDUCATIONAL_COUNSELING = 'prod_1';
-    case needy_people = 'prod_2';
+    case PEOPLE_IN_NEED = 'prod_2';
     case ALL = 'prod_3';
 
     /**
