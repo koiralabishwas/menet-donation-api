@@ -48,7 +48,7 @@ jobs:
         run: npm run build
 
       - name: Migrate Database
-        run: php artisan migrate
+        run: php artisan migrate --force
 
       - name: Deploy exported folder to Xserver through FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
