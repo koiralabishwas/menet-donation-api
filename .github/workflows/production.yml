@@ -15,8 +15,6 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ""
           MYSQL_DATABASE: donation
-          MYSQL_USER: root
-          MYSQL_PASSWOR: ""
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
         options: >-
           --health-cmd "mysqladmin ping"
