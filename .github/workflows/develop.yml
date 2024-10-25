@@ -51,7 +51,7 @@ jobs:
         run: npm run build
 
       - name: Migrate Database
-        run: php artisan migrate --force
+        run: php artisan migrate:fresh --force
         env:
           DB_HOST: 127.0.0.1
 
