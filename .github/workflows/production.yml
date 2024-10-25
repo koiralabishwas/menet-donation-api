@@ -11,10 +11,12 @@ jobs:
       db:
         image: mysql:5.7
         ports:
-          - 3306
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: ""
           MYSQL_DATABASE: donation
+          MYSQL_USER: root
+          MYSQL_PASSWOR: ""
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
         options: >-
           --health-cmd "mysqladmin ping"
@@ -49,6 +51,13 @@ jobs:
 
       - name: Migrate Database
         run: php artisan migrate --force
+        env:
+          DB_HOST: 127.0.0.1
+
+      - name: Test
+        run: make test
+        env:
+          DB_HOST: 127.0.0.1
 
       - name: Deploy exported folder to Xserver through FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
