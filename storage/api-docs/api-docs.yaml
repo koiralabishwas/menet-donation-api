@@ -96,6 +96,7 @@ components:
             - people_in_need
             - educational_counseling
             - all
+          example: altervoice
         price:
           type: number
           example: 9999.0
