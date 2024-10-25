@@ -25,6 +25,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Setup MySQL Database
+      - uses: shogo82148/actions-setup-mysql@v1
+        with:
+          distribution: "mysql"
+          mysql-version: "5.7"
+          user: "root"
+
+      - name: Migrate Database
+        run: php artisan migrate
+
       - name: Deploy exported folder to Xserver through FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
