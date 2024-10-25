@@ -41,6 +41,9 @@ jobs:
           extensions: mbstring, pdo_mysql, bcmath
           coverage: none
 
+      - name: Copy .env
+        run: cp .env.github_actions .env
+
       - name: Install
         run: make install
         env:
