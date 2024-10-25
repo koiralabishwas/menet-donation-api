@@ -24,11 +24,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
           # XServerのNodeJSの最新バージョンは16.20.2
           node-version: 16.20.2
           cache: "npm"
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_mysql, bcmath
+          coverage: none
 
       - name: Install
         run: make install
