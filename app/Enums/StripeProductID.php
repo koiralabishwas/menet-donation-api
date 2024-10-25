@@ -19,7 +19,7 @@ final class StripeProductID extends Enum
         return array_map('strtolower', self::getKeys());
     }
 
-    public static function getKeyByLowerCase(string $lowerKey): ?string
+    public static function getValueByLowerCaseKey(string $lowerKey): ?string
     {
         foreach (self::getKeys() as $key) {
             if (strtolower($key) === $lowerKey) {

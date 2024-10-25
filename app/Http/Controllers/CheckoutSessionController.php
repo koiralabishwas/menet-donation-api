@@ -20,13 +20,13 @@ class CheckoutSessionController extends Controller
             $stripeCustomer = StripeProvider::createCustomer($formData['customer']);
             $donor = DonorRepository::storeDonor($formData, $stripeCustomer);
             $donor['stripe_customer_object'] = json_decode($donor['stripe_customer_object']);
-            $stripePrice = StripeProvider::createPrice(StripeProductID::getKeyByLowerCase($formData['product']), $formData['price']);
+            $stripePrice = StripeProvider::createPrice(StripeProductID::getValueByLowerCaseKey($formData['product']), $formData['price']);
 
             $paymentIntentMetaData = [
                 'donor_id' => $donor['donor_id'],
                 'donor_name' => $donor['name'],
                 'donor_external_id' => $donor['donor_external_id'],
-                'donation_project' => StripeProvider::getProductNameFromId(StripeProductID::getKeyByLowerCase($formData['product'])),
+                'donation_project' => StripeProvider::getProductNameFromId(StripeProductID::getValueByLowerCaseKey($formData['product'])),
                 'amount' => $formData['price'],
                 'currency' => 'jpy',
                 'type' => 'ONE_TIME',

@@ -14,7 +14,7 @@ final class ProductName extends Enum
 
     const PEOPLE_IN_NEED = '生活困窮者';
 
-    public static function getKeyByLowerCase(string $lowerKey): ?string
+    public static function getValueByLowerCaseKey(string $lowerKey): ?string
     {
         foreach (self::getKeys() as $key) {
             if (strtolower($key) === $lowerKey) {
