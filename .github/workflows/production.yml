@@ -58,7 +58,7 @@ jobs:
           DB_HOST: 127.0.0.1
 
       - name: Test
-        run: make test
+        run: php artisan test
         env:
           DB_HOST: 127.0.0.1
 
