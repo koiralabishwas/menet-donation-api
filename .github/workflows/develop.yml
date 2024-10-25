@@ -34,16 +34,13 @@ jobs:
           cache: "npm"
 
       - name: Install
-        run: npm ci
+        run: make install
         env:
           # CI上では husky を動かさないようにする
           HUSKY: 0
 
       - name: Build
         run: npm run build
-
-      - name: Laravel Install
-        run: make install
 
       - name: Migrate Database
         run: php artisan migrate
