@@ -29,7 +29,7 @@ jobs:
         run: npm run build
 
       - name: Setup MySQL Database
-      - uses: shogo82148/actions-setup-mysql@v1
+        uses: shogo82148/actions-setup-mysql@v1
         with:
           distribution: "mysql"
           mysql-version: "5.7"
