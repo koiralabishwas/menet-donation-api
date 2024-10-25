@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\StripeProducts;
+use App\Enums\StripeProductID;
 use App\Http\Requests\DonationFormRequest;
 use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
@@ -20,17 +20,17 @@ class CheckoutSessionController extends Controller
             $stripeCustomer = StripeProvider::createCustomer($formData['customer']);
             $donor = DonorRepository::storeDonor($formData, $stripeCustomer);
             $donor['stripe_customer_object'] = json_decode($donor['stripe_customer_object']);
-            $stripePrice = StripeProvider::createPrice($formData['product_id'], $formData['price']);
+            $stripePrice = StripeProvider::createPrice(StripeProductID::getValueByLowerCaseKey($formData['product']), $formData['price']);
 
             $paymentIntentMetaData = [
                 'donor_id' => $donor['donor_id'],
                 'donor_name' => $donor['name'],
                 'donor_external_id' => $donor['donor_external_id'],
-                'donation_project' => StripeProvider::getProductNameFromId(StripeProducts::getByKey($formData['product'])),
+                'donation_project' => StripeProvider::getProductNameFromId(StripeProductID::getValueByLowerCaseKey($formData['product'])),
                 'amount' => $formData['price'],
                 'currency' => 'jpy',
                 'type' => 'ONE_TIME',
-                'tax_deduction_certificate_url' => 'https://www.google.com//'.$donor['donor_external_id'],
+                'tax_deduction_certificate_url' => "{env('APP_URL')}/{$donor['donor_external_id']}",
             ];
 
             $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id, $paymentIntentMetaData);

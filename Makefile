@@ -5,7 +5,7 @@ help: ## help 表示 `make help` でタスクの一覧を確認できます
 
 .PHONY: install
 install: ## インストールします
-	@npm run install
+	@npm install
 	@composer install
 
 .PHONY: update
@@ -19,7 +19,7 @@ swagger: ## swaggerを生成します
 
 .PHONY: test
 test: ## テストを実行します
-	@make clear-log
+	@make clear-logs
 	@php artisan test
 	@make test-webhook-payment-intent
 	@rm -rf .phpunit.cache .phpunit.result.cache

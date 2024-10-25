@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\StripeProducts;
+use App\Enums\StripeProductID;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -31,7 +31,7 @@ class DonationFormRequest extends FormRequest
             'customer.address.city' => 'required|string',
             'customer.address.line1' => 'required|string',
             'customer.address.line2' => 'nullable|string',
-            'product' => ['required', 'string', Rule::in(StripeProducts::getAllKeys())], // StripeのプロダクトID
+            'product' => ['required', 'string', Rule::in(StripeProductID::getLowerCaseKeys())], // StripeのプロダクトID
             'price' => 'required|numeric', // 寄付額
         ];
     }
