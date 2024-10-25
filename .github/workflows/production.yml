@@ -39,6 +39,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Laravel Install
+        run: make install
+
       - name: Migrate Database
         run: php artisan migrate
 
