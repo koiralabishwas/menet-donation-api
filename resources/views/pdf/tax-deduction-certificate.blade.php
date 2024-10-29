@@ -94,9 +94,9 @@ use App\Helpers\PdfHelpers;use Carbon\Carbon; @endphp
             <p>{{$donor['address']}}</p>
             <p>{{$donor['name']}} 様</p>
         </div>
-        <div class="right-column text-right">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" style="max-width: 100px; max-height: 100px;">
-        </div>
+{{--        <div class="right-column text-right">--}}
+{{--            <img src="{{ asset('images/logo.png') }}" alt="Logo" style="max-width: 100px; max-height: 100px;">--}}
+{{--        </div>--}}
     </div>
 </div>
 
