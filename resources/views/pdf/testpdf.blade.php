@@ -1,4 +1,5 @@
-@php use App\Helpers\Helpers;use App\Helpers\PdfHelpers;use Carbon\Carbon; @endphp
+@php
+use App\Helpers\PdfHelpers;use Carbon\Carbon; @endphp
     <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,13 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>寄附金受領証明書</title>
     <style>
+        @page{
+            margin: 30px 10px 10px;
+        }
         body {
             font-family: 'Noto Sans JP', sans-serif;
             line-height: 1.5;
-            margin: 20px;
         }
 
-        h1, h2 {
+        h1, h2 ,h3{
             text-align: center;
         }
 
@@ -22,10 +25,14 @@
             margin: 5px 0;
         }
 
-        .section {
-            padding: 10px;
+        .side-by-side {
+            display: flex;           /* Align items side by side */
+            padding: 10px;           /* Optional padding for better spacing */
         }
 
+        .left-column, .right-column {
+            flex: 1;                 /* Ensures both columns take up equal width */
+        }
         .text-right {
             text-align: right;
         }
@@ -33,9 +40,12 @@
         .text-center {
             text-align: center;
         }
+        .text-left {
+            text-align: left;
+        }
 
         .table-wrapper {
-            margin: 20px 0;
+            /*margin: 20px 0;*/
         }
 
         table {
@@ -64,6 +74,7 @@
 
         .danger {
             background-color: #fff1f2;
+            margin-top : 20px;
         }
 
         .bold {
@@ -72,12 +83,24 @@
     </style>
 </head>
 <body>
-<div class="section text-right">
+<div class="text-right">
     <p>{{ PdfHelpers::getJapaneseDate(Carbon::now()) }}</p>
     <h2>{{ PdfHelpers::getJapaneseYear($certificateYear)}}年分寄附金受領証明書</h2>
 </div>
+<div>
+    <div class="side-by-side">
+        <div class="left-column text-left">
+            <p>{{$donor['postal_code']}}</p>
+            <p>{{$donor['address']}}</p>
+            <p>{{$donor['name']}} 様</p>
+        </div>
+        <div class="right-column text-right">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" style="max-width: 100px; max-height: 100px;">
+        </div>
+    </div>
+</div>
 
-<div class="section text-right">
+<div class="text-right">
     <p>認定通知書の番号 市市活第502号</p>
     <p>認定年月日 令和6年4月10日</p>
     <p>神奈川県横浜市栄区小菅ヶ谷一丁目2-1</p>
@@ -86,13 +109,14 @@
     <p>理事長 武 一美</p>
 </div>
 
+
 <div class="section-box">
     <p class="text-center">平素は当法人の活動にご理解、ご協力を賜り、厚く御礼申し上げます。</p>
     <p class="text-center">頂戴した貴重なご寄附は、当団体の諸事業の運営に有効に使わせて頂きます。</p>
     <p class="text-center">今後とも、変わらぬご支援、ご協力をどうぞよろしくお願い申し上げます。</p>
 </div>
 
-<div class="section">
+<div class="">
     <p>寄附者ID: {{ $donor['donor_external_id'] }}</p>
     <p>寄附者住所: {{ $donor['address'] }}</p>
     <p>寄附者氏名または法人名: {{ $donor['name'] }} 様</p>
@@ -102,8 +126,8 @@
 
 
 
-<div class="section">
-    <h2>◯ 寄附の内訳</h2>
+<div class="">
+    <h3>◯ 寄附の内訳</h3>
 </div>
 
 <div class="table-wrapper">
