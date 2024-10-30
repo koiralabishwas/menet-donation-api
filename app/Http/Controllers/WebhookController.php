@@ -47,7 +47,7 @@ class WebhookController extends Controller
     public function paymentIntentSucceed(Request $request): void
     {
         $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50';
-        $payload = @file_get_contents('php://input');
+        $payload = $request->getcontent();
         $sig_header = $request->header('HTTP_STRIPE_SIGNATURE');
 
         $event = Webhook::constructEvent(
