@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/checkout-session', [CheckoutSessionController::class, 'create']);
 
 Route::prefix('webhooks')->group(function () {
-    Route::post('/payment-intent-succeed', [WebhookController::class, 'create']);
+    Route::post('/payment-intent-succeed', [WebhookController::class, 'paymentIntentSucceed']);
 });
 Route::post('/webhook', [WebhookController::class, 'create']);
 
