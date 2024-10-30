@@ -10,9 +10,9 @@ class DonorRepository
     /**
      * Store a new Donor record in the database.
      */
-    public static function storeDonor(array $DonorData, object $stripeCustomer): Donor
+    public static function storeDonor(array $donorData, object $stripeCustomer): Donor
     {
-        // NOTE :リーピータ客の場合、 上書きしたい項目は $DonorData　から渡す
+        // NOTE :リーピータ客の場合、 上書きしたい項目は $donorData　から渡す
         // NOTE : 上書き必要ないものは一回$stripeCustomerのままで
         return Donor::updateOrCreate(
             [
@@ -21,7 +21,7 @@ class DonorRepository
             [
                 'donor_external_id' => $stripeCustomer->metadata->donor_external_id,  // Custom external ID
                 'stripe_customer_id' => $stripeCustomer->id, // Stripe customer ID
-                'type' => $DonorData['customer']['type'],  // Type from Stripe metadata
+                'type' => $stripeCustomer->metadata->type,   // Customer type from Stripe response
                 'name' => $stripeCustomer->name,             // Customer name from Stripe response
                 'email' => $stripeCustomer->email,           // Customer email from Stripe response
                 'phone' => $stripeCustomer->phone,           // Customer phone from Stripe response
@@ -32,10 +32,10 @@ class DonorRepository
                     $stripeCustomer->address->line1,       // Line 1 from Stripe address
                     $stripeCustomer->address->line2,       // Line 2 from Stripe address
                 ]),
-                'is_public' => $DonorData['customer']['is_public'], // Is public from request data
-                'public_name' => $DonorData['customer']['public_name'], // Display name from request data
-                'corporate_no' => $DonorData['customer']['corporate_no'], // Corporate number from request data
-                'message' => $DonorData['customer']['message'],         // Message from request data
+                'is_public' => $donorData['customer']['is_public'], // Is public from request data
+                'public_name' => $donorData['customer']['public_name'], // Display name from request data
+                'corporate_no' => $donorData['customer']['corporate_no'], // Corporate number from request data
+                'message' => $donorData['customer']['message'],         // Message from request data
                 'stripe_customer_object' => json_encode($stripeCustomer), // Entire Stripe customer object as JSON
             ]
         );

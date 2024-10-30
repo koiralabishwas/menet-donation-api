@@ -76,9 +76,9 @@ components:
             type:
               type: string
               enum:
-                - person
+                - individual
                 - company
-              example: "person"
+              example: "individual"
             name:
               type: string
               example: "John Doe"
@@ -171,6 +171,12 @@ components:
         stripe_customer_id:
           type: string
           example: "cus_R3HZqz0iiqvl7z"
+        type:
+          type: string
+          enum:
+            - individual
+            - company
+          example: "individual"
         name:
           type: string
           example: "John Doe"

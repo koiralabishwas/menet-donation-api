@@ -17,7 +17,7 @@ class DonationFormRequest extends FormRequest
     {
         return [
             'customer' => 'required|array',
-            'customer.type' => 'required|in:person,company',
+            'customer.type' => 'required|in:individual,company',
             'customer.name' => 'required|string',
             'customer.name_furigana' => 'nullable|string',
             'customer.email' => 'required|email',
