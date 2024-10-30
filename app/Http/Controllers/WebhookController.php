@@ -40,4 +40,28 @@ class WebhookController extends Controller
             default:
         }
     }
+
+    /**
+     * @throws SignatureVerificationException
+     */
+    public function paymentIntentSucceed(Request $request): void
+    {
+        $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
+        $payload = @file_get_contents('php://input');
+        $sig_header = $request->header('HTTP_STRIPE_SIGNATURE');
+
+        $event = Webhook::constructEvent(
+            $payload, $sig_header, $endpoint_secret
+        );
+
+        $paymentIntent = $event->data;
+        $metaData = $paymentIntent['object']->metadata;
+        Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
+
+        DonationRepository::storeDonation($metaData, $paymentIntent['object']);
+        Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
+
+        // ... handle other event types
+
+    }
 }
