@@ -55,6 +55,14 @@ jobs:
         env:
           DB_HOST: 127.0.0.1
 
+      - name: Install MySQL Client
+        run: sudo apt-get install mysql-client
+
+      - name: Connect to MySQL and run queries
+        run: |
+          mysql -h 127.0.0.1 -u root --password="" donation -e "SELECT * FROM donation.donors;"
+          mysql -h 127.0.0.1 -u root --password="" donation -e "SELECT * FROM donation.donations;"
+
       - name: Test
         run: php artisan test
         env:
