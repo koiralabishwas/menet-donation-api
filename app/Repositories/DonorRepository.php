@@ -21,6 +21,7 @@ class DonorRepository
             [
                 'donor_external_id' => $stripeCustomer->metadata->donor_external_id,  // Custom external ID
                 'stripe_customer_id' => $stripeCustomer->id, // Stripe customer ID
+                'type' => $DonorData['customer']['type'],  // Type from Stripe metadata
                 'name' => $stripeCustomer->name,             // Customer name from Stripe response
                 'email' => $stripeCustomer->email,           // Customer email from Stripe response
                 'phone' => $stripeCustomer->phone,           // Customer phone from Stripe response
