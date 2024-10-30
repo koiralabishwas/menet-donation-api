@@ -8,7 +8,7 @@ use Google\Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class UploadImageController extends Controller
+class DonationImageController extends Controller
 {
     /**
      * @throws Exception
@@ -16,7 +16,7 @@ class UploadImageController extends Controller
     public function uploadDonationImage(Request $request): JsonResponse
     {
         $image = $request->file('file');
-        $donorEmail = $request->input('donorEmail');
+        $donorEmail = $request->input('email');
         $externalId = Helpers::CreateExternalIdfromDate();
 
         $imageName = "$donorEmail-$externalId";
