@@ -28,6 +28,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/DonationResponse"
 
+  /api/xserver/check-if-email-exists:
+    post:
+      operationId: checkIfEmailExists
+      summary: Check if email exists
+      tags:
+        - XServer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locale:
+                  type: string
+                  example: ja
+                email:
+                  type: string
+                  example: rajan.valencia@au.com
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exist:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Success
+
 components:
   schemas:
     DonationRequest:
@@ -48,7 +81,7 @@ components:
               example: "ジョン・ドー"
             email:
               type: string
-              example: "john@example.com"
+              example: "rajan.valencia@au.com"
             phone:
               type: string
               example: "1234567890"
