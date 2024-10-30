@@ -11,6 +11,7 @@ class CheckoutSessionControllerTest extends TestCase
     {
         $donorData = [
             'customer' => [
+                'type' => 'person',
                 'name' => 'test',
                 'email' => 'test@example.com',
                 'phone' => '0123456789',
@@ -47,6 +48,7 @@ class CheckoutSessionControllerTest extends TestCase
             'message' => 'success',
             'data' => [
                 'donor' => [
+                    'type' => $donorData['customer']['type'],
                     'name' => $donorData['customer']['name'],
                     'email' => $donorData['customer']['email'],
                     'phone' => $donorData['customer']['phone'],
