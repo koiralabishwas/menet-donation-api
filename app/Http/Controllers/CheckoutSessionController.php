@@ -31,7 +31,7 @@ class CheckoutSessionController extends Controller
                 'amount' => $formData['price'],
                 'currency' => 'jpy',
                 'type' => 'ONE_TIME',
-                'tax_deduction_certificate_url' => "{env('APP_URL')}/{$donor['donor_external_id']}",
+                'tax_deduction_certificate_url' => "{env('FRONT_END_URL')}/success?donor_name={$donor['name']}",
             ];
 
             $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id, $paymentIntentMetaData);
