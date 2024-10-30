@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('donor_id')->autoIncrement();
             $table->string('donor_external_id', 36)->comment('uuid')->unique()->index();
             $table->string('stripe_customer_id', 100);  // No nullable() modifier ensures it's required
+            $table->enum('type', ['person', 'company']);
             $table->string('name', 255);
             $table->string('email', 255)->unique();
             $table->string('phone', 15);

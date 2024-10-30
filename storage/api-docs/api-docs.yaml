@@ -73,6 +73,12 @@ components:
         customer:
           type: object
           properties:
+            type:
+              type: string
+              enum:
+                - person
+                - company
+              example: "person"
             name:
               type: string
               example: "John Doe"
