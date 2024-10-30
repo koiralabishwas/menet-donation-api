@@ -48,7 +48,7 @@ class WebhookController extends Controller
     {
         $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50';
         $payload = $request->getcontent();
-        $sig_header = $request->header('HTTP_STRIPE_SIGNATURE');
+        $sig_header = $request->header('Stripe-Signature');
 
         $event = Webhook::constructEvent(
             $payload, $sig_header, $endpoint_secret
