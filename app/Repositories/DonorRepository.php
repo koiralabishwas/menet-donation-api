@@ -32,7 +32,7 @@ class DonorRepository
                     $stripeCustomer->address->line2,       // Line 2 from Stripe address
                 ]),
                 'is_public' => $DonorData['customer']['is_public'], // Is public from request data
-                'display_name' => $DonorData['customer']['display_name'], // Display name from request data
+                'public_name' => $DonorData['customer']['public_name'], // Display name from request data
                 'corporate_no' => $DonorData['customer']['corporate_no'], // Corporate number from request data
                 'message' => $DonorData['customer']['message'],         // Message from request data
                 'stripe_customer_object' => json_encode($stripeCustomer), // Entire Stripe customer object as JSON

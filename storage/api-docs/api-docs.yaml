@@ -88,9 +88,9 @@ components:
             is_public:
               type: boolean
               example: true
-            display_name:
+            public_name:
               type: string
-              example: "John"
+              example: "匿名"
             corporate_no:
               type: string
               nullable: true
@@ -183,7 +183,7 @@ components:
         is_public:
           type: boolean
           example: true
-        display_name:
+        public_name:
           type: string
           example: "John"
         corporate_no:

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('postal_code', 10);
             $table->string('address', 255);
             $table->unsignedTinyInteger('is_public')->default(0);
-            $table->string('display_name', 255)->nullable();
+            $table->string('public_name', 255)->nullable();
             $table->string('corporate_no', 20)->nullable();
             $table->text('message')->nullable();
             // table->image(customerPic)
