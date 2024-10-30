@@ -48,7 +48,6 @@ class CheckoutSessionControllerTest extends TestCase
             'message' => 'success',
             'data' => [
                 'donor' => [
-                    'type' => $donorData['customer']['type'],
                     'name' => $donorData['customer']['name'],
                     'email' => $donorData['customer']['email'],
                     'phone' => $donorData['customer']['phone'],
