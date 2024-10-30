@@ -6,6 +6,10 @@ use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/checkout-session', [CheckoutSessionController::class, 'create']);
+
+Route::prefix('webhooks')->group(function () {
+    Route::post('/payment-intent-succeed', [WebhookController::class, 'create']);
+});
 Route::post('/webhook', [WebhookController::class, 'create']);
 
 //use for debugging functions or routes
