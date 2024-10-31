@@ -16,10 +16,8 @@ class DonationImageController extends Controller
     public function uploadDonationImage(Request $request): JsonResponse
     {
         $image = $request->file('file');
-        $donorEmail = $request->input('email');
-        $externalId = Helpers::CreateExternalIdfromDate();
 
-        $imageName = "$donorEmail-$externalId";
+        $imageName = Helpers::CreateExternalIdfromDate();
 
         $imageId = GoogleDriveProvider::uploadFile($image, $imageName);
 
@@ -27,7 +25,7 @@ class DonationImageController extends Controller
             'image_id' => $imageId,
             'image_name' => $imageName,
             'image_status' => 'uploaded',
-            'image_url' => "https://drive.google.com/file/d/$imageId/view",
+            'image_url' => "https://drive.google.com/file/d/$imageName",
         ]);
     }
 
