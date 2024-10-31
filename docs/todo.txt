@@ -1,18 +1,12 @@
-
-
-updating donor on same email
-
-swagger api docs
-
-write docs in notion
+### updating donor on same email
 
 ### tempelate-fix
-fix PDf layout
-    add logo
-    fix font
+    fix PDf layout
+        add logo
+        fix font
+    fix mail layout by looking to previous repo
+        add logo
 
-fix mail layout by looking to previous repo
-    add logo
 
 
 
