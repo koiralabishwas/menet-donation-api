@@ -4,6 +4,7 @@ use App\Http\Controllers\CheckoutSessionController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\DonationImageController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\XServerController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/checkout-session', [CheckoutSessionController::class, 'create']);
@@ -17,6 +18,8 @@ Route::prefix('/images')->group(function () {
     Route::post('/upload-donation-image', [DonationImageController::class, 'uploadDonationImage']);
     Route::delete('/delete-donation-image/{image_id}', [DonationImageController::class, 'deleteDonationImage']);
 });
+
+Route::post('/xserver/check-if-email-exists', [XServerController::class, 'check_if_email_exists']);
 
 //use for debugging functions or routes
 Route::post('/debug/createCustomer', [DebugController::class, 'checkCreateCustomer']);

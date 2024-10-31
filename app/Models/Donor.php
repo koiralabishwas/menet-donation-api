@@ -27,7 +27,7 @@ class Donor extends Model
         'postal_code',
         'address',
         'is_public',
-        'display_name',
+        'public_name',
         'corporate_no',
         'message',
         'stripe_customer_object',
