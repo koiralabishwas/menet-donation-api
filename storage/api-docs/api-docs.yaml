@@ -51,7 +51,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Image'
-  /api/images/delete-donation-image/{image_id}:
+  /api/images/delete/{image_id}:
     delete:
       operationId: deleteDonationImage
       summary: Delete Donation Image
