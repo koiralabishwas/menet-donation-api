@@ -13,6 +13,7 @@ class CheckoutSessionControllerTest extends TestCase
             'customer' => [
                 'type' => 'individual',
                 'name' => 'test',
+                'name_furigana' => 'test・furigana',
                 'email' => 'test@example.com',
                 'phone' => '0123456789',
                 'address' => [

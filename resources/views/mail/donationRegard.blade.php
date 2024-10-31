@@ -9,16 +9,16 @@
 <body>
 <p>{{ $donorName }}様、</p>
 
-<p>この度は、{{ $donationProject }}プロジェクトにご寄付いただき、誠にありがとうございます。</p>
+<p>この度は、{{ $donationProject }}にご寄付いただき、誠にありがとうございます。</p>
 
 <p>寄付金額: ¥{{ number_format($donationAmount) }}</p>
 
-<p>皆様からのご支援は、プロジェクトの成功に向けて大変貴重です。心より感謝申し上げます。</p>
+<p>ご支援のおかげで、今後も{{$donationProject}}を欠かさず永続できます。</p>
 
-<p><a href="{{ env('APP_URL/pdf/') ."$donorExternalId" }}" target="_blank">寄付控除証明書を表示する</a></p>
-
+<p>寄付控除証明書は来年の1月にメールにて送信させていただきます。</p>
 <p>引き続きよろしくお願いいたします。</p>
 
-<p>{{ config('app.name') }}</p>
+<p>---------------------------------</p>
+<p>認定NPO法人多文化共生教育ネットワークかながわ</p>
 </body>
 </html>

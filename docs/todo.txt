@@ -1,12 +1,14 @@
-fix PDf layout
-    add logo
-    fix font
+### updating donor on same email
 
-updating donor on same email
+### tempelate-fix
+    fix PDf layout
+        add logo
+        fix font
+    fix mail layout by looking to previous repo
+        add logo
 
-swagger api docs
 
-write docs in notion
+
 
 
 

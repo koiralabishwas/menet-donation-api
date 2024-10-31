@@ -15,7 +15,7 @@ class WebhookController extends Controller
     /**
      * @throws SignatureVerificationException
      */
-    public function create(Request $request): void
+    public function create(Request $request): void // NOTE: this fun is to test for local use
     {
         $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
         $payload = $request->getcontent();
@@ -39,5 +39,29 @@ class WebhookController extends Controller
                 // ... handle other event types
             default:
         }
+    }
+
+    /**
+     * @throws SignatureVerificationException
+     */
+    public function paymentIntentSucceed(Request $request): void // for prod use
+    {
+        $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
+        $payload = $request->getcontent();
+        $sig_header = $request->header('Stripe-Signature');
+
+        $event = Webhook::constructEvent(
+            $payload, $sig_header, $endpoint_secret
+        );
+
+        $paymentIntent = $event->data;
+        $metaData = $paymentIntent['object']->metadata;
+        Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
+
+        DonationRepository::storeDonation($metaData, $paymentIntent['object']);
+        Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
+
+        // ... handle other event types
+
     }
 }

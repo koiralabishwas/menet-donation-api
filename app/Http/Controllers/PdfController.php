@@ -17,11 +17,11 @@ class PdfController extends Controller
         $certificateData = DonationRepository::getDonationCertificate($donor_external_id, $year);
         $total_amount = array_sum(array_column($certificateData, 'amount'));
 
-        return pdf()->view('pdf.testpdf', [
+        return pdf()->view('pdf.tax-deduction-certificate', [
             'donor' => $donor,
             'certificateYear' => $year,
             'donations' => $certificateData,
             'total_amount' => $total_amount,
-        ])->format(Format::A4)->name('tested.pdf');
+        ])->format(Format::A4)->name('tax-deduction-certificate.pdf');
     }
 }

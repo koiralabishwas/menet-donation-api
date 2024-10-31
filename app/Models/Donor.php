@@ -21,6 +21,7 @@ class Donor extends Model
         'donor_external_id',
         'stripe_customer_id',
         'name',
+        'name_furigana',
         'email',
         'phone',
         'country_code',
