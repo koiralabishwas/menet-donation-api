@@ -22,16 +22,16 @@ class DonorRepository
                 'donor_external_id' => $stripeCustomer->metadata->donor_external_id,  // Custom external ID
                 'stripe_customer_id' => $stripeCustomer->id, // Stripe customer ID
                 'type' => $stripeCustomer->metadata->type,   // Customer type from Stripe response
-                'name' => $donorData["customer"]["name"],             //
-                'name_furigana' => $donorData["customer"]["name_furigana"],
+                'name' => $donorData['customer']['name'],             //
+                'name_furigana' => $donorData['customer']['name_furigana'],
                 'email' => $stripeCustomer->email,           // Customer email from Stripe response
-                'phone' => $donorData["customer"]["phone"],           // Customer phone from Stripe response
-                'country_code' => $donorData["customer"]["address"]["country"],  // Country code from Stripe address
-                'postal_code' => $donorData["customer"]["address"]["postal_code"], // Postal code from Stripe address
+                'phone' => $donorData['customer']['phone'],           // Customer phone from Stripe response
+                'country_code' => $donorData['customer']['address']['country'],  // Country code from Stripe address
+                'postal_code' => $donorData['customer']['address']['postal_code'], // Postal code from Stripe address
                 'address' => implode(', ', [
-                    $donorData["customer"]["address"]["city"],        // City from Stripe address
-                    $donorData["customer"]["address"]["line1"],       // Line 1 from Stripe address
-                    $donorData["customer"]["address"]["line2"],       // Line 2 from Stripe address
+                    $donorData['customer']['address']['city'],        // City from Stripe address
+                    $donorData['customer']['address']['line1'],       // Line 1 from Stripe address
+                    $donorData['customer']['address']['line2'],       // Line 2 from Stripe address
                 ]),
                 'is_public' => $donorData['customer']['is_public'], // Is public from request data
                 'public_name' => $donorData['customer']['public_name'], // Display name from request data
