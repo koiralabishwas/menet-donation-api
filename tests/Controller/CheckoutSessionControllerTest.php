@@ -11,6 +11,7 @@ class CheckoutSessionControllerTest extends TestCase
     {
         $donorData = [
             'customer' => [
+                'type' => 'individual',
                 'name' => 'test',
                 'email' => 'test@example.com',
                 'phone' => '0123456789',
@@ -22,7 +23,7 @@ class CheckoutSessionControllerTest extends TestCase
                     'line2' => '東京都千代田区千代田1-1-1',
                 ],
                 'is_public' => true,
-                'display_name' => 'test',
+                'public_name' => 'test',
                 'corporate_no' => '1234567890',
                 'message' => 'Hello World!',
             ],
@@ -53,7 +54,7 @@ class CheckoutSessionControllerTest extends TestCase
                     'country_code' => $donorData['customer']['address']['country'],
                     'postal_code' => $donorData['customer']['address']['postal_code'],
                     'is_public' => $donorData['customer']['is_public'],
-                    'display_name' => $donorData['customer']['display_name'],
+                    'public_name' => $donorData['customer']['public_name'],
                     'corporate_no' => $donorData['customer']['corporate_no'],
                     'message' => $donorData['customer']['message'],
                     'stripe_customer_object' => [

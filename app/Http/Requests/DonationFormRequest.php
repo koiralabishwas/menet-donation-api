@@ -17,12 +17,13 @@ class DonationFormRequest extends FormRequest
     {
         return [
             'customer' => 'required|array',
+            'customer.type' => 'required|in:individual,company',
             'customer.name' => 'required|string',
             'customer.name_furigana' => 'nullable|string',
             'customer.email' => 'required|email',
             'customer.phone' => 'required|string', // 海外の電話番号を考慮してstringのみ
             'customer.is_public' => 'required|boolean', // Validation for is_public field
-            'customer.display_name' => 'nullable|string',
+            'customer.public_name' => 'nullable|string',
             'customer.corporate_no' => 'nullable|string',
             'customer.message' => 'nullable|string',
             'customer.address' => 'required|array',

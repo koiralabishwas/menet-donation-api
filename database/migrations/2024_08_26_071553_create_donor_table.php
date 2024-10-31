@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('donor_id')->autoIncrement();
             $table->string('donor_external_id', 36)->comment('uuid')->unique()->index();
             $table->string('stripe_customer_id', 100);  // No nullable() modifier ensures it's required
+            $table->enum('type', ['individual', 'company']);
             $table->string('name', 255);
             $table->string('email', 255)->unique();
             $table->string('phone', 15);
@@ -22,7 +23,7 @@ return new class extends Migration
             $table->string('postal_code', 10);
             $table->string('address', 255);
             $table->unsignedTinyInteger('is_public')->default(0);
-            $table->string('display_name', 255)->nullable();
+            $table->string('public_name', 255)->nullable();
             $table->string('corporate_no', 20)->nullable();
             $table->text('message')->nullable();
             // table->image(customerPic)

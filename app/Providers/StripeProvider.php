@@ -57,7 +57,10 @@ class StripeProvider extends ServiceProvider
                 'line1' => $customerData['address']['line1'],
                 'line2' => $customerData['address']['line2'],
             ],
-            'metadata' => ['donor_external_id' => $externalId],
+            'metadata' => [
+                'donor_external_id' => $externalId,
+                'type' => $customerData['type'],
+            ],
         ]);
     }
 

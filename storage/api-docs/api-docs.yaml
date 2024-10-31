@@ -28,6 +28,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/DonationResponse"
 
+  /api/xserver/check-if-email-exists:
+    post:
+      operationId: checkIfEmailExists
+      summary: Check if email exists
+      tags:
+        - XServer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locale:
+                  type: string
+                  example: ja
+                email:
+                  type: string
+                  example: rajan.valencia@au.com
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exist:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Success
+
 components:
   schemas:
     DonationRequest:
@@ -40,6 +73,12 @@ components:
         customer:
           type: object
           properties:
+            type:
+              type: string
+              enum:
+                - individual
+                - company
+              example: "individual"
             name:
               type: string
               example: "John Doe"
@@ -48,16 +87,16 @@ components:
               example: "ジョン・ドー"
             email:
               type: string
-              example: "john@example.com"
+              example: "rajan.valencia@au.com"
             phone:
               type: string
               example: "1234567890"
             is_public:
               type: boolean
               example: true
-            display_name:
+            public_name:
               type: string
-              example: "John"
+              example: "匿名"
             corporate_no:
               type: string
               nullable: true
@@ -132,6 +171,12 @@ components:
         stripe_customer_id:
           type: string
           example: "cus_R3HZqz0iiqvl7z"
+        type:
+          type: string
+          enum:
+            - individual
+            - company
+          example: "individual"
         name:
           type: string
           example: "John Doe"
@@ -150,7 +195,7 @@ components:
         is_public:
           type: boolean
           example: true
-        display_name:
+        public_name:
           type: string
           example: "John"
         corporate_no:
