@@ -29,7 +29,7 @@ paths:
                 $ref: "#/components/schemas/DonationResponse"
 
 
-  /api/images/upload-donation-image:
+  /api/images/upload:
     post:
       operationId: uploadDonationImage
       summary: Upload Donation Image
