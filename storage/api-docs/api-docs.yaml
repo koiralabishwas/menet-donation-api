@@ -50,6 +50,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Image'
+  /api/images/delete-donation-image/{image_id}:
+    delete:
+      operationId: deleteDonationImage
+      summary: Delete Donation Image
+      tags:
+        - Image
+      parameters:
+        - in: path
+          name: image_id
+          schema:
+            type: string
+            example: 1yU3dbWNL2Hr-FSOATrFCbJBGakGagFPd
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
 
 components:
   schemas:
@@ -310,7 +329,7 @@ components:
           example: 20241031-VW26J3
         image_status:
           type: string
-          example: uploaded
+          example: uploaded | deleted
         image_url:
           type: string
           example: https://drive.google.com/file/d/1yU3dbWNL2Hr-FSOATrFCbJBGakGagFPd/view

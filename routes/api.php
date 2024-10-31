@@ -15,7 +15,7 @@ Route::post('/webhook', [WebhookController::class, 'create']);
 
 Route::prefix('/images')->group(function () {
     Route::post('/upload-donation-image', [DonationImageController::class, 'uploadDonationImage']);
-    Route::delete('/delete-donation-image/{image_id', [DonationImageController::class, 'deleteDonationImage']);
+    Route::delete('/delete-donation-image/{image_id}', [DonationImageController::class, 'deleteDonationImage']);
 });
 
 //use for debugging functions or routes

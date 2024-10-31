@@ -40,7 +40,7 @@ class DonationImageController extends Controller
         return response()->json([
             'image_id' => $image_id,
             'image_name' => $imageName,
-            'image_status' => 'uploaded',
+            'image_status' => 'deleted',
             'image_url' => "https://drive.google.com/file/d/$image_id/view",
         ]);
     }
