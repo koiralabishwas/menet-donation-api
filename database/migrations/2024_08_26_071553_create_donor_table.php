@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('stripe_customer_id', 100);  // No nullable() modifier ensures it's required
             $table->enum('type', ['individual', 'company']);
             $table->string('name', 255);
+            $table->string('name_furigana',255);
             $table->string('email', 255)->unique();
             $table->string('phone', 15);
             $table->string('country_code', 2);
