@@ -133,8 +133,8 @@ class StripeProvider extends ServiceProvider
         $donor_email = json_encode($paymentIntentMetaData['donor_email']);
 
         return $stripe->checkout->sessions->create([
-            'success_url' => env('FRONT_END_URL')."/success?name={$donor_name}&email={$donor_email}",
-            'cancel_url' => env('FRONT_END_URL')."/cancel?name={$donor_name}",
+            'success_url' => env('FRONTEND_URL')."/success?name={$donor_name}&email={$donor_email}",
+            'cancel_url' => env('FRONTEND_URL')."/cancel?name={$donor_name}",
             'ui_mode' => 'hosted',
             'customer' => $customerId,
             'payment_method_types' => ['card'],
