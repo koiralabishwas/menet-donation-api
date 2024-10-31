@@ -27,6 +27,7 @@ class CheckoutSessionController extends Controller
                 'donor_name' => $donor['name'],
                 'donor_external_id' => $donor['donor_external_id'],
                 'donor_type' => $donor['type'],
+                'donor_email' => $donor['email'],
                 'donation_project' => StripeProvider::getProductNameFromId(StripeProductID::getValueByLowerCaseKey($formData['product'])),
                 'amount' => $formData['price'],
                 'currency' => 'jpy',
