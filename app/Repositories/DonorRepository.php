@@ -12,7 +12,7 @@ class DonorRepository
      */
     public static function storeDonor(array $donorData, object $stripeCustomer): Donor
     {
-        // NOTE :リーピータ客の場合、 上書きする項目は $donorData　から渡す
+        // NOTE :一回のみの寄付を同じ email で再度行った場合、email 以外の項目を上書きする
         // NOTE : 上書き必要ないものは一回$stripeCustomerのままで
         return Donor::updateOrCreate(
             [
