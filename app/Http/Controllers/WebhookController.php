@@ -15,7 +15,7 @@ class WebhookController extends Controller
     /**
      * @throws SignatureVerificationException
      */
-    public function create(Request $request): void
+    public function create(Request $request): void // NOTE: this fun is to test for local use
     {
         $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
         $payload = $request->getcontent();
@@ -44,7 +44,7 @@ class WebhookController extends Controller
     /**
      * @throws SignatureVerificationException
      */
-    public function paymentIntentSucceed(Request $request): void
+    public function paymentIntentSucceed(Request $request): void // for dev and prd use
     {
         $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
         $payload = $request->getcontent();
