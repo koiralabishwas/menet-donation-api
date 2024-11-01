@@ -44,7 +44,7 @@ class WebhookController extends Controller
     /**
      * @throws SignatureVerificationException
      */
-    public function paymentIntentSucceed(Request $request): void // for prod use
+    public function paymentIntentSucceed(Request $request): void // for dev and prd use
     {
         $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
         $payload = $request->getcontent();
