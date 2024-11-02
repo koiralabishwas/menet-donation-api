@@ -29,9 +29,9 @@ class DonationFormRequest extends FormRequest
             'customer.address' => 'required|array',
             'customer.address.country' => 'required|string',
             'customer.address.postal_code' => 'nullable|string',
-            'customer.address.city' => 'required|string',
+            'customer.address.city' => 'required|string', // 市町村まで
             'customer.address.line1' => 'required|string',
-            'customer.address.line2' => 'nullable|string',
+            'customer.address.line2' => 'nullable|string', // TODO : Remove this
             'product' => ['required', 'string', Rule::in(StripeProductID::getLowerCaseKeys())], // StripeのプロダクトID
             'price' => 'required|numeric', // 寄付額
         ];

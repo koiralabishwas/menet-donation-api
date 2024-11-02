@@ -8,6 +8,10 @@
         add logo
 
 
+### fix address form
+address.city (not null)
+address.line1 (null ok)
+address.line2 remove
 
 
 
