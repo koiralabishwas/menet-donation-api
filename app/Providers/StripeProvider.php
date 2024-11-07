@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\EnvHelpers;
 use App\Helpers\Helpers;
 use App\Repositories\DonorRepository;
 use Illuminate\Support\Facades\Log;
@@ -131,17 +132,11 @@ class StripeProvider extends ServiceProvider
         $stripe = app(StripeClient::class);
         $donor_name = json_encode($paymentIntentMetaData['donor_name']);
         $donor_email = json_encode($paymentIntentMetaData['donor_email']);
-
-        $isProdOrDev = app()->environment(['production', 'develop']);
-
-        $paths = [
-            'success' => 'success'.($isProdOrDev ? '.html' : ''),
-            'cancel' => 'cancel'.($isProdOrDev ? '.html' : ''),
-        ];
+        $envHelper = new EnvHelpers;
 
         return $stripe->checkout->sessions->create([
-            'success_url' => env('FRONT_END_URL')."/{$paths['success']}?name={$donor_name}&email={$donor_email}",
-            'cancel_url' => env('FRONT_END_URL')."/{$paths['cancel']}?name={$donor_name}",
+            'success_url' => env('FRONT_END_URL')."/{$envHelper->adjustUrlFromEnv('success')}?name={$donor_name}&email={$donor_email}",
+            'cancel_url' => env('FRONT_END_URL')."/.{$envHelper->adjustUrlFromEnv('cancel')}?name={$donor_name}",
             'ui_mode' => 'hosted',
             'customer' => $customerId,
             'payment_method_types' => ['card'],
