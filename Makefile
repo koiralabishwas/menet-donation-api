@@ -74,5 +74,4 @@ test-webhook-payment-intent: ## payment-intentのwebhook テストを実行
       --add payment_intent:metadata.donation_project="高校進学ガイダンス" \
       --add payment_intent:metadata.donor_id="4" \
       --add payment_intent:metadata.amount="123" \
-      --add payment_intent:metadata.tax_deduction_certificate_url="https:\/\/www.google.com\/\/ebc24ad9-16c1-4279-ac3b-0f961be0c471" \
       --add payment_intent:metadata.donor_external_id="eb706ddc-8806-4afb-9825-976ccb70146e" \
