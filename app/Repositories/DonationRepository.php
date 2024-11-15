@@ -23,7 +23,6 @@ class DonationRepository
                 'amount' => $DonationData['amount'],
                 'currency' => $DonationData['currency'],
                 'type' => $DonationData['type'],
-                'tax_deduction_certificate_url' => $DonationData['tax_deduction_certificate_url'],
                 'stripe_donation_object' => json_encode($StripePaymentIntentObject),
             ]
         );

@@ -28,7 +28,6 @@ class Donation extends Model
         'amount',
         'currency',
         'type',
-        'tax_deduction_certificate_url',
         'stripe_donation_object',
     ];
 }
