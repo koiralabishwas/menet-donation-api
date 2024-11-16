@@ -96,7 +96,7 @@ class StripeProvider extends ServiceProvider
         return 'all customers deleted';
     }
 
-    public static function searchPrice(string $productId, int $amount)
+    public static function searchOneTimePrice(string $productId, int $amount)
     {
         $stripe = app(StripeClient::class);
         $existingPrice = $stripe->prices->search([
@@ -109,11 +109,12 @@ class StripeProvider extends ServiceProvider
         return null;
     }
 
-    public static function createPrice(string $productId, int $amount): Price
+
+    public static function createOneTimePrice(string $productId, int $amount): Price
     {
         $stripe = app(StripeClient::class);
 
-        $existingPrice = self::searchPrice($productId, $amount);
+        $existingPrice = self::searchOneTimePrice($productId, $amount);
 
         if ($existingPrice) {
             return $existingPrice;
@@ -125,6 +126,12 @@ class StripeProvider extends ServiceProvider
             'unit_amount' => $amount,
             'metadata' => ['amount' => $amount],
         ]);
+    }
+    public static function searchPriceByPriceId(string $priceId )
+    {
+        $stripe = app(StripeClient::class);
+        $price = $stripe->prices->retrieve($priceId);
+        return $price;
     }
 
     public static function createCheckoutSession(string $customerId, string $priceId, $paymentIntentMetaData): Session

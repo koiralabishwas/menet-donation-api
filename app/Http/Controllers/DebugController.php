@@ -17,6 +17,14 @@ class DebugController extends Controller
         return response()->json($productName);
     }
 
+    public function getStrpePriceByID(Request $request): JsonResponse
+    {
+        return response()->json(StripeProvider::searchPriceByPriceId($request->query('price-id')
+    ));
+    }
+
+
+
     public function getStripeCustomerFromEmail(Request $request): JsonResponse
     {
         $email = $request->query('email');

@@ -22,6 +22,10 @@ Route::prefix('/images')->group(function () {
 Route::post('/xserver/check-if-email-exists', [XServerController::class, 'check_if_email_exists']);
 
 //use for debugging functions or routes
-Route::post('/debug/createCustomer', [DebugController::class, 'checkCreateCustomer']);
-Route::get('/debug/email', [DebugController::class, 'getDbCustomerObjFromEmail']);
-Route::get('/debug/product-name', [DebugController::class, 'getStripeProductNameFromProductId']);
+
+Route::prefix("/debug")->group(function () {
+    Route::post('/createCustomer', [DebugController::class, 'checkCreateCustomer']);
+    Route::get('/email', [DebugController::class, 'getDbCustomerObjFromEmail']);
+    Route::get('/product-name', [DebugController::class, 'getStripeProductNameFromProductId']);
+    Route::get('/price', [DebugController::class, 'getStrpePriceByID']);
+});
