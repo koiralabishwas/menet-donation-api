@@ -109,7 +109,6 @@ class StripeProvider extends ServiceProvider
         return null;
     }
 
-
     public static function createOneTimePrice(string $productId, int $amount): Price
     {
         $stripe = app(StripeClient::class);
@@ -127,10 +126,12 @@ class StripeProvider extends ServiceProvider
             'metadata' => ['amount' => $amount],
         ]);
     }
-    public static function searchPriceByPriceId(string $priceId )
+
+    public static function searchPriceByPriceId(string $priceId)
     {
         $stripe = app(StripeClient::class);
         $price = $stripe->prices->retrieve($priceId);
+
         return $price;
     }
 
