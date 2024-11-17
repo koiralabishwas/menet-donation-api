@@ -190,6 +190,30 @@ class StripeProvider extends ServiceProvider
 
     }
 
+    public static function createSubscriptionSession(string $customerId, string $priceId, $supscriptionDataMetaData): Session
+    {
+        $stripe = app(StripeClient::class);
+        $donor_name = json_encode($supscriptionDataMetaData['donor_name']);
+        $donor_email = json_encode($supscriptionDataMetaData['donor_email']);
+        $envHelper = new EnvHelpers;
+
+        return $stripe->checkout->sessions->create([
+            'success_url' => env('FRONT_END_URL')."/{$envHelper->getUrlByEnv('success')}?name={$donor_name}&email={$donor_email}",
+            'cancel_url' => env('FRONT_END_URL')."/.{$envHelper->getUrlByEnv('cancel')}?name={$donor_name}",
+            'ui_mode' => 'hosted',
+            'customer' => $customerId,
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price' => $priceId,
+                'quantity' => 1,
+            ]],
+            'automatic_tax' => ['enabled' => false],
+            'mode' => 'subscription',
+            'subscription_data' => [
+                'metadata' => $supscriptionDataMetaData,
+            ],
+        ]);
+    }
     public static function getProductNameFromId(string $productId): string
     {
         $stripe = app(StripeClient::class);
