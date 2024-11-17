@@ -1,9 +1,14 @@
 1. make subscription price creatable
 	-need to use !subscription! price
+
+	chages::
 	-checkoutsession mode => subscription
  	-paymentIntentMetadata will not be usable to store metadatas for webhok => use subscripton_data instead
  	-catch subscription data through webhook and store in DB
- 	-
+
+ 	fotThatIneedto
+ 	create search and create price for subscription prices
+
 
 
 

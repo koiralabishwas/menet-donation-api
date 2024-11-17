@@ -100,12 +100,24 @@ class StripeProvider extends ServiceProvider
     {
         $stripe = app(StripeClient::class);
         $existingPrice = $stripe->prices->search([
-            'query' => "active:\"true\" AND product:\"$productId\" AND metadata[\"amount\"]:\"$amount\"",
+            'query' => "active:\"true\" AND product:\"$productId\" AND type:\"one_time\" AND metadata[\"amount\"]:\"$amount\"",
         ]);
         if ($existingPrice->data) {
             return $existingPrice->data[0];
         }
 
+        return null;
+    }
+
+    public static function searchSubscriptionPrice(string $productId , int $amount)
+    {
+        $stripe = app(StripeClient::class);
+        $existingPrice = $stripe->prices->search([
+            'query' => "active:\"true\" AND product:\"$productId\" AND type:\"recurring\" AND metadata[\"amount\"]:\"$amount\"",
+        ]);
+        if ($existingPrice->data) {
+            return $existingPrice->data[0];
+        }
         return null;
     }
 
@@ -123,6 +135,23 @@ class StripeProvider extends ServiceProvider
             'product' => $productId,
             'currency' => 'jpy',
             'unit_amount' => $amount,
+            'metadata' => ['amount' => $amount],
+        ]);
+    }
+
+    public static function createSubscriptionPrice(string $productId , int $amount)
+    {
+        $stripe = app(StripeClient::class);
+        $existingPrice = self::searchSubscriptionPrice($productId, $amount);
+        if ($existingPrice) {
+            return $existingPrice;
+        }
+
+        return $stripe->prices->create([
+            'product' => $productId,
+            'currency' => 'jpy',
+            'unit_amount' => $amount,
+            'recurring' => ['interval' => 'month'],
             'metadata' => ['amount' => $amount],
         ]);
     }

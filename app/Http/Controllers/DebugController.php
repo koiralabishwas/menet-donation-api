@@ -23,6 +23,13 @@ class DebugController extends Controller
         ));
     }
 
+    public function createSubscriptionPrice(Request $request): JsonResponse
+    {
+        $productId = $request->query('product-id');
+        $amount = $request->query('amount');
+        return response()->json(StripeProvider::createSubscriptionPrice($productId, $amount));
+    }
+
     public function getStripeCustomerFromEmail(Request $request): JsonResponse
     {
         $email = $request->query('email');

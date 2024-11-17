@@ -28,4 +28,5 @@ Route::prefix('/debug')->group(function () {
     Route::get('/email', [DebugController::class, 'getDbCustomerObjFromEmail']);
     Route::get('/product-name', [DebugController::class, 'getStripeProductNameFromProductId']);
     Route::get('/price', [DebugController::class, 'getStrpePriceByID']);
+    Route::get('/price/subs', [DebugController::class, 'createSubscriptionPrice']);
 });
