@@ -25,7 +25,7 @@ class WebhookController extends Controller
             $payload, $sig_header, $endpoint_secret
         );
         switch ($event->type) {
-            // for one-time payment
+            // for one-time payment checkout session
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data;
                 $metaData = $paymentIntent['object']->metadata;
@@ -36,7 +36,16 @@ class WebhookController extends Controller
 
                 return;
 
-                // ... handle other event types
+                //            case 'customer.subscription.created':
+                //                $data = $event->data;
+                //                Log::info($data);
+                //                // ... handle other event types
+                //                return;
+
+                //            case 'invoice.payment_succeeded':
+                //                $data = $event->data;
+                //                Log::info($data);
+
             default:
         }
     }

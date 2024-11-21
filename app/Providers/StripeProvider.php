@@ -109,7 +109,7 @@ class StripeProvider extends ServiceProvider
         return null;
     }
 
-    public static function searchSubscriptionPrice(string $productId , int $amount)
+    public static function searchSubscriptionPrice(string $productId, int $amount)
     {
         $stripe = app(StripeClient::class);
         $existingPrice = $stripe->prices->search([
@@ -118,6 +118,7 @@ class StripeProvider extends ServiceProvider
         if ($existingPrice->data) {
             return $existingPrice->data[0];
         }
+
         return null;
     }
 
@@ -139,7 +140,7 @@ class StripeProvider extends ServiceProvider
         ]);
     }
 
-    public static function createSubscriptionPrice(string $productId , int $amount)
+    public static function createSubscriptionPrice(string $productId, int $amount)
     {
         $stripe = app(StripeClient::class);
         $existingPrice = self::searchSubscriptionPrice($productId, $amount);
@@ -190,11 +191,11 @@ class StripeProvider extends ServiceProvider
 
     }
 
-    public static function createSubscriptionSession(string $customerId, string $priceId, $supscriptionDataMetaData): Session
+    public static function createSubscriptionSession(string $customerId, string $priceId, $subscriptionDataMetaData): Session
     {
         $stripe = app(StripeClient::class);
-        $donor_name = json_encode($supscriptionDataMetaData['donor_name']);
-        $donor_email = json_encode($supscriptionDataMetaData['donor_email']);
+        $donor_name = json_encode($subscriptionDataMetaData['donor_name']);
+        $donor_email = json_encode($subscriptionDataMetaData['donor_email']);
         $envHelper = new EnvHelpers;
 
         return $stripe->checkout->sessions->create([
@@ -209,11 +210,12 @@ class StripeProvider extends ServiceProvider
             ]],
             'automatic_tax' => ['enabled' => false],
             'mode' => 'subscription',
-            'subscription_data' => [
-                'metadata' => $supscriptionDataMetaData,
+            'subscription_data' => [ // 注意: Subscription table に保存するでーた
+                'metadata' => $subscriptionDataMetaData,
             ],
         ]);
     }
+
     public static function getProductNameFromId(string $productId): string
     {
         $stripe = app(StripeClient::class);

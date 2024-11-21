@@ -6,8 +6,8 @@ use App\Enums\StripeProductID;
 use App\Http\Requests\DonationFormRequest;
 use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
-use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 class SubscriptionSessionController extends Controller
 {
@@ -20,7 +20,7 @@ class SubscriptionSessionController extends Controller
             $stripeCustomer = StripeProvider::createCustomer($formData['customer']);
             $donor = DonorRepository::storeDonor($formData, $stripeCustomer);
             $donor['stripe_customer_object'] = json_decode($donor['stripe_customer_object']);
-            # searchs for subscription price , if null , creates one
+            // searchs for subscription price , if null , creates one
             $stripePrice = StripeProvider::createSubscriptionPrice(StripeProductID::getValueByLowerCaseKey($formData['product']), $formData['price']);
 
             $subscriptionDataMetaData = [
@@ -32,7 +32,7 @@ class SubscriptionSessionController extends Controller
                 'donation_project' => StripeProvider::getProductNameFromId(StripeProductID::getValueByLowerCaseKey($formData['product'])),
                 'amount' => $formData['price'],
                 'currency' => 'jpy',
-                'type' => 'MONTHLY', #TODO :まともな名前かんがえようか
+                'type' => 'MONTHLY', //TODO :まともな名前かんがえようか
             ];
 
             $subscriptionSession = StripeProvider::createSubscriptionSession($stripeCustomer->id, $stripePrice->id, $subscriptionDataMetaData);
@@ -54,7 +54,7 @@ class SubscriptionSessionController extends Controller
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                $e
+                $e,
             ], 500);
         }
     }

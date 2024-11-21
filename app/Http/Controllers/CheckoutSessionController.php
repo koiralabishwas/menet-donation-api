@@ -53,7 +53,7 @@ class CheckoutSessionController extends Controller
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                "fullError" => $e
+                'fullError' => $e,
             ], 500);
         }
     }

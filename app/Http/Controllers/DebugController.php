@@ -27,6 +27,7 @@ class DebugController extends Controller
     {
         $productId = $request->query('product-id');
         $amount = $request->query('amount');
+
         return response()->json(StripeProvider::createSubscriptionPrice($productId, $amount));
     }
 
