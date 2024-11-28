@@ -26,25 +26,34 @@ class WebhookController extends Controller
         );
         switch ($event->type) {
             // for one-time payment checkout session
-            case 'payment_intent.succeeded':
+            case 'payment_intent.succeeded':   // to store one-time payment on db
                 $paymentIntent = $event->data;
-                $metaData = $paymentIntent['object']->metadata;
-                Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
+                $metaData = $paymentIntent['object']->metadata; // onetime のときのみここにmetadata 保存されている。
+                if ($metaData->type === 'ONE_TIME') {
+                    Log::info($metaData->type);
+                    Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
+                    //ここで残りのonetime時の処理
+                } else {
+                    Log::info('subscription mode');
+                }
 
-                DonationRepository::storeDonation($metaData, $paymentIntent['object']);
-                Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
-
+                //                DonationRepository::storeDonation($metaData, $paymentIntent['object']);
+                //                Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
                 return;
 
                 //            case 'customer.subscription.created':
                 //                $data = $event->data;
+                //                Log::info("webhook case customer.subscription.created");
                 //                Log::info($data);
                 //                // ... handle other event types
                 //                return;
-
-                //            case 'invoice.payment_succeeded':
+                //
+                //            case 'invoice.paid': // to store subscription payments in db
                 //                $data = $event->data;
+                //                Log::info("webhook case invoice.paid");
                 //                Log::info($data);
+
+                //            case 'customer.subscription.deleted'
 
             default:
         }
