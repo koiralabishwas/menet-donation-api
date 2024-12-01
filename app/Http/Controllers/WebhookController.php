@@ -54,6 +54,7 @@ class WebhookController extends Controller
                     $data = $event->data;
                     Log::info("webhook case invoice.paid");
                     Log::info($data);
+                    DonationRepository::storeDonation($data['object']->subscription_details->metadata,$data['object']);
                     return;
 
 //              case 'customer.subscription.deleted'
