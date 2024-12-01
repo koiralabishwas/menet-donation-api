@@ -33,27 +33,28 @@ class WebhookController extends Controller
                     Log::info($metaData->type);
                     Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
                     //ここで残りのonetime時の処理
+                    DonationRepository::storeDonation($metaData, $paymentIntent['object']);
+                    Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
                 } else {
-                    Log::info('subscription mode');
+                    Log::info('subscription mode , no onetime 処理 will be run ');
                 }
 
-                //                DonationRepository::storeDonation($metaData, $paymentIntent['object']);
-                //                Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
                 return;
 
-                //            case 'customer.subscription.created':
-                //                $data = $event->data;
-                //                Log::info("webhook case customer.subscription.created");
-                //                Log::info($data);
-                //                // ... handle other event types
-                //                return;
-                //
-                //            case 'invoice.paid': // to store subscription payments in db
-                //                $data = $event->data;
-                //                Log::info("webhook case invoice.paid");
-                //                Log::info($data);
+                case 'customer.subscription.created':
+                    $data = $event->data;
+                    Log::info("webhook case customer.subscription.created");
+                    Log::info($data);
+                    // ... handle other event types
+                    return;
+    //
+                case 'invoice.paid': // to store subscription payments in db
+                    $data = $event->data;
+                    Log::info("webhook case invoice.paid");
+                    Log::info($data);
+                    return;
 
-                //            case 'customer.subscription.deleted'
+//              case 'customer.subscription.deleted'
 
             default:
         }
