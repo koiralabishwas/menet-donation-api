@@ -42,20 +42,22 @@ class WebhookController extends Controller
 
                 return;
 
-                case 'customer.subscription.created':
-                    $subscriptionData = $event->data;
-//                    Log::info("webhook case customer.subscription.created");
-//                    Log::info($subscriptionData);
-                    SubscriptionRepository::storeSubscription($subscriptionData['object']);
-                    return;
-    //
-                case 'invoice.paid': // to store subscription payments in db
-                    $invoice = $event->data;
-//                    Log::info("webhook case invoice.paid");
-//                    Log::info($data);
-                    DonationRepository::storeDonation($invoice['object']->subscription_details->metadata,$invoice['object']);
-                    // TODO:確認メールとキャンセルurlもかねて送る？
-                    return;
+            case 'customer.subscription.created':
+                $subscriptionData = $event->data;
+                //                    Log::info("webhook case customer.subscription.created");
+                //                    Log::info($subscriptionData);
+                SubscriptionRepository::storeSubscription($subscriptionData['object']);
+
+                return;
+                //
+            case 'invoice.paid': // to store subscription payments in db
+                $invoice = $event->data;
+                //                    Log::info("webhook case invoice.paid");
+                //                    Log::info($data);
+                DonationRepository::storeDonation($invoice['object']->subscription_details->metadata, $invoice['object']);
+
+                // TODO:確認メールとキャンセルurlもかねて送る？
+                return;
 
             default:
         }

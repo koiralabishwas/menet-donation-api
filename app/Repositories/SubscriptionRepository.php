@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Helpers\Helpers;
 use App\Models\Subscription;
 
-class SubscriptionRepository{
-    public static function storeSubscription( object $stripeSubscriptionObject) : Subscription{
+class SubscriptionRepository
+{
+    public static function storeSubscription(object $stripeSubscriptionObject): Subscription
+    {
         return Subscription::create([
             'subscription_external_id' => Helpers::CreateExternalIdfromDate(),
             'stripe_subscription_id' => $stripeSubscriptionObject->id,
@@ -14,7 +17,7 @@ class SubscriptionRepository{
             'donation_project' => $stripeSubscriptionObject->metadata->donation_project,
             'amount' => $stripeSubscriptionObject->metadata->amount,
             'currency' => $stripeSubscriptionObject->metadata->currency,
-            'stripe_subscription_object' => json_encode($stripeSubscriptionObject)
+            'stripe_subscription_object' => json_encode($stripeSubscriptionObject),
         ]);
     }
 }

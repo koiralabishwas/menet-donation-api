@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
  * @method static create(array $array)
  */
@@ -29,9 +28,6 @@ class Subscription extends Model
     ];
 
     protected $casts = [
-        'is_cancelled' => 'boolean'
+        'is_cancelled' => 'boolean',
     ];
-
-
-
 }
