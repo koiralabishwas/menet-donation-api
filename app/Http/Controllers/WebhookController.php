@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
+use App\Repositories\SubscriptionRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -42,10 +43,11 @@ class WebhookController extends Controller
                 return;
 
                 case 'customer.subscription.created':
-                    $data = $event->data;
-                    Log::info("webhook case customer.subscription.created");
-                    Log::info($data);
-                    // ... handle other event types
+                    $subscriptionData = $event->data;
+//                    Log::info("webhook case customer.subscription.created");
+//                    Log::info($subscriptionData);
+                    SubscriptionRepository::storeSubscription($subscriptionData['object']);
+                    // 次に確認メールとキャンセルurlもかねて送る？
                     return;
     //
                 case 'invoice.paid': // to store subscription payments in db

@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
+/**
+ * @method static create(array $array)
+ */
 class Subscription extends Model
 {
     use HasFactory;
@@ -21,9 +25,13 @@ class Subscription extends Model
         'donation_project',
         'amount',
         'currency',
-        'is_cancelled',
         'stripe_subscription_object',
     ];
+
+    protected $casts = [
+        'is_cancelled' => 'boolean'
+    ];
+
 
 
 }
