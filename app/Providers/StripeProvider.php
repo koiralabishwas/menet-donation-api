@@ -210,7 +210,7 @@ class StripeProvider extends ServiceProvider
             ]],
             'automatic_tax' => ['enabled' => false],
             'mode' => 'subscription',
-            'subscription_data' => [ // 注意: Subscription table に保存するでーた
+            'subscription_data' => [ // 注意: Subscription table に保存するため
                 'metadata' => $subscriptionDataMetaData,
             ],
         ]);
