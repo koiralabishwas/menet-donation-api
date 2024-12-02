@@ -1,7 +1,7 @@
 
 // SUBSCRIPTION
    subscription created => store in subscription table
-   subscription paid => store in dontation table
+   subscription paid => store in donation table
    subscription canceled => add canceled date in subscription table
 
 
