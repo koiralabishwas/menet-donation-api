@@ -9,7 +9,7 @@ use App\Repositories\DonorRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
-class CheckoutSessionController extends Controller
+class SubscriptionSessionController extends Controller
 {
     public function create(DonationFormRequest $request): JsonResponse
     {
@@ -20,9 +20,10 @@ class CheckoutSessionController extends Controller
             $stripeCustomer = StripeProvider::createCustomer($formData['customer']);
             $donor = DonorRepository::storeDonor($formData, $stripeCustomer);
             $donor['stripe_customer_object'] = json_decode($donor['stripe_customer_object']);
-            $stripePrice = StripeProvider::createOneTimePrice(StripeProductID::getValueByLowerCaseKey($formData['product']), $formData['price']);
+            // searchs for subscription price , if null , creates one
+            $stripePrice = StripeProvider::createSubscriptionPrice(StripeProductID::getValueByLowerCaseKey($formData['product']), $formData['price']);
 
-            $paymentIntentMetaData = [
+            $subscriptionDataMetaData = [
                 'donor_id' => $donor['donor_id'],
                 'donor_name' => $donor['name'],
                 'donor_external_id' => $donor['donor_external_id'],
@@ -31,13 +32,13 @@ class CheckoutSessionController extends Controller
                 'donation_project' => StripeProvider::getProductNameFromId(StripeProductID::getValueByLowerCaseKey($formData['product'])),
                 'amount' => $formData['price'],
                 'currency' => 'jpy',
-                'type' => 'ONE_TIME',
+                'type' => 'MONTHLY', //TODO :まともな名前かんがえようか
             ];
 
-            $checkoutSession = StripeProvider::createCheckoutSession($stripeCustomer->id, $stripePrice->id, $paymentIntentMetaData);
+            $subscriptionSession = StripeProvider::createSubscriptionSession($stripeCustomer->id, $stripePrice->id, $subscriptionDataMetaData);
             $formData = [
                 'donor' => $donor,
-                'stripe_checkout_session' => $checkoutSession,
+                'stripe_subscription_session' => $subscriptionSession,
                 'stripe_price' => $stripePrice,
                 'stripe_customer' => $stripeCustomer,
             ];
@@ -53,7 +54,7 @@ class CheckoutSessionController extends Controller
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'fullError' => $e,
+                $e,
             ], 500);
         }
     }
