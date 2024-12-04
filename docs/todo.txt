@@ -1,11 +1,14 @@
-### updating donor on same email
 
-### tempelate-fix
-    fix PDf layout
-        add logo
-        fix font
-    fix mail layout by looking to previous repo
-        add logo
+// SUBSCRIPTION
+   subscription created => store in subscription table
+   subscription paid => store in donation table
+   subscription canceled => add canceled date in subscription table
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,9 @@
+### tempelate-fix
+    fix PDf layout
+        add logo
+        fix font
+    fix mail layout by looking to previous repo
+        add logo
+
+
+## json object を保存しない方がいいpractice にならないかな

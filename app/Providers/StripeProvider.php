@@ -96,11 +96,11 @@ class StripeProvider extends ServiceProvider
         return 'all customers deleted';
     }
 
-    public static function searchPrice(string $productId, int $amount)
+    public static function searchOneTimePrice(string $productId, int $amount)
     {
         $stripe = app(StripeClient::class);
         $existingPrice = $stripe->prices->search([
-            'query' => "active:\"true\" AND product:\"$productId\" AND metadata[\"amount\"]:\"$amount\"",
+            'query' => "active:\"true\" AND product:\"$productId\" AND type:\"one_time\" AND metadata[\"amount\"]:\"$amount\"",
         ]);
         if ($existingPrice->data) {
             return $existingPrice->data[0];
@@ -109,12 +109,39 @@ class StripeProvider extends ServiceProvider
         return null;
     }
 
-    public static function createPrice(string $productId, int $amount): Price
+    public static function searchSubscriptionPrice(string $productId, int $amount)
+    {
+        $stripe = app(StripeClient::class);
+        $existingPrice = $stripe->prices->search([
+            'query' => "active:\"true\" AND product:\"$productId\" AND type:\"recurring\" AND metadata[\"amount\"]:\"$amount\"",
+        ]);
+        if ($existingPrice->data) {
+            return $existingPrice->data[0];
+        }
+
+        return null;
+    }
+
+    public static function createOneTimePrice(string $productId, int $amount): Price
     {
         $stripe = app(StripeClient::class);
 
-        $existingPrice = self::searchPrice($productId, $amount);
+        $existingPrice = self::searchOneTimePrice($productId, $amount);
 
+        if ($existingPrice) return $existingPrice;
+
+        return $stripe->prices->create([
+            'product' => $productId,
+            'currency' => 'jpy',
+            'unit_amount' => $amount,
+            'metadata' => ['amount' => $amount],
+        ]);
+    }
+
+    public static function createSubscriptionPrice(string $productId, int $amount)
+    {
+        $stripe = app(StripeClient::class);
+        $existingPrice = self::searchSubscriptionPrice($productId, $amount);
         if ($existingPrice) {
             return $existingPrice;
         }
@@ -123,8 +150,17 @@ class StripeProvider extends ServiceProvider
             'product' => $productId,
             'currency' => 'jpy',
             'unit_amount' => $amount,
+            'recurring' => ['interval' => 'month'],
             'metadata' => ['amount' => $amount],
         ]);
+    }
+
+    public static function searchPriceByPriceId(string $priceId)
+    {
+        $stripe = app(StripeClient::class);
+        $price = $stripe->prices->retrieve($priceId);
+
+        return $price;
     }
 
     public static function createCheckoutSession(string $customerId, string $priceId, $paymentIntentMetaData): Session
@@ -151,6 +187,31 @@ class StripeProvider extends ServiceProvider
             ],
         ]);
 
+    }
+
+    public static function createSubscriptionSession(string $customerId, string $priceId, $subscriptionDataMetaData): Session
+    {
+        $stripe = app(StripeClient::class);
+        $donor_name = json_encode($subscriptionDataMetaData['donor_name']);
+        $donor_email = json_encode($subscriptionDataMetaData['donor_email']);
+        $envHelper = new EnvHelpers;
+
+        return $stripe->checkout->sessions->create([
+            'success_url' => env('FRONT_END_URL')."/{$envHelper->getUrlByEnv('success')}?name={$donor_name}&email={$donor_email}",
+            'cancel_url' => env('FRONT_END_URL')."/.{$envHelper->getUrlByEnv('cancel')}?name={$donor_name}",
+            'ui_mode' => 'hosted',
+            'customer' => $customerId,
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price' => $priceId,
+                'quantity' => 1,
+            ]],
+            'automatic_tax' => ['enabled' => false],
+            'mode' => 'subscription',
+            'subscription_data' => [ // 注意: Subscription table に保存するため
+                'metadata' => $subscriptionDataMetaData,
+            ],
+        ]);
     }
 
     public static function getProductNameFromId(string $productId): string
