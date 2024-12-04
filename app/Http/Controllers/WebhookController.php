@@ -87,9 +87,13 @@ class WebhookController extends Controller
 
     }
 
+    /**
+     * @throws SignatureVerificationException
+     */
     public function customerSubscriptionCreated(Request $request): void
     {
-        $endpoint_secret = 'whsec_66d1bc562f01853a93c4c10ab740b0bbd30aa4084a2fd9e5a300473917bc2f8f';
+        $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY
+';
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
 
