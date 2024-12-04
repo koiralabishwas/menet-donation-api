@@ -76,15 +76,16 @@ class WebhookController extends Controller
             $payload, $sig_header, $endpoint_secret
         );
 
+        if ($event->type !== 'payment_intent.succeeded') {
+            return;
+        }
+
         $paymentIntent = $event->data;
         $metaData = $paymentIntent['object']->metadata;
         Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
 
         DonationRepository::storeDonation($metaData, $paymentIntent['object']);
         Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
-
-        // ... handle other event types
-
     }
 
     /**
