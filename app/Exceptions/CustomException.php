@@ -21,6 +21,7 @@ class CustomException extends Exception
 
     public function __construct(
         string $type,
+        int $line,
         string $userEmail,
         string $shortMessage,
         Exception $e
@@ -30,7 +31,7 @@ class CustomException extends Exception
         $this->type = $type;
         $this->userEmail = $userEmail;
         $this->code = $e->getCode() ?: 500; // Default to 500 if no code is provided
-        $this->line = $e->getLine();
+        $this->line = $line;
         $this->shortMessage = $shortMessage;
         $this->message = $e->getMessage();
     }

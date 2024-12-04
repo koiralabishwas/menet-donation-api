@@ -72,8 +72,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::FATAL,
+                __LINE__,
                 $customerData['email'],
-                'Failed to create Stripe customer.',
+                'Failed to create Stripe customer',
                 $e
             );
         }
@@ -93,6 +94,7 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::FATAL,
+                __LINE__,
                 $email,
                 'Failed to search Stripe customer.',
                 $e
@@ -106,7 +108,7 @@ class StripeProvider extends ServiceProvider
     public static function deleteAllCustomers(): string
     {
         if (env('APP_ENV') === 'production') {
-            return 'Production environment is not allowed to delete all customers.';
+            return 'Production environment is not allowed to delete all customers';
         }
 
         try {
@@ -128,8 +130,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::ERROR,
+                __LINE__,
                 '',
-                'Failed to delete all Stripe customers.',
+                'Failed to delete all Stripe customers',
                 $e
             );
         }
@@ -153,8 +156,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::ERROR,
+                __LINE__,
                 '',
-                'Failed to search Stripe one-time price.',
+                'Failed to search Stripe one-time price',
                 $e
             );
         }
@@ -178,8 +182,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::ERROR,
+                __LINE__,
                 '',
-                'Failed to search Stripe subscription price.',
+                'Failed to search Stripe subscription price',
                 $e
             );
         }
@@ -208,8 +213,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::FATAL,
+                __LINE__,
                 '',
-                'Failed to create Stripe one-time price.',
+                'Failed to create Stripe one-time price',
                 $e
             );
         }
@@ -237,8 +243,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::FATAL,
+                __LINE__,
                 '',
-                'Failed to create Stripe subscription price.',
+                'Failed to create Stripe subscription price',
                 $e
             );
         }
@@ -257,8 +264,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::ERROR,
+                __LINE__,
                 '',
-                'Failed to search Stripe price.',
+                'Failed to search Stripe price',
                 $e
             );
         }
@@ -294,8 +302,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::FATAL,
-                '',
-                'Failed to create Stripe checkout session.',
+                __LINE__,
+                $paymentIntentMetaData['donor_email'],
+                'Failed to create Stripe checkout session',
                 $e
             );
         }
@@ -332,8 +341,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::FATAL,
-                '',
-                'Failed to create Stripe checkout session.',
+                __LINE__,
+                $subscriptionDataMetaData['donor_email'],
+                'Failed to create Stripe checkout session',
                 $e
             );
         }
@@ -352,8 +362,9 @@ class StripeProvider extends ServiceProvider
         } catch (Exception $e) {
             throw new CustomException(
                 LogType::FATAL,
+                __LINE__,
                 '',
-                'Failed to get Stripe product name.',
+                'Failed to get Stripe product name',
                 $e
             );
         }
