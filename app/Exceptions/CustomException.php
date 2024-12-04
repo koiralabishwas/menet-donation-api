@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Services\DiscordService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -38,15 +39,38 @@ class CustomException extends Exception
 
     public function render($request): JsonResponse
     {
+        $this->sendToDiscord($request);
+
         return response()->json([
             'success' => false,
             'timestamp' => now()->toDateTimeString(),
-            'route' => '/'.$request->path(),
+            'route' => "/{$request->path()}",
             'error_type' => $this->type,
             'error_line' => $this->line,
             'user_email' => $this->userEmail,
             'short_message' => $this->shortMessage,
             'message' => $this->message,
         ], $this->code);
+    }
+
+    protected function sendToDiscord($request): void
+    {
+        $message = [
+            'embeds' => [
+                [
+                    'title' => 'Error Report',
+                    'description' => "**Type:** {$this->type}\n".
+                        "**Route:** /{$request->path()}\n".
+                        "**Line:** {$this->line}\n".
+                        "**User Email:** {$this->userEmail}\n".
+                        "**Short Message:** {$this->shortMessage}\n".
+                        "**Message:** {$this->message}",
+                    'color' => hexdec('FF0000'), // Red color for errors
+                    'timestamp' => now()->toIso8601String(),
+                ],
+            ],
+        ];
+
+        DiscordService::sendMessage($message);
     }
 }
