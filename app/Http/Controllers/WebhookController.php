@@ -37,7 +37,7 @@ class WebhookController extends Controller
                     DonationRepository::storeDonation($metaData, $paymentIntent['object']);
                     Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
                 } else {
-                    Log::info('subscription mode , no onetime 処理 will be run ');
+                    Log::info('subscription mode , no onetime 処理 will be run');
                 }
 
                 return;
@@ -76,7 +76,7 @@ class WebhookController extends Controller
             $payload, $sig_header, $endpoint_secret
         );
 
-        if ($event->type !== 'payment_intent.succeeded') {
+        if ($event->type !== 'payment_intent.succeeded' || $event->data['object']->metadata->type !== 'ONE_TIME') {
             return;
         }
 
