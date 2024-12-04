@@ -16,7 +16,7 @@ class WebhookController extends Controller
     /**
      * @throws SignatureVerificationException
      */
-    public function create(Request $request): void // NOTE: this fun is to test for local use
+    public function create(Request $request): void // NOTE!:to test for local use
     {
         $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
         $payload = $request->getcontent();
@@ -41,7 +41,7 @@ class WebhookController extends Controller
                 }
 
                 return;
-
+                // catch and store subscription on db
             case 'customer.subscription.created':
                 $subscriptionData = $event->data;
                 //                    Log::info("webhook case customer.subscription.created");
@@ -85,5 +85,19 @@ class WebhookController extends Controller
 
         // ... handle other event types
 
+    }
+
+    public function customerSubscriptionCreated(Request $request): void
+    {
+        $endpoint_secret = 'whsec_66d1bc562f01853a93c4c10ab740b0bbd30aa4084a2fd9e5a300473917bc2f8f';
+        $payload = $request->getcontent();
+        $sig_header = $request->header('Stripe-Signature');
+
+        $event = Webhook::constructEvent(
+            $payload, $sig_header, $endpoint_secret
+        );
+        $subscriptionData = $event->data;
+        SubscriptionRepository::storeSubscription($subscriptionData['object']);
+        // TODO : send notification mail
     }
 }
