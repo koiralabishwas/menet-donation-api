@@ -92,14 +92,17 @@ class WebhookController extends Controller
      */
     public function customerSubscriptionCreated(Request $request): void
     {
-        $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY
-';
+        $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
 
         $event = Webhook::constructEvent(
             $payload, $sig_header, $endpoint_secret
         );
+        if ($event->type !== 'customer.subscription.created') {
+            return;
+        }
+
         $subscriptionData = $event->data;
         SubscriptionRepository::storeSubscription($subscriptionData['object']);
         // TODO : send notification mail
