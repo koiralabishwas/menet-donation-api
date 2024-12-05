@@ -11,7 +11,7 @@ class DiscordService
     public static function sendErrorMessage($request, $type, $line, $userEmail, $shortMessage, $message, $code): void
     {
         $message = [
-            'mention_everyone' => true,
+            'mention_everyone' => ! (env('APP_ENV') === 'local'), // Mention everyone except local
             'username' => '【'.env('APP_ENV').'】'.env('APP_NAME'),
             'embeds' => [
                 [
@@ -35,7 +35,7 @@ class DiscordService
     public static function sendSuccessMessage($donorName, $donorEmail, $donationProject, $amount): void
     {
         $message = [
-            'mention_everyone' => true,
+            'mention_everyone' => ! (env('APP_ENV') === 'local'), // Mention everyone except local
             'username' => '【'.env('APP_ENV').'】'.env('APP_NAME'),
             'embeds' => [
                 [
