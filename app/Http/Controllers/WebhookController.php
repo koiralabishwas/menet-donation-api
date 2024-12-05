@@ -37,7 +37,7 @@ class WebhookController extends Controller
                     DonationRepository::storeDonation($metaData, $paymentIntent['object']);
                     Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
                 } else {
-                    Log::info('subscription mode , no onetime 処理 will be run ');
+                    Log::info('subscription mode , no onetime 処理 will be run');
                 }
 
                 return;
@@ -76,26 +76,34 @@ class WebhookController extends Controller
             $payload, $sig_header, $endpoint_secret
         );
 
+        if ($event->type !== 'payment_intent.succeeded' || $event->data['object']->metadata->type !== 'ONE_TIME') {
+            return;
+        }
+
         $paymentIntent = $event->data;
         $metaData = $paymentIntent['object']->metadata;
         Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
 
         DonationRepository::storeDonation($metaData, $paymentIntent['object']);
         Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
-
-        // ... handle other event types
-
     }
 
+    /**
+     * @throws SignatureVerificationException
+     */
     public function customerSubscriptionCreated(Request $request): void
     {
-        $endpoint_secret = 'whsec_66d1bc562f01853a93c4c10ab740b0bbd30aa4084a2fd9e5a300473917bc2f8f';
+        $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
 
         $event = Webhook::constructEvent(
             $payload, $sig_header, $endpoint_secret
         );
+        if ($event->type !== 'customer.subscription.created') {
+            return;
+        }
+
         $subscriptionData = $event->data;
         SubscriptionRepository::storeSubscription($subscriptionData['object']);
         // TODO : send notification mail
