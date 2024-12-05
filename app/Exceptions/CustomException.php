@@ -55,22 +55,6 @@ class CustomException extends Exception
 
     protected function sendToDiscord($request): void
     {
-        $message = [
-            'embeds' => [
-                [
-                    'title' => 'Error Report',
-                    'description' => "**Type:** {$this->type}\n".
-                        "**Route:** /{$request->path()}\n".
-                        "**Line:** {$this->line}\n".
-                        "**User Email:** {$this->userEmail}\n".
-                        "**Short Message:** {$this->shortMessage}\n".
-                        "**Message:** {$this->message}",
-                    'color' => hexdec('FF0000'), // Red color for errors
-                    'timestamp' => now()->toIso8601String(),
-                ],
-            ],
-        ];
-
-        DiscordService::sendMessage($message);
+        DiscordService::sendErrorMessage($request, $this->type, $this->line, $this->userEmail, $this->shortMessage, $this->message, $this->code);
     }
 }
