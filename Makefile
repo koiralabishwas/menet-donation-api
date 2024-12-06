@@ -39,6 +39,7 @@ clear: ## キャッシュをクリアします
 	@php artisan config:clear
 	@php artisan route:clear
 	@php artisan view:clear
+	@rm -rf bootstrap/cache/*
 
 .PHONY: clear-logs
 clear-logs: ## storage/logs/laravel.logのログをクリアします
