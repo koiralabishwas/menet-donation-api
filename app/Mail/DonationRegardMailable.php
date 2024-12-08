@@ -11,6 +11,16 @@ use Illuminate\Queue\SerializesModels;
 {
     use Queueable, SerializesModels;
 
+    public string $donorName;
+
+    public string $donationProject;
+
+    public string $donationAmount;
+
+    public string $donorExternalId;
+
+    public string $donationCertificateUrl;
+
     /**
      * Create a new message instance.
      */
@@ -29,6 +39,10 @@ use Illuminate\Queue\SerializesModels;
     public function build(): DonationRegardMailable
     {
         $subject = '寄付完了のお知らせ';
+
+        if (env('APP_ENV') !== 'production') {
+            $subject = '(テスト)'.$subject;
+        }
 
         return $this->subject($subject)->markdown('mail.donationRegard')->with([
             'donorName' => $this->donorName,

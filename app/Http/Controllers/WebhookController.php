@@ -18,6 +18,9 @@ class WebhookController extends Controller
      */
     public function create(Request $request): void // NOTE!:to test for local use
     {
+        Log::info('Request Headers: ', $request->headers->all());
+        Log::info('Request Body: ', json_decode($request->getContent(), true));
+
         $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
@@ -68,6 +71,9 @@ class WebhookController extends Controller
      */
     public function paymentIntentSucceed(Request $request): void // for dev and prd use
     {
+        Log::info('Request Headers: ', $request->headers->all());
+        Log::info('Request Body: ', json_decode($request->getContent(), true));
+
         $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
@@ -85,6 +91,7 @@ class WebhookController extends Controller
         Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
 
         DonationRepository::storeDonation($metaData, $paymentIntent['object']);
+
         Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
     }
 
@@ -93,6 +100,9 @@ class WebhookController extends Controller
      */
     public function customerSubscriptionCreated(Request $request): void
     {
+        Log::info('Request Headers: ', $request->headers->all());
+        Log::info('Request Body: ', json_decode($request->getContent(), true));
+
         $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
