@@ -29,6 +29,7 @@ class WebhookController extends Controller
 
             return response()->json([
                 'message' => 'Invalid payload',
+                'url' => $request->getRequestUri(),
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 'error' => $e->getMessage(),
             ], 400);
@@ -37,6 +38,7 @@ class WebhookController extends Controller
 
             return response()->json([
                 'message' => 'Invalid signature',
+                'url' => $request->getRequestUri(),
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 'error' => $e->getMessage(),
             ], 400);
@@ -45,6 +47,7 @@ class WebhookController extends Controller
         if ($event->type !== 'payment_intent.succeeded' || $event->data['object']->metadata->type !== 'ONE_TIME') {
             return response()->json([
                 'message' => 'Invalid payload',
+                'url' => $request->getRequestUri(),
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
             ], 400);
         }
@@ -61,6 +64,7 @@ class WebhookController extends Controller
 
             return response()->json([
                 'message' => 'Failed to send email',
+                'url' => $request->getRequestUri(),
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 'error' => $e->getMessage(),
             ], 400);
@@ -68,6 +72,7 @@ class WebhookController extends Controller
 
         return response()->json([
             'message' => 'Success',
+            'url' => $request->getRequestUri(),
             'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
         ], 200);
     }
@@ -85,6 +90,7 @@ class WebhookController extends Controller
 
             return response()->json([
                 'message' => 'Invalid payload',
+                'url' => $request->getRequestUri(),
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 'error' => $e->getMessage(),
             ], 400);
@@ -93,6 +99,7 @@ class WebhookController extends Controller
 
             return response()->json([
                 'message' => 'Invalid signature',
+                'url' => $request->getRequestUri(),
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 'error' => $e->getMessage(),
             ], 400);
@@ -103,6 +110,7 @@ class WebhookController extends Controller
 
             return response()->json([
                 'message' => 'Invalid payload',
+                'url' => $request->getRequestUri(),
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
             ], 400);
         }
@@ -114,6 +122,7 @@ class WebhookController extends Controller
 
         return response()->json([
             'message' => 'Success',
+            'url' => $request->getRequestUri(),
             'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
         ], 200);
     }
