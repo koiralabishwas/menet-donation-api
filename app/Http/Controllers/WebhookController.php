@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\LogType;
-use App\Exceptions\CustomException;
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
@@ -27,7 +25,7 @@ class WebhookController extends Controller
         try {
             $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
         } catch (UnexpectedValueException $e) {
-            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid payload', $e);
+            Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
 
             return response()->json([
                 'message' => 'Invalid payload',
@@ -35,7 +33,7 @@ class WebhookController extends Controller
                 'error' => $e->getMessage(),
             ], 400);
         } catch (SignatureVerificationException $e) {
-            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid signature', $e);
+            Log::error('Stripe webhook error: Invalid signature', ['exception' => $e]);
 
             return response()->json([
                 'message' => 'Invalid signature',
@@ -84,6 +82,8 @@ class WebhookController extends Controller
                     'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 ], 200);
             default:
+                Log::error('Stripe webhook error: Invalid payload');
+
                 return response()->json([
                     'message' => 'Invalid payload',
                     'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
@@ -156,7 +156,7 @@ class WebhookController extends Controller
         try {
             $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
         } catch (UnexpectedValueException $e) {
-            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid payload', $e);
+            Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
 
             return response()->json([
                 'message' => 'Invalid payload',
@@ -164,7 +164,7 @@ class WebhookController extends Controller
                 'error' => $e->getMessage(),
             ], 400);
         } catch (SignatureVerificationException $e) {
-            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid signature', $e);
+            Log::error('Stripe webhook error: Invalid signature', ['exception' => $e]);
 
             return response()->json([
                 'message' => 'Invalid signature',
@@ -174,6 +174,8 @@ class WebhookController extends Controller
         }
 
         if ($event->type !== 'customer.subscription.created') {
+            Log::error('Stripe webhook error: Invalid payload');
+
             return response()->json([
                 'message' => 'Invalid payload',
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
