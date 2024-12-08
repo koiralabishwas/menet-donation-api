@@ -200,7 +200,6 @@ class StripeProvider extends ServiceProvider
 
             $existingPrice = self::searchOneTimePrice($productId, $amount);
 
-
             if ($existingPrice) {
                 return $existingPrice;
             }

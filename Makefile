@@ -23,7 +23,6 @@ test: ## テストを実行します
 	@php artisan test
 	@make test-webhook-payment-intent
 	@rm -rf .phpunit.cache .phpunit.result.cache
-	@make
 
 .PHONY: format-code
 format-code: ## コードをフォーマットします
