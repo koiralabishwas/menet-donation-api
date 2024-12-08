@@ -7,6 +7,7 @@ use App\Exceptions\CustomException;
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -99,7 +100,7 @@ class WebhookController extends Controller
         try {
             $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
         } catch (UnexpectedValueException $e) {
-            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid payload', $e);
+            Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
 
             return response()->json([
                 'message' => 'Invalid payload',
@@ -107,7 +108,7 @@ class WebhookController extends Controller
                 'error' => $e->getMessage(),
             ], 400);
         } catch (SignatureVerificationException $e) {
-            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid signature', $e);
+            Log::error('Stripe webhook error: Invalid signature', ['exception' => $e]);
 
             return response()->json([
                 'message' => 'Invalid signature',
@@ -125,11 +126,20 @@ class WebhookController extends Controller
 
         $paymentIntent = $event->data;
         $metaData = $paymentIntent['object']->metadata;
-        Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
 
         DonationRepository::storeDonation($metaData, $paymentIntent['object']);
 
-        Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
+        try {
+            Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
+        } catch (Exception $e) {
+            Log::error('Stripe webhook error: Failed to send email', ['exception' => $e]);
+
+            return response()->json([
+                'message' => 'Failed to send email',
+                'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
+                'error' => $e->getMessage(),
+            ], 400);
+        }
 
         return response()->json([
             'message' => 'Success',
