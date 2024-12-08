@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\LogType;
+use App\Exceptions\CustomException;
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
@@ -17,9 +19,6 @@ class WebhookController extends Controller
 {
     public function create(Request $request): JsonResponse
     {
-        Log::info('Request Headers: ', $request->headers->all());
-        Log::info('Request Body: ', json_decode($request->getContent(), true));
-
         $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
@@ -27,12 +26,16 @@ class WebhookController extends Controller
         try {
             $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
         } catch (UnexpectedValueException $e) {
+            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid payload', $e);
+
             return response()->json([
                 'message' => 'Invalid payload',
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 'error' => $e->getMessage(),
             ], 400);
         } catch (SignatureVerificationException $e) {
+            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid signature', $e);
+
             return response()->json([
                 'message' => 'Invalid signature',
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
@@ -89,9 +92,6 @@ class WebhookController extends Controller
 
     public function paymentIntentSucceed(Request $request): JsonResponse // for dev and prd use
     {
-        Log::info('Request Headers: ', $request->headers->all());
-        Log::info('Request Body: ', json_decode($request->getContent(), true));
-
         $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
@@ -99,12 +99,16 @@ class WebhookController extends Controller
         try {
             $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
         } catch (UnexpectedValueException $e) {
+            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid payload', $e);
+
             return response()->json([
                 'message' => 'Invalid payload',
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 'error' => $e->getMessage(),
             ], 400);
         } catch (SignatureVerificationException $e) {
+            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid signature', $e);
+
             return response()->json([
                 'message' => 'Invalid signature',
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
@@ -135,9 +139,6 @@ class WebhookController extends Controller
 
     public function customerSubscriptionCreated(Request $request): JsonResponse
     {
-        Log::info('Request Headers: ', $request->headers->all());
-        Log::info('Request Body: ', json_decode($request->getContent(), true));
-
         $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
@@ -145,12 +146,16 @@ class WebhookController extends Controller
         try {
             $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
         } catch (UnexpectedValueException $e) {
+            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid payload', $e);
+
             return response()->json([
                 'message' => 'Invalid payload',
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
                 'error' => $e->getMessage(),
             ], 400);
         } catch (SignatureVerificationException $e) {
+            new CustomException(LogType::ERROR, __LINE__, '', 'Invalid signature', $e);
+
             return response()->json([
                 'message' => 'Invalid signature',
                 'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
