@@ -2,69 +2,12 @@
 2.webhookController でコードを統一化。（画像を確認しろ。）
     a.webhook::constructを統一して、webhooksecretだけparameterで渡す関数にする。
     b.trycatchも別関数で統一可能？
-3.
-
-
-
+3.webhook event は local も deployも同じように取れる。
+=>localのstripe cliを実行時に詳細のurlやeventを指定する必要がある
+    ex>> stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded
 
 気になるもの:
 servicesをProvidersに変えたほうがlaravelの規則に沿った形にならないのかな？
-
-
-
-webhookcontroller::create
-
-    /**
-     * @throws SignatureVerificationException
-     */
-    public function create(Request $request): void // NOTE!:to test for local use
-    {
-        $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
-        $payload = $request->getcontent();
-        $sig_header = $request->header('Stripe-Signature');
-
-        $event = Webhook::constructEvent(
-            $payload, $sig_header, $endpoint_secret
-        );
-        switch ($event->type) {
-            // for one-time payment checkout session
-            case 'payment_intent.succeeded':   // to store one-time payment on db
-                $paymentIntent = $event->data;
-                $metaData = $paymentIntent['object']->metadata; // onetime のときのみここにmetadata 保存されている。
-                if ($metaData->type === 'ONE_TIME') {
-                    Log::info($metaData->type);
-                    Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
-                    //ここで残りのonetime時の処理
-                    DonationRepository::storeDonation($metaData, $paymentIntent['object']);
-                    Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
-                } else {
-                    Log::info('subscription mode , no onetime 処理 will be run');
-                }
-
-                return;
-                // catch and store subscription on db
-            case 'customer.subscription.created':
-                $subscriptionData = $event->data;
-                //                    Log::info("webhook case customer.subscription.created");
-                //                    Log::info($subscriptionData);
-                SubscriptionRepository::storeSubscription($subscriptionData['object']);
-
-                return;
-                //
-            case 'invoice.paid': // to store subscription payments in db
-                $invoice = $event->data;
-                //                    Log::info("webhook case invoice.paid");
-                //                    Log::info($data);
-                DonationRepository::storeDonation($invoice['object']->subscription_details->metadata, $invoice['object']);
-
-                // TODO:確認メールとキャンセルurlもかねて送る？
-                return;
-
-            default:
-        }
-    }
-
-
 
 
 
