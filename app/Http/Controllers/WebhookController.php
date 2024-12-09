@@ -18,7 +18,12 @@ class WebhookController extends Controller
 {
     public function paymentIntentSucceed(Request $request): JsonResponse // for dev and prd use
     {
+        // TODO: make these endpoints dynamic
+        // endpoint secret for dev depoy
         $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
+
+        // local cli webhook secret
+        //        $endpoint_secret = env("STRIPE_WEBHOOK_SECRET"); // this differs in each endpoint
         $payload = $request->getcontent();
         $sig_header = $request->header('Stripe-Signature');
 

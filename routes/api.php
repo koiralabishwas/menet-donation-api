@@ -25,6 +25,7 @@ Route::post('/xserver/check-if-email-exists', [XServerController::class, 'check_
 
 // use for debugging functions or routes
 Route::prefix('/debug')->group(function () {
+    Route::post('webhooks/payment-intent-succeed', [DebugController::class, 'debugPaymentIntentSucceed']);
     Route::post('/createCustomer', [DebugController::class, 'checkCreateCustomer']);
     Route::get('/email', [DebugController::class, 'getDbCustomerObjFromEmail']);
     Route::get('/product-name', [DebugController::class, 'getStripeProductNameFromProductId']);
