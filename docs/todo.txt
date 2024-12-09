@@ -1,14 +1,14 @@
-
-// SUBSCRIPTION
-   subscription created => store in subscription table
-   subscription paid => store in donation table
-   subscription canceled => add canceled date in subscription table
-
-
+1.local 用のwebhook の処理を書け。
+2.webhookController でコードを統一化。（画像を確認しろ。）
+    a.webhook::constructを統一して、webhooksecretだけparameterで渡す関数にする。
+    b.trycatchも別関数で統一可能？
+3.
 
 
 
 
+気になるもの:
+servicesをProvidersに変えたほうがlaravelの規則に沿った形にならないのかな？
 
 
 
