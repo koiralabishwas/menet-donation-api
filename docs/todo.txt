@@ -4,7 +4,7 @@
     b.trycatchも別関数で統一可能？
 3.webhook event は local も deployも同じように取れる。
 =>localのstripe cliを実行時に詳細のurlやeventを指定する必要がある
-    ex>> stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded
+    example>> stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded
 
 気になるもの:
 servicesをProvidersに変えたほうがlaravelの規則に沿った形にならないのかな？

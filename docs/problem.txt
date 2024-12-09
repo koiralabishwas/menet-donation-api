@@ -7,3 +7,9 @@
 
 
 ## json object を保存しない方がいいpractice にならないかな
+
+!!!!!
+BUG : webhook event !
+subscription session の checkout session時にpayment_intent.metadataにDBに保存する情報を持たすことができない。
+そのため、invoice.paidが必要。！！バレンなにしとんね
+
