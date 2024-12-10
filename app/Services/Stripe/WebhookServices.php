@@ -14,10 +14,11 @@ class WebhookServices
      * @throws SignatureVerificationException
      * @throws UnexpectedValueException
      */
-    public static function constructWebhookEvent(Request $request , string $endpoint_secret) : Event
+    public static function constructWebhookEvent(Request $request, string $endpoint_secret): Event
     {
         $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
-        return Webhook::constructEvent($payload, $sig_header,$endpoint_secret);
+
+        return Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
     }
 }

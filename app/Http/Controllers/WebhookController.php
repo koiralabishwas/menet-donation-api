@@ -21,12 +21,11 @@ class WebhookController extends Controller
     {
         // TODO: make these endpoints dynamic
         // endpoint secret for dev deploy
-        //$endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
-        // local cli webhook secret
-        //        $endpoint_secret = env("STRIPE_WEBHOOK_SECRET"); // this differs in each endpoint
+        //whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
 
+        // enum を使って,local じゃないときは、env()で引っ張って見たほうがいいいのかな。
         try {
-            $event = WebhookServices::constructWebhookEvent($request , env("stripe_webhook_secret"));
+            $event = WebhookServices::constructWebhookEvent($request, env('STRIPE_WEBHOOK_SECRET'));
         } catch (UnexpectedValueException $e) {
             Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
 
