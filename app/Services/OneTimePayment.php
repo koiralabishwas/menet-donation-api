@@ -5,22 +5,23 @@ namespace App\Services;
 use App\Enums\StripeProductID;
 use App\Exceptions\CustomException;
 use App\Http\Requests\DonationFormRequest;
+use App\Models\Donor;
 use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
 
 class OneTimePayment
 {
-    private $request;
+    private DonationFormRequest $request;
 
-    private $formData;
+    private array $formData;
 
-    private $donor;
+    private Donor $donor;
 
-    private $stripeCustomer;
+    private object $stripeCustomer;
 
-    private $stripePrice;
+    private object $stripePrice;
 
-    private $paymentIntentMetaData;
+    private array $paymentIntentMetaData;
 
     public function __construct(DonationFormRequest $request)
     {
