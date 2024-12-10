@@ -57,12 +57,18 @@ class OneTimePayment
         return $this;
     }
 
+    public function storeDonor(): static
+    {
+        $this->donor = DonorRepository::storeDonor($this->formData, $this->stripeCustomer);
+
+        return $this;
+    }
+
     /**
      * @throws CustomException
      */
     public function createMetadata(): static
     {
-        $this->donor = DonorRepository::storeDonor($this->formData, $this->stripeCustomer);
         $this->donor['stripe_customer_object'] = json_decode($this->donor['stripe_customer_object']);
 
         $this->paymentIntentMetaData = [

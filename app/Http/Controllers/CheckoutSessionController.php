@@ -18,6 +18,7 @@ class CheckoutSessionController extends Controller
             ->validate()
             ->createCustomer()
             ->createPrice()
+            ->storeDonor()
             ->createMetadata()
             ->createCheckoutSession();
 
