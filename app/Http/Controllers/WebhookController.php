@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Exception\UnexpectedValueException;
-use Stripe\Webhook;
 
 class WebhookController extends Controller
 {
@@ -76,17 +75,15 @@ class WebhookController extends Controller
             'message' => 'Success',
             'url' => $request->getRequestUri(),
             'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-        ], 200);
+        ]); // default status  が　200だから、わざわざ書かなくていいみたい
     }
 
     public function customerSubscriptionCreated(Request $request): JsonResponse
     {
-        $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
-        $payload = $request->getContent();
-        $sig_header = $request->header('Stripe-Signature');
+        //        $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
 
         try {
-            $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
+            $event = WebhookServices::constructWebhookEvent($request, env('STRIPE_WEBHOOK_SECRET'));
         } catch (UnexpectedValueException $e) {
             Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
 
@@ -126,6 +123,6 @@ class WebhookController extends Controller
             'message' => 'Success',
             'url' => $request->getRequestUri(),
             'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-        ], 200);
+        ]);
     }
 }

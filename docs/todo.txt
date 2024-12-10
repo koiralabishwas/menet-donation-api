@@ -10,6 +10,13 @@
 servicesをProvidersに変えたほうがlaravelの規則に沿った形にならないのかな？
 
 
+memo::
+catch subscription created in local stripe cli
+stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-created --events=customer.subscription.created
+
+catch subscription payment-intent.paid in local stripe cli
+stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded
+
 
 
 
