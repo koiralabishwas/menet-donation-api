@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
+use App\Services\Stripe\WebhookServices;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,16 +20,13 @@ class WebhookController extends Controller
     public function paymentIntentSucceed(Request $request): JsonResponse // for dev and prd use
     {
         // TODO: make these endpoints dynamic
-        // endpoint secret for dev depoy
-        $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
-
+        // endpoint secret for dev deploy
+        //$endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
         // local cli webhook secret
         //        $endpoint_secret = env("STRIPE_WEBHOOK_SECRET"); // this differs in each endpoint
-        $payload = $request->getcontent();
-        $sig_header = $request->header('Stripe-Signature');
 
         try {
-            $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
+            $event = WebhookServices::constructWebhookEvent($request , env("stripe_webhook_secret"));
         } catch (UnexpectedValueException $e) {
             Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
 
@@ -85,7 +83,7 @@ class WebhookController extends Controller
     public function customerSubscriptionCreated(Request $request): JsonResponse
     {
         $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
-        $payload = $request->getcontent();
+        $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
 
         try {
