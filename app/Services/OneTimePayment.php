@@ -28,6 +28,9 @@ class OneTimePayment
         $this->request = $request;
     }
 
+    /**
+     * Step 1: Validate the request data
+     */
     public function validate(): static
     {
         $this->formData = $this->request->validated();
@@ -36,6 +39,8 @@ class OneTimePayment
     }
 
     /**
+     * Step 2: Create the Stripe customer
+     *
      * @throws CustomException
      */
     public function createCustomer(): static
@@ -46,6 +51,8 @@ class OneTimePayment
     }
 
     /**
+     * Step 3: Create the price for the product
+     *
      * @throws CustomException
      */
     public function createPrice(): static
@@ -58,6 +65,9 @@ class OneTimePayment
         return $this;
     }
 
+    /**
+     * Step 4: Store the donor information
+     */
     public function storeDonor(): static
     {
         $this->donor = DonorRepository::storeDonor($this->formData, $this->stripeCustomer);
@@ -66,6 +76,8 @@ class OneTimePayment
     }
 
     /**
+     * Step 5: Create metadata for the payment
+     *
      * @throws CustomException
      */
     public function createMetadata(): static
@@ -90,6 +102,8 @@ class OneTimePayment
     }
 
     /**
+     * Step 6: Create the Stripe checkout session
+     *
      * @throws CustomException
      */
     public function createCheckoutSession(): array
