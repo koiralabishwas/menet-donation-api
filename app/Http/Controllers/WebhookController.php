@@ -20,11 +20,6 @@ class WebhookController extends Controller
 {
     public function paymentIntentSucceed(Request $request): JsonResponse // for dev and prd use
     {
-        // TODO: make these endpoints dynamic
-        // endpoint secret for dev deploy
-        //whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
-
-        // enum を使って,local じゃないときは、env()で引っ張って見たほうがいいいのかな。
         try {
             $event = WebhookServices::constructWebhookEvent(
                 $request,
