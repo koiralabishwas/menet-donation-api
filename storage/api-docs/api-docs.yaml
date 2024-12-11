@@ -28,6 +28,25 @@ paths:
               schema:
                 $ref: "#/components/schemas/DonationResponse"
 
+  /api/subscription-session:
+    post:
+      operationId: createSubscriptionSession
+      summary: Create Subscription Session
+      tags:
+        - Subscription Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DonationRequest"
+      responses:
+        '201':
+          description: Subscription Session successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DonationResponse"
 
   /api/images/upload:
     post:
