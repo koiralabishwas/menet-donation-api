@@ -3,13 +3,12 @@
 namespace App\PaymentServices;
 
 use App\Enums\PaymentSchedule;
-use App\Http\Requests\DonationFormRequest;
 
 class PaymentService
 {
     private PaymentServiceBuilder $builder;
 
-    public function __construct(DonationFormRequest $request)
+    public function __construct(array $request)
     {
         $this->builder = new PaymentServiceBuilder($request);
     }

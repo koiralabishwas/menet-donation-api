@@ -3,16 +3,13 @@
 namespace App\PaymentServices;
 
 use App\Enums\StripeProductID;
-use App\Http\Requests\DonationFormRequest;
 use App\Models\Donor;
 use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
 
 class PaymentServiceBuilder
 {
-    private DonationFormRequest $request;
-
-    private array $formData;
+    private array $request;
 
     private Donor $donor;
 
@@ -22,21 +19,21 @@ class PaymentServiceBuilder
 
     private array $paymentIntentMetaData;
 
-    public function __construct(DonationFormRequest $request)
+    public function __construct(array $request)
     {
         $this->request = $request;
     }
 
     public function createCustomer(): PaymentServiceBuilder
     {
-        $this->stripeCustomer = StripeProvider::createCustomer($this->formData['customer']);
+        $this->stripeCustomer = StripeProvider::createCustomer($this->request['customer']);
 
         return $this;
     }
 
     public function storeDonor(): PaymentServiceBuilder
     {
-        $this->donor = DonorRepository::storeDonor($this->formData, $this->stripeCustomer);
+        $this->donor = DonorRepository::storeDonor($this->request, $this->stripeCustomer);
 
         return $this;
     }
@@ -44,8 +41,8 @@ class PaymentServiceBuilder
     public function creatOneTimePrice(): PaymentServiceBuilder
     {
         $this->stripePrice = StripeProvider::createOneTimePrice(
-            StripeProductID::getValueByLowerCaseKey($this->formData['product']),
-            $this->formData['price']
+            StripeProductID::getValueByLowerCaseKey($this->request['product']),
+            $this->request['price']
         );
 
         return $this;
@@ -54,8 +51,8 @@ class PaymentServiceBuilder
     public function createSubscriptionPrice(): PaymentServiceBuilder
     {
         $this->stripePrice = StripeProvider::createSubscriptionPrice(
-            StripeProductID::getValueByLowerCaseKey($this->formData['product']),
-            $this->formData['price']
+            StripeProductID::getValueByLowerCaseKey($this->request['product']),
+            $this->request['price']
         );
 
         return $this;
@@ -72,9 +69,9 @@ class PaymentServiceBuilder
             'donor_type' => $this->donor['type'],
             'donor_email' => $this->donor['email'],
             'donation_project' => StripeProvider::getProductNameFromId(
-                StripeProductID::getValueByLowerCaseKey($this->formData['product'])
+                StripeProductID::getValueByLowerCaseKey($this->request['product'])
             ),
-            'amount' => $this->formData['price'],
+            'amount' => $this->request['price'],
             'currency' => 'jpy',
             'payment_schedule' => $paymentSchedule,
         ];
