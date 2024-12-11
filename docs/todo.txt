@@ -1,21 +1,12 @@
 1.local 用のwebhook の処理を書け。
 2.webhookController でコードを統一化。（画像を確認しろ。）
-    a.webhook::constructを統一して、webhooksecretだけparameterで渡す関数にする。
+    ok!!a.webhook::constructを統一して、webhooksecretだけparameterで渡す関数にする。
     b.trycatchも別関数で統一可能？
-3.webhook event は local も deployも同じように取れる。
-=>localのstripe cliを実行時に詳細のurlやeventを指定する必要がある
-    example>> stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded
 
-気になるもの:
-servicesをProvidersに変えたほうがlaravelの規則に沿った形にならないのかな？
-
-
-memo::
-catch subscription created in local stripe cli
-stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-created --events=customer.subscription.created
-
-catch subscription payment-intent.paid in local stripe cli
-stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded
+to fix::
+1. subscription-session時の payment_intent.succeed は　paymentIntentSucceed のwebhook処理でしない
+=> invoice.paid でするのだ。
+＝＝＝＞理由はpayment_intent.metadaに情報もたせられないから。
 
 
 
