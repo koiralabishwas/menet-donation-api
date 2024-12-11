@@ -23,6 +23,6 @@ class EnvHelpers
             return config('services.stripe.webhook.local_webhook_secret');
         }
 
-        return config("services.stripe.webhook.$type->value}");
+        return config("services.stripe.webhook.$type->value");
     }
 }
