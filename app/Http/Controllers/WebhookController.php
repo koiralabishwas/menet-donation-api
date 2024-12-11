@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\WebhookSecret;
+use App\Helpers\EnvHelpers;
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
@@ -24,7 +26,10 @@ class WebhookController extends Controller
 
         // enum を使って,local じゃないときは、env()で引っ張って見たほうがいいいのかな。
         try {
-            $event = WebhookServices::constructWebhookEvent($request, env('STRIPE_WEBHOOK_SECRET'));
+            $event = WebhookServices::constructWebhookEvent(
+                $request,
+                EnvHelpers::getWebhookSecret(WebhookSecret::INVOICE_PAID_SECRET)
+            );
         } catch (UnexpectedValueException $e) {
             Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
 
@@ -83,7 +88,10 @@ class WebhookController extends Controller
         //        $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
 
         try {
-            $event = WebhookServices::constructWebhookEvent($request, env('STRIPE_WEBHOOK_SECRET'));
+            $event = WebhookServices::constructWebhookEvent(
+                $request,
+                EnvHelpers::getWebhookSecret(WebhookSecret::CUSTOMER_SUBSCRIPTION_CREATED_SECRET)
+            );
         } catch (UnexpectedValueException $e) {
             Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
 
