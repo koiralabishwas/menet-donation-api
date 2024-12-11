@@ -28,7 +28,7 @@ class WebhookController extends Controller
         try {
             $event = WebhookServices::constructWebhookEvent(
                 $request,
-                EnvHelpers::getWebhookSecret(WebhookSecret::INVOICE_PAID_SECRET)
+                EnvHelpers::getWebhookSecret(WebhookSecret::PAYMENT_INTENT_SUCCEED_SECRET)
             );
         } catch (UnexpectedValueException $e) {
             Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
