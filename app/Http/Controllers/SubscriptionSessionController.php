@@ -13,12 +13,12 @@ class SubscriptionSessionController extends Controller
         $validatedRequest = $request->validated();
 
         $paymentService = new PaymentService($validatedRequest);
-        $formData = $paymentService->monthlyPayment();
+        $data = $paymentService->monthlyPayment();
 
         return response()->json([
             'status' => 201,
             'message' => 'success',
-            'data' => $formData,
+            'data' => $data,
         ], 201);
     }
 }

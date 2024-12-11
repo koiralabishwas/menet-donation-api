@@ -13,12 +13,12 @@ class CheckoutSessionController extends Controller
         $validatedRequest = $request->validated();
 
         $paymentService = new PaymentService($validatedRequest);
-        $formData = $paymentService->oneTimePayment();
+        $data = $paymentService->oneTimePayment();
 
         return response()->json([
             'status' => 201,
             'message' => 'success',
-            'data' => $formData,
+            'data' => $data,
         ], 201);
     }
 }
