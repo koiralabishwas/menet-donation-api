@@ -27,16 +27,16 @@ class PaymentServiceBuilder
         $this->request = $request;
     }
 
-    public function validate(): PaymentServiceBuilder
+    public function createCustomer(): PaymentServiceBuilder
     {
-        $this->formData = $this->request->validated();
+        $this->stripeCustomer = StripeProvider::createCustomer($this->formData['customer']);
 
         return $this;
     }
 
-    public function createCustomer(): PaymentServiceBuilder
+    public function storeDonor(): PaymentServiceBuilder
     {
-        $this->stripeCustomer = StripeProvider::createCustomer($this->formData['customer']);
+        $this->donor = DonorRepository::storeDonor($this->formData, $this->stripeCustomer);
 
         return $this;
     }
@@ -57,13 +57,6 @@ class PaymentServiceBuilder
             StripeProductID::getValueByLowerCaseKey($this->formData['product']),
             $this->formData['price']
         );
-
-        return $this;
-    }
-
-    public function storeDonor(): PaymentServiceBuilder
-    {
-        $this->donor = DonorRepository::storeDonor($this->formData, $this->stripeCustomer);
 
         return $this;
     }

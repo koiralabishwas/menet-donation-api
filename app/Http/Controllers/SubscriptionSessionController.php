@@ -10,7 +10,9 @@ class SubscriptionSessionController extends Controller
 {
     public function create(DonationFormRequest $request): JsonResponse
     {
-        $paymentService = new PaymentService($request);
+        $validatedRequest = $request->validated();
+
+        $paymentService = new PaymentService($validatedRequest);
         $formData = $paymentService->monthlyPayment();
 
         return response()->json([

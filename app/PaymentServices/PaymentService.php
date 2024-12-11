@@ -17,10 +17,9 @@ class PaymentService
     public function oneTimePayment(): array
     {
         return $this->builder
-            ->validate()
             ->createCustomer()
-            ->creatOneTimePrice()
             ->storeDonor()
+            ->creatOneTimePrice()
             ->createMetadata(PaymentSchedule::ONE_TIME)
             ->createCheckoutSession();
     }
@@ -28,10 +27,9 @@ class PaymentService
     public function monthlyPayment(): array
     {
         return $this->builder
-            ->validate()
             ->createCustomer()
-            ->createSubscriptionPrice()
             ->storeDonor()
+            ->createSubscriptionPrice()
             ->createMetadata(PaymentSchedule::MONTHLY)
             ->createSubscriptionSession();
     }
