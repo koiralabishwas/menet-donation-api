@@ -1,7 +1,7 @@
 1.local 用のwebhook の処理を書け。
 2.webhookController でコードを統一化。（画像を確認しろ。）
     ok!!a.webhook::constructを統一して、webhooksecretだけparameterで渡す関数にする。
-    b.trycatchも別関数で統一可能？
+    b.trycatchも別関数で統一可能？ // => service や　builder で実現
 
 to fix::
 1. subscription-session時の payment_intent.succeed は　paymentIntentSucceed のwebhook処理でしない
