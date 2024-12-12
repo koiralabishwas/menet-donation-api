@@ -3,16 +3,13 @@
 namespace App\PaymentServices;
 
 use App\Enums\StripeProductID;
-use App\Http\Requests\DonationFormRequest;
 use App\Models\Donor;
 use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
 
-class OneTimePaymentBuilder
+class PaymentServiceBuilder
 {
-    private DonationFormRequest $request;
-
-    private array $formData;
+    private array $request;
 
     private Donor $donor;
 
@@ -22,43 +19,46 @@ class OneTimePaymentBuilder
 
     private array $paymentIntentMetaData;
 
-    public function __construct(DonationFormRequest $request)
+    public function __construct(array $request)
     {
         $this->request = $request;
     }
 
-    public function validate(): OneTimePaymentBuilder
+    public function createCustomer(): PaymentServiceBuilder
     {
-        $this->formData = $this->request->validated();
+        $this->stripeCustomer = StripeProvider::createCustomer($this->request['customer']);
 
         return $this;
     }
 
-    public function createCustomer(): OneTimePaymentBuilder
+    public function storeDonor(): PaymentServiceBuilder
     {
-        $this->stripeCustomer = StripeProvider::createCustomer($this->formData['customer']);
+        $this->donor = DonorRepository::storeDonor($this->request, $this->stripeCustomer);
 
         return $this;
     }
 
-    public function createPrice(): OneTimePaymentBuilder
+    public function creatOneTimePrice(): PaymentServiceBuilder
     {
         $this->stripePrice = StripeProvider::createOneTimePrice(
-            StripeProductID::getValueByLowerCaseKey($this->formData['product']),
-            $this->formData['price']
+            StripeProductID::getValueByLowerCaseKey($this->request['product']),
+            $this->request['price']
         );
 
         return $this;
     }
 
-    public function storeDonor(): OneTimePaymentBuilder
+    public function createSubscriptionPrice(): PaymentServiceBuilder
     {
-        $this->donor = DonorRepository::storeDonor($this->formData, $this->stripeCustomer);
+        $this->stripePrice = StripeProvider::createSubscriptionPrice(
+            StripeProductID::getValueByLowerCaseKey($this->request['product']),
+            $this->request['price']
+        );
 
         return $this;
     }
 
-    public function createMetadata(): OneTimePaymentBuilder
+    public function createMetadata(string $paymentSchedule): PaymentServiceBuilder
     {
         $this->donor['stripe_customer_object'] = json_decode($this->donor['stripe_customer_object']);
 
@@ -69,11 +69,11 @@ class OneTimePaymentBuilder
             'donor_type' => $this->donor['type'],
             'donor_email' => $this->donor['email'],
             'donation_project' => StripeProvider::getProductNameFromId(
-                StripeProductID::getValueByLowerCaseKey($this->formData['product'])
+                StripeProductID::getValueByLowerCaseKey($this->request['product'])
             ),
-            'amount' => $this->formData['price'],
+            'amount' => $this->request['price'],
             'currency' => 'jpy',
-            'type' => 'ONE_TIME',
+            'payment_schedule' => $paymentSchedule,
         ];
 
         return $this;
@@ -82,6 +82,22 @@ class OneTimePaymentBuilder
     public function createCheckoutSession(): array
     {
         $checkoutSession = StripeProvider::createCheckoutSession(
+            $this->stripeCustomer->id,
+            $this->stripePrice->id,
+            $this->paymentIntentMetaData
+        );
+
+        return [
+            'donor' => $this->donor,
+            'stripe_checkout_session' => $checkoutSession,
+            'stripe_price' => $this->stripePrice,
+            'stripe_customer' => $this->stripeCustomer,
+        ];
+    }
+
+    public function createSubscriptionSession(): array
+    {
+        $checkoutSession = StripeProvider::createSubscriptionSession(
             $this->stripeCustomer->id,
             $this->stripePrice->id,
             $this->paymentIntentMetaData

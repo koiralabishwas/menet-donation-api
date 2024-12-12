@@ -3,20 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DonationFormRequest;
-use App\PaymentServices\OneTimePayment;
+use App\PaymentServices\PaymentService;
 use Illuminate\Http\JsonResponse;
 
 class CheckoutSessionController extends Controller
 {
     public function create(DonationFormRequest $request): JsonResponse
     {
-        $oneTimePayment = new OneTimePayment($request);
-        $formData = $oneTimePayment->processPayment();
+        $validatedRequest = $request->validated();
+
+        $paymentService = new PaymentService($validatedRequest);
+        $data = $paymentService->oneTimePayment();
 
         return response()->json([
             'status' => 201,
             'message' => 'success',
-            'data' => $formData,
+            'data' => $data,
         ], 201);
     }
 }
