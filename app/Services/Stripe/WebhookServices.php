@@ -20,37 +20,35 @@ class WebhookServices
         $this->builder = new WebhookServiceBuilder($request, $webhookSecret);
     }
 
+    /**
+     * @throws Exception
+     */
     public function paymentIntentSucceed(): array
     {
-        try {
-            $this->builder
-                ->constructWebhookEvent()
-                ->storeDonation()
-                ->sendRegardMail();
+        $this->builder
+            ->constructWebhookEvent()
+            ->storeDonation()
+            ->sendRegardMail();
 
-            return [
-                'message' => 'Success',
-                'type' => 'payment_intent.succeeded',
-            ];
-        } catch (Exception $e) {
-            return [$e->getMessage()];
-        }
+        return [
+            'message' => 'Success',
+            'type' => 'payment_intent.succeeded',
+        ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function customerSubscriptionCreated(): array
     {
-        try {
-            $this->builder
-                ->constructWebhookEvent()
-                ->storeSubscription()
-                ->sendRegardMail();
+        $this->builder
+            ->constructWebhookEvent()
+            ->storeSubscription()
+            ->sendRegardMail();
 
-            return [
-                'message' => 'Success',
-                'type' => 'customer.subscription.created',
-            ];
-        } catch (Exception $e) {
-            return [$e->getMessage()];
-        }
+        return [
+            'message' => 'Success',
+            'type' => 'customer.subscription.created',
+        ];
     }
 }

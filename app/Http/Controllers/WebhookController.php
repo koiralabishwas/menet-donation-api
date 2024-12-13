@@ -3,23 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Enums\WebhookSecret;
+use App\Helpers\EnvHelpers;
 use App\Services\Stripe\WebhookServices;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
 {
     public function paymentIntentSucceed(Request $request): JsonResponse // for dev and prd use
     {
-        Log::debug($request);
         try {
-            $job = new WebhookServices(
+            $event = new WebhookServices(
                 $request,
                 WebhookSecret::PAYMENT_INTENT_SUCCEED_SECRET
             );
-            $data = $job->paymentIntentSucceed();
+            $data = $event->paymentIntentSucceed();
 
             return response()->json([
                 'status' => 201,
@@ -27,7 +26,10 @@ class WebhookController extends Controller
                 'data' => $data,
             ]);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return response()->json([
+                'error' => $e->getMessage(),
+                $e->getTrace(),
+            ], 400);
         }
     }
 
@@ -36,7 +38,7 @@ class WebhookController extends Controller
         try {
             $job = new WebhookServices(
                 $request,
-                WebhookSecret::CUSTOMER_SUBSCRIPTION_CREATED_SECRET
+                EnvHelpers::getWebhookSecret(WebhookSecret::PAYMENT_INTENT_SUCCEED_SECRET)
             );
             $data = $job->customerSubscriptionCreated();
 

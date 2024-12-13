@@ -3,11 +3,13 @@
 namespace App\Services\Stripe;
 
 use App\Enums\WebhookSecret;
+use App\Helpers\EnvHelpers;
 use App\Mail\DonationRegardMailable;
 use App\Models\Donation;
 use App\Models\Subscription;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Event;
@@ -19,7 +21,7 @@ class WebhookServiceBuilder
 {
     private Request $request;
 
-    private WebhookSecret $webhookSecret;
+    private string $webhookSecret;
 
     private Event $webhookEvent;
 
@@ -34,7 +36,8 @@ class WebhookServiceBuilder
     public function __construct(Request $request, WebhookSecret $webhookSecret)
     {
         $this->request = $request;
-        $this->webhookSecret = $webhookSecret;
+        $this->webhookSecret = EnvHelpers::getWebhookSecret($webhookSecret);
+        //        $this->webhookSecret = $webhookSecret;
     }
 
     /**
@@ -45,7 +48,7 @@ class WebhookServiceBuilder
     {
         $payload = $this->request->getContent();
         $sig_header = $this->request->header('Stripe-Signature');
-        $endpoint_secret = $this->webhookSecret->value;
+        $endpoint_secret = $this->webhookSecret;
 
         $this->webhookEvent = Webhook::constructEvent(
             $payload,
@@ -56,14 +59,15 @@ class WebhookServiceBuilder
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function storeDonation(): WebhookServiceBuilder
     {
         $paymentIntent = $this->webhookEvent->data->object;
         $metadata = $paymentIntent->metadata;
         DonationRepository::storeDonation($metadata, $paymentIntent);
 
-        // TODO
-        // mail execption処理も欠かさず
         return $this;
     }
 
