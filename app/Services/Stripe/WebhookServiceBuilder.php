@@ -9,8 +9,8 @@ use App\Models\Subscription;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Exception\UnexpectedValueException;
 use Stripe\Webhook;
@@ -21,7 +21,7 @@ class WebhookServiceBuilder
 
     private WebhookSecret $webhookSecret;
 
-    private object $webhookEvent;
+    private Event $webhookEvent;
 
     private Donation $donation;
 
@@ -58,12 +58,9 @@ class WebhookServiceBuilder
 
     public function storeDonation(): WebhookServiceBuilder
     {
-        $paymentIntent = $this->webhookEvent->data['object'];
+        $paymentIntent = $this->webhookEvent->data->object;
         $metadata = $paymentIntent->metadata;
         DonationRepository::storeDonation($metadata, $paymentIntent);
-
-        Log::info($paymentIntent);
-        Log::info($metadata);
 
         // TODO
         // mail execption処理も欠かさず
@@ -72,7 +69,7 @@ class WebhookServiceBuilder
 
     public function storeSubscription(): WebhookServiceBuilder
     {
-        $subscription = $this->webhookEvent->data['object'];
+        $subscription = $this->webhookEvent->data->object;
         SubscriptionRepository::storeSubscription($subscription);
 
         return $this;
@@ -80,8 +77,8 @@ class WebhookServiceBuilder
 
     public function sendRegardMail()
     {
-        $receipt = $this->webhookEvent->data['object']->receipt_email;
-        $metaData = $this->webhookEvent->data['object']->metadata;
+        $receipt = $this->webhookEvent->data->object->receipt_email;
+        $metaData = $this->webhookEvent->data->object->metadata;
 
         Mail::to($receipt)->send(new DonationRegardMailable($metaData));
 

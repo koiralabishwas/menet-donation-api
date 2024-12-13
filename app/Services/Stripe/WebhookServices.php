@@ -5,7 +5,6 @@ namespace App\Services\Stripe;
 use App\Enums\WebhookSecret;
 use Exception;
 use Illuminate\Http\Request;
-use Stripe\Exception\SignatureVerificationException;
 
 class WebhookServices
 {
@@ -54,19 +53,4 @@ class WebhookServices
             return [$e->getMessage()];
         }
     }
-
-    //    /**
-    //     * @throws SignatureVerificationException
-    //     * @throws UnexpectedValueException
-    //     */
-    //
-    //    // ↓これbuilder 処理かも
-    //    public static function constructWebhookEvent(Request $request, string $endpoint_secret): Event
-    //    {
-    //        $payload = $request->getContent();
-    //        $sig_header = $request->header('Stripe-Signature');
-    //
-    //        return Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
-    //    }
-
 }
