@@ -2,7 +2,6 @@
 
 namespace App\Services\Stripe;
 
-use App\Enums\WebhookSecret;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -15,7 +14,7 @@ class WebhookServices
     //invoicePaid function
     // make better Exceptions
 
-    public function __construct(Request $request, WebhookSecret $webhookSecret)
+    public function __construct(Request $request, string $webhookSecret)
     {
         $this->builder = new WebhookServiceBuilder($request, $webhookSecret);
     }

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\WebhookSecret;
-use App\Helpers\EnvHelpers;
 use App\Services\Stripe\WebhookServices;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +14,8 @@ class WebhookController extends Controller
         try {
             $event = new WebhookServices(
                 $request,
-                WebhookSecret::PAYMENT_INTENT_SUCCEED_SECRET
+                // Localで stripecliで実行する時、.env の　STRIPE_PAYMENT_INTENT_SUCCEED_SECRET　以外の webhook secretをコメントアウトしてください。
+                env('STRIPE_PAYMENT_INTENT_SUCCEED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
             );
             $data = $event->paymentIntentSucceed();
 
@@ -28,7 +27,8 @@ class WebhookController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                $e->getTrace(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ], 400);
         }
     }
@@ -36,17 +36,25 @@ class WebhookController extends Controller
     public function customerSubscriptionCreated(Request $request): JsonResponse
     {
         try {
-            $job = new WebhookServices(
+            $event = new WebhookServices(
                 $request,
-                EnvHelpers::getWebhookSecret(WebhookSecret::PAYMENT_INTENT_SUCCEED_SECRET)
+                env('STRIPE_CUSTOMER_SUBSCRIPTION_CREATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
             );
-            $data = $job->customerSubscriptionCreated();
+            $data = $event->customerSubscriptionCreated();
+
+            return response()->json([
+                'status' => 201,
+                'message' => 'success',
+                'data' => $data,
+            ]);
 
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 400);
+            return response()->json([
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], 400);
         }
-
-        return response()->json($data);
 
     }
 }

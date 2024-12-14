@@ -3,7 +3,6 @@
 namespace App\Services\Stripe;
 
 use App\Enums\WebhookSecret;
-use App\Helpers\EnvHelpers;
 use App\Mail\DonationRegardMailable;
 use App\Models\Donation;
 use App\Models\Subscription;
@@ -33,10 +32,10 @@ class WebhookServiceBuilder
 
     private object $paymentIntentObject;
 
-    public function __construct(Request $request, WebhookSecret $webhookSecret)
+    public function __construct(Request $request, string $webhookSecret)
     {
         $this->request = $request;
-        $this->webhookSecret = EnvHelpers::getWebhookSecret($webhookSecret);
+        $this->webhookSecret = $webhookSecret;
         //        $this->webhookSecret = $webhookSecret;
     }
 
@@ -82,6 +81,7 @@ class WebhookServiceBuilder
     public function sendRegardMail()
     {
         $receipt = $this->webhookEvent->data->object->receipt_email;
+        //FIX: このようなmetadataの渡し方はpayment-intent-succeedのときしかできない。
         $metaData = $this->webhookEvent->data->object->metadata;
 
         Mail::to($receipt)->send(new DonationRegardMailable($metaData));
