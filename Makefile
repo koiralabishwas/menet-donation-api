@@ -50,7 +50,13 @@ show-logs: ## show laravel.log
 
 .PHONY: run-server-with-webhook
 run-server-webhook:
-	php artisan serve & stripe listen --forward-to localhost:8000/api/webhook
+	php artisan serve \
+	& stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded \
+	& stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-created --events=customer.subscription.created \
+	& stripe listen --forward-to localhost:8000/api/webhooks/invoice-paid --events=invoice.paid
+
+
+
 
 
 .PHONY: run-server

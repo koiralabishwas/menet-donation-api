@@ -2,128 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\DonationRegardMailable;
-use App\Repositories\DonationRepository;
-use App\Repositories\SubscriptionRepository;
+use App\Services\Stripe\WebhookService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Exception\UnexpectedValueException;
-use Stripe\Webhook;
 
 class WebhookController extends Controller
 {
+    /**
+     * @throws SignatureVerificationException
+     * @throws UnexpectedValueException
+     * @throws Exception
+     */
     public function paymentIntentSucceed(Request $request): JsonResponse // for dev and prd use
     {
-        $endpoint_secret = 'whsec_T9qp3taSDglrSmrfCnHzfqC5laPRqb50'; // this differs in each endpoint
-        $payload = $request->getcontent();
-        $sig_header = $request->header('Stripe-Signature');
-
-        try {
-            $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
-        } catch (UnexpectedValueException $e) {
-            Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
-
-            return response()->json([
-                'message' => 'Invalid payload',
-                'url' => $request->getRequestUri(),
-                'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-                'error' => $e->getMessage(),
-            ], 400);
-        } catch (SignatureVerificationException $e) {
-            Log::error('Stripe webhook error: Invalid signature', ['exception' => $e]);
-
-            return response()->json([
-                'message' => 'Invalid signature',
-                'url' => $request->getRequestUri(),
-                'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-                'error' => $e->getMessage(),
-            ], 400);
-        }
-
-        if ($event->type !== 'payment_intent.succeeded' || $event->data['object']->metadata->type !== 'ONE_TIME') {
-            return response()->json([
-                'message' => 'Invalid payload',
-                'url' => $request->getRequestUri(),
-                'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-            ], 400);
-        }
-
-        $paymentIntent = $event->data;
-        $metaData = $paymentIntent['object']->metadata;
-
-        DonationRepository::storeDonation($metaData, $paymentIntent['object']);
-
-        try {
-            Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
-        } catch (Exception $e) {
-            Log::error('Stripe webhook error: Failed to send email', ['exception' => $e]);
-
-            return response()->json([
-                'message' => 'Failed to send email',
-                'url' => $request->getRequestUri(),
-                'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-                'error' => $e->getMessage(),
-            ], 400);
-        }
+        $event = new WebhookService(
+            $request,
+            env('STRIPE_PAYMENT_INTENT_SUCCEED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
+        );
+        $data = $event->paymentIntentSucceed();
 
         return response()->json([
-            'message' => 'Success',
-            'url' => $request->getRequestUri(),
-            'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-        ], 200);
+            'status' => 201,
+            'message' => 'success',
+            'data' => $data,
+        ]);
     }
 
+    /**
+     * @throws SignatureVerificationException
+     * @throws UnexpectedValueException
+     * @throws Exception
+     */
     public function customerSubscriptionCreated(Request $request): JsonResponse
     {
-        $endpoint_secret = 'whsec_mQjZ7AdLtBAFphXTugFMglLyNdPrbfAY';
-        $payload = $request->getcontent();
-        $sig_header = $request->header('Stripe-Signature');
-
-        try {
-            $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
-        } catch (UnexpectedValueException $e) {
-            Log::error('Stripe webhook error: Invalid payload', ['exception' => $e]);
-
-            return response()->json([
-                'message' => 'Invalid payload',
-                'url' => $request->getRequestUri(),
-                'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-                'error' => $e->getMessage(),
-            ], 400);
-        } catch (SignatureVerificationException $e) {
-            Log::error('Stripe webhook error: Invalid signature', ['exception' => $e]);
-
-            return response()->json([
-                'message' => 'Invalid signature',
-                'url' => $request->getRequestUri(),
-                'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-                'error' => $e->getMessage(),
-            ], 400);
-        }
-
-        if ($event->type !== 'customer.subscription.created') {
-            Log::error('Stripe webhook error: Invalid payload');
-
-            return response()->json([
-                'message' => 'Invalid payload',
-                'url' => $request->getRequestUri(),
-                'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-            ], 400);
-        }
-
-        $subscriptionData = $event->data;
-        SubscriptionRepository::storeSubscription($subscriptionData['object']);
-
-        // TODO : send notification mail
+        $event = new WebhookService(
+            $request,
+            env('STRIPE_CUSTOMER_SUBSCRIPTION_CREATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
+        );
+        $data = $event->customerSubscriptionCreated();
 
         return response()->json([
-            'message' => 'Success',
-            'url' => $request->getRequestUri(),
-            'request' => ['headers' => $request->headers->all(), 'body' => $request->getContent()],
-        ], 200);
+            'status' => 201,
+            'message' => 'success',
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * @throws SignatureVerificationException
+     * @throws UnexpectedValueException
+     * @throws Exception
+     */
+    public function invoicePaid(Request $request): JsonResponse
+    {
+        $event = new WebhookService(
+            $request,
+            env('STRIPE_INVOICE_PAID_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
+        );
+        $data = $event->invoicePaid();
+
+        return response()->json([
+            'status' => 201,
+            'message' => 'success',
+            'data' => $data,
+        ]);
     }
 }

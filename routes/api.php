@@ -14,6 +14,7 @@ Route::post('/subscription-session', [SubscriptionSessionController::class, 'cre
 Route::prefix('/webhooks')->group(function () {
     Route::post('/payment-intent-succeed', [WebhookController::class, 'paymentIntentSucceed']);
     Route::post('/customer-subscription-created', [WebhookController::class, 'customerSubscriptionCreated']);
+    Route::post('/invoice-paid', [WebhookController::class, 'invoicePaid']);
 });
 
 Route::prefix('/images')->group(function () {
@@ -25,6 +26,7 @@ Route::post('/xserver/check-if-email-exists', [XServerController::class, 'check_
 
 // use for debugging functions or routes
 Route::prefix('/debug')->group(function () {
+    Route::post('webhooks/payment-intent-succeed', [DebugController::class, 'debugPaymentIntentSucceed']);
     Route::post('/createCustomer', [DebugController::class, 'checkCreateCustomer']);
     Route::get('/email', [DebugController::class, 'getDbCustomerObjFromEmail']);
     Route::get('/product-name', [DebugController::class, 'getStripeProductNameFromProductId']);
