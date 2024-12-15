@@ -220,6 +220,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'message' => $message,
                 'error' => $e->getMessage(),
+                'class' => get_class($e),
                 'request' => $request->all(),
             ], 500);
         });
