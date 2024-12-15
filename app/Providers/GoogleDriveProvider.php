@@ -12,22 +12,6 @@ use Illuminate\Support\ServiceProvider;
 class GoogleDriveProvider extends ServiceProvider
 {
     /**
-     * Register services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-        //
-    }
-
-    /**
      * @throws Exception
      */
     public static function uploadFile($file, $file_name): string

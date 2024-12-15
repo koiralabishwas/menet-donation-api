@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class DiscordService
 {
-    public static function sendErrorMessage($request, $type, $line, $userEmail, $shortMessage, $message, $code): void
+    public static function sendErrorMessage(Exception $error, string $message): void
     {
         $message = [
             'mention_everyone' => ! (env('APP_ENV') === 'local'), // Mention everyone except local
@@ -16,35 +16,12 @@ class DiscordService
             'embeds' => [
                 [
                     'title' => 'Error Report',
-                    'description' => "**Type:** {$type}\n".
-                        "**Route:** /{$request->path()}\n".
-                        "**Code:** {$code}\n".
-                        "**Line:** {$line}\n".
-                        "**User Email:** {$userEmail}\n".
-                        "**Short Message:** {$shortMessage}\n".
-                        "**Message:** {$message}",
+                    'description' => "\n".
+                        '**Route:** /'.request()->path()."\n".
+                        '**Message:** '.$message."\n".
+                        '**Error:** '.$error->getMessage()."\n".
+                        "**Request:** ```json\n".request()->getContent()."\n```\n",
                     'color' => hexdec('FF0000'), // Red color for errors
-                    'timestamp' => now()->toIso8601String(),
-                ],
-            ],
-        ];
-
-        self::sendMessage($message);
-    }
-
-    public static function sendSuccessMessage($donorName, $donorEmail, $donationProject, $amount): void
-    {
-        $message = [
-            'mention_everyone' => ! (env('APP_ENV') === 'local'), // Mention everyone except local
-            'username' => '【'.env('APP_ENV').'】'.env('APP_NAME'),
-            'embeds' => [
-                [
-                    'title' => 'Success Report',
-                    'description' => "**Donor Name:** {$donorName}\n".
-                        "**Donor Email:** {$donorEmail}\n".
-                        "**Donation Project:** {$donationProject}\n".
-                        "**Amount:** {$amount}\n",
-                    'color' => hexdec('00FF00'), // Green color for success
                     'timestamp' => now()->toIso8601String(),
                 ],
             ],
