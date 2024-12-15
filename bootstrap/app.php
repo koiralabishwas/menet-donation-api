@@ -1,6 +1,15 @@
 <?php
 
 use App\Services\DiscordService;
+use Illuminate\Database\ClassMorphViolationException;
+use Illuminate\Database\DeadlockException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\LostConnectionException;
+use Illuminate\Database\MultipleColumnsSelectedException;
+use Illuminate\Database\MultipleRecordsFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\RecordNotFoundException;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -31,6 +40,10 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
+
+        /**************************************************************************
+         * Stripe API Exceptions
+         **************************************************************************/
 
         $exceptions->render(function (ApiConnectionException $e, Request $request) {
             $message = 'Stripe API Webhook error. Api connection error occurred.';
@@ -188,6 +201,10 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 400);
         });
 
+        /**************************************************************************
+         * Google Drive API Exceptions
+         **************************************************************************/
+
         $exceptions->render(function (\Google\Service\Exception $e, Request $request) {
             $message = 'Google Drive API error. Api error occurred.';
 
@@ -199,6 +216,122 @@ return Application::configure(basePath: dirname(__DIR__))
                 'request' => $request->all(),
             ], 400);
         });
+
+        /**************************************************************************
+         * Database Exceptions
+         **************************************************************************/
+
+        $exceptions->render(function (ClassMorphViolationException $e, Request $request) {
+            $message = 'Database error. Deadlock error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        $exceptions->render(function (DeadlockException $e, Request $request) {
+            $message = 'Database error. Deadlock error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        $exceptions->render(function (LostConnectionException $e, Request $request) {
+            $message = 'Database error. Lost connection error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        $exceptions->render(function (ModelNotFoundException $e, Request $request) {
+            $message = 'Database error. Model not found error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        $exceptions->render(function (MultipleColumnsSelectedException $e, Request $request) {
+            $message = 'Database error. Multiple columns selected error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        $exceptions->render(function (MultipleRecordsFoundException $e, Request $request) {
+            $message = 'Database error. Multiple records found error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        $exceptions->render(function (QueryException $e, Request $request) {
+            $message = 'Database error. Query error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        $exceptions->render(function (RecordNotFoundException $e, Request $request) {
+            $message = 'Database error. Record not found error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        $exceptions->render(function (UniqueConstraintViolationException $e, Request $request) {
+            $message = 'Database error. Unique constraint error occurred.';
+
+            DiscordService::sendErrorMessage($e, $message);
+
+            return response()->json([
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'request' => $request->all(),
+            ], 500);
+        });
+
+        /**************************************************************************
+         * Validation Exceptions
+         **************************************************************************/
 
         $exceptions->render(function (ValidationException $e, Request $request) {
             $message = 'Validation error. Validation error occurred.';
