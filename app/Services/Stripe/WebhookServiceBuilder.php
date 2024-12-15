@@ -4,7 +4,6 @@ namespace App\Services\Stripe;
 
 use App\Enums\WebhookSecret;
 use App\Mail\DonationRegardMailable;
-use App\Models\Donation;
 use App\Models\Subscription;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
@@ -48,6 +47,7 @@ class WebhookServiceBuilder
             $sig_header,
             $endpoint_secret,
         );
+
         return $this;
     }
 
@@ -60,6 +60,14 @@ class WebhookServiceBuilder
         $this->metaData = $paymentIntent->metadata;
         DonationRepository::storeDonation($this->metaData, $paymentIntent);
 
+        return $this;
+    }
+
+    public function storeMonthlyDonation(): WebhookServiceBuilder
+    {
+        $invoice = $this->webhookEvent->data->object;
+        $this->metaData = $invoice->subscription_details->metadata;
+        DonationRepository::storeDonation($this->metaData, $invoice);
 
         return $this;
     }
@@ -69,10 +77,10 @@ class WebhookServiceBuilder
         $subscription = $this->webhookEvent->data->object;
         $this->metaData = $subscription->metadata;
         SubscriptionRepository::storeSubscription($subscription);
+
         //TODO : 送るメールを subscription 契約しましたのような内容にする。
         return $this;
     }
-
 
     // TODO Send EMAIL FUNCTION
     // メールノ内容とテンプレートをparameterでわたして、送信させるのいいかも？

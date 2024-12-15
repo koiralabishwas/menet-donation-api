@@ -9,9 +9,6 @@ class WebhookServices
 {
     private WebhookServiceBuilder $builder;
     // TODO :
-    //paymentIntentSucceed function
-    //customerSubscrioptionCreated function
-    //invoicePaid function
     // make better Exceptions
 
     public function __construct(Request $request, string $webhookSecret)
@@ -48,6 +45,22 @@ class WebhookServices
         return [
             'message' => 'Success',
             'type' => 'customer.subscription.created',
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function invoicePaid(): array
+    {
+        $this->builder
+            ->constructWebhookEvent()
+            ->storeMonthlyDonation()
+            ->sendEmail();
+
+        return [
+            'message' => 'Success',
+            'type' => 'invoice.paid',
         ];
     }
 }
