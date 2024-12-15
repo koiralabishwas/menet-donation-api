@@ -2,9 +2,7 @@
 
 namespace App\Services\Stripe;
 
-use App\Enums\WebhookSecret;
 use App\Mail\DonationRegardMailable;
-use App\Models\Subscription;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
 use Exception;
@@ -29,7 +27,6 @@ class WebhookServiceBuilder
     {
         $this->request = $request;
         $this->webhookSecret = $webhookSecret;
-        //        $this->webhookSecret = $webhookSecret;
     }
 
     /**
@@ -54,7 +51,7 @@ class WebhookServiceBuilder
     /**
      * @throws Exception
      */
-    public function storeDonation(): WebhookServiceBuilder
+    public function storeOneTimeDonation(): WebhookServiceBuilder
     {
         $paymentIntent = $this->webhookEvent->data->object;
         $this->metaData = $paymentIntent->metadata;
@@ -78,7 +75,6 @@ class WebhookServiceBuilder
         $this->metaData = $subscription->metadata;
         SubscriptionRepository::storeSubscription($subscription);
 
-        //TODO : 送るメールを subscription 契約しましたのような内容にする。
         return $this;
     }
 

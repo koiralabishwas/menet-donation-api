@@ -10,7 +10,7 @@ to fix::
   ②毎月支払いをsubscription時の通知メール
   ③管理者側の通知メール
 
-
-
-
+3.subscription が　支払いされたときに payment_intent.succeed イベントも発生してしまう。
+    しかし、subscription によって作られる payment_intent.succeed では metadataをもたせられてないため、
+    subscription で　作られた payment.intent.succeed のイベントは回避しないとエラーになる。
 

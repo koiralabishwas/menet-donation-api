@@ -14,7 +14,6 @@ class WebhookController extends Controller
         try {
             $event = new WebhookServices(
                 $request,
-                // Localで stripecliで実行する時、.env の　STRIPE_PAYMENT_INTENT_SUCCEED_SECRET　以外の webhook secretをコメントアウトしてください。
                 env('STRIPE_PAYMENT_INTENT_SUCCEED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
             );
             $data = $event->paymentIntentSucceed();

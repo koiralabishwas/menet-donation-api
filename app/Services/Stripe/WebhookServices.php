@@ -20,10 +20,10 @@ class WebhookServices
      * @throws Exception
      */
     public function paymentIntentSucceed(): array
-    {
+    { // TODO: subscription型のpaymentの場合はイベントが発生してしまうが、回避しなければならない。
         $this->builder
             ->constructWebhookEvent()
-            ->storeDonation()
+            ->storeOneTimeDonation()
             ->sendEmail();
 
         return [
