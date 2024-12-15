@@ -5,7 +5,7 @@ namespace App\Services\Stripe;
 use Exception;
 use Illuminate\Http\Request;
 
-class WebhookServices
+class WebhookService
 {
     private WebhookServiceBuilder $builder;
     // TODO :

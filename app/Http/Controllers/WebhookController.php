@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Stripe\WebhookServices;
+use App\Services\Stripe\WebhookService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ class WebhookController extends Controller
     public function paymentIntentSucceed(Request $request): JsonResponse // for dev and prd use
     {
         try {
-            $event = new WebhookServices(
+            $event = new WebhookService(
                 $request,
                 env('STRIPE_PAYMENT_INTENT_SUCCEED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
             );
@@ -35,7 +35,7 @@ class WebhookController extends Controller
     public function customerSubscriptionCreated(Request $request): JsonResponse
     {
         try {
-            $event = new WebhookServices(
+            $event = new WebhookService(
                 $request,
                 env('STRIPE_CUSTOMER_SUBSCRIPTION_CREATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
             );
@@ -60,7 +60,7 @@ class WebhookController extends Controller
     public function invoicePaid(Request $request): JsonResponse
     {
         try {
-            $event = new WebhookServices(
+            $event = new WebhookService(
                 $request,
                 env('STRIPE_INVOICE_PAID_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
             );
