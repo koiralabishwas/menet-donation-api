@@ -4,6 +4,8 @@ namespace App\Services\Stripe;
 
 use Exception;
 use Illuminate\Http\Request;
+use Stripe\Exception\SignatureVerificationException;
+use Stripe\Exception\UnexpectedValueException;
 
 class WebhookService
 {
@@ -17,6 +19,8 @@ class WebhookService
     }
 
     /**
+     * @throws SignatureVerificationException
+     * @throws UnexpectedValueException
      * @throws Exception
      */
     public function paymentIntentSucceed(): array
