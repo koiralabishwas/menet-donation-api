@@ -27,7 +27,7 @@ class WebhookServices
         $this->builder
             ->constructWebhookEvent()
             ->storeDonation()
-            ->sendRegardMail();
+            ->sendEmail();
 
         return [
             'message' => 'Success',
@@ -43,7 +43,7 @@ class WebhookServices
         $this->builder
             ->constructWebhookEvent()
             ->storeSubscription()
-            ->sendRegardMail();
+            ->sendEmail();
 
         return [
             'message' => 'Success',

@@ -6,6 +6,7 @@ use App\Services\Stripe\WebhookServices;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
 {
@@ -41,6 +42,7 @@ class WebhookController extends Controller
                 env('STRIPE_CUSTOMER_SUBSCRIPTION_CREATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
             );
             $data = $event->customerSubscriptionCreated();
+            Log::info($request);
 
             return response()->json([
                 'status' => 201,
@@ -56,5 +58,11 @@ class WebhookController extends Controller
             ], 400);
         }
 
+    }
+
+    public function invoicePaid(Request $request): JsonResponse
+    {
+        Log::info($request);
+        return response()->json($request);
     }
 }

@@ -24,13 +24,7 @@ class WebhookServiceBuilder
 
     private Event $webhookEvent;
 
-    private Donation $donation;
-
-    private Subscription $subscription;
-
     private object $metaData;
-
-    private object $paymentIntentObject;
 
     public function __construct(Request $request, string $webhookSecret)
     {
@@ -54,7 +48,6 @@ class WebhookServiceBuilder
             $sig_header,
             $endpoint_secret,
         );
-
         return $this;
     }
 
@@ -64,8 +57,9 @@ class WebhookServiceBuilder
     public function storeDonation(): WebhookServiceBuilder
     {
         $paymentIntent = $this->webhookEvent->data->object;
-        $metadata = $paymentIntent->metadata;
-        DonationRepository::storeDonation($metadata, $paymentIntent);
+        $this->metaData = $paymentIntent->metadata;
+        DonationRepository::storeDonation($this->metaData, $paymentIntent);
+
 
         return $this;
     }
@@ -73,19 +67,20 @@ class WebhookServiceBuilder
     public function storeSubscription(): WebhookServiceBuilder
     {
         $subscription = $this->webhookEvent->data->object;
+        $this->metaData = $subscription->metadata;
         SubscriptionRepository::storeSubscription($subscription);
-
+        //TODO : 送るメールを subscription 契約しましたのような内容にする。
         return $this;
     }
 
-    public function sendRegardMail()
+
+    // TODO Send EMAIL FUNCTION
+    // メールノ内容とテンプレートをparameterでわたして、送信させるのいいかも？
+    public function sendEmail(): void
     {
-        $receipt = $this->webhookEvent->data->object->receipt_email;
-        //FIX: このようなmetadataの渡し方はpayment-intent-succeedのときしかできない。
-        $metaData = $this->webhookEvent->data->object->metadata;
+        $receipt = $this->metaData->donor_email;
+        $metaData = $this->metaData;
 
         Mail::to($receipt)->send(new DonationRegardMailable($metaData));
-
-        return $this;
     }
 }
