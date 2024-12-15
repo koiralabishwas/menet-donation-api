@@ -27,7 +27,7 @@ class Donation extends Model
         'donation_project',
         'amount',
         'currency',
-        'type',
+        'payment_schedule',
         'stripe_donation_object',
     ];
 }

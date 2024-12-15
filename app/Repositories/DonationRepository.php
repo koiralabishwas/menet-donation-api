@@ -22,7 +22,7 @@ class DonationRepository
                 'donation_project' => $DonationData['donation_project'],
                 'amount' => $DonationData['amount'],
                 'currency' => $DonationData['currency'],
-                'type' => $DonationData['type'],
+                'payment_schedule' => $DonationData['payment_schedule'],
                 'stripe_donation_object' => json_encode($stripeObject),
             ]
         );
