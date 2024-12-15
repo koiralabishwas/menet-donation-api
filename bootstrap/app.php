@@ -345,6 +345,10 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 422);
         });
 
+        /**************************************************************************
+         * Default Exception
+         **************************************************************************/
+
         $exceptions->render(function (Exception $e, Request $request) {
             $message = 'Internal server error. An unexpected error occurred';
 
