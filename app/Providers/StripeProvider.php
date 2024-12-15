@@ -206,7 +206,7 @@ class StripeProvider extends ServiceProvider
         $envHelper = new EnvHelpers;
 
         return $stripe->checkout->sessions->create([
-            'success_url' => env('FRONT_END_UR')."/{$envHelper->getUrlByEnv('success')}?name={$donor_name}&email={$donor_email}",
+            'success_url' => env('FRONT_END_URL')."/{$envHelper->getUrlByEnv('success')}?name={$donor_name}&email={$donor_email}",
             'cancel_url' => env('FRONT_END_URL')."/.{$envHelper->getUrlByEnv('cancel')}?name={$donor_name}",
             'ui_mode' => 'hosted',
             'customer' => $customerId,
