@@ -6,6 +6,8 @@ use App\Enums\StripeProductID;
 use App\Models\Donor;
 use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\InvalidRequestException;
 
 class PaymentServiceBuilder
 {
@@ -24,6 +26,10 @@ class PaymentServiceBuilder
         $this->request = $request;
     }
 
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidRequestException
+     */
     public function createCustomer(): PaymentServiceBuilder
     {
         $this->stripeCustomer = StripeProvider::createCustomer($this->request['customer']);
@@ -38,6 +44,10 @@ class PaymentServiceBuilder
         return $this;
     }
 
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidRequestException
+     */
     public function creatOneTimePrice(): PaymentServiceBuilder
     {
         $this->stripePrice = StripeProvider::createOneTimePrice(
@@ -48,6 +58,10 @@ class PaymentServiceBuilder
         return $this;
     }
 
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidRequestException
+     */
     public function createSubscriptionPrice(): PaymentServiceBuilder
     {
         $this->stripePrice = StripeProvider::createSubscriptionPrice(
@@ -79,6 +93,10 @@ class PaymentServiceBuilder
         return $this;
     }
 
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidRequestException
+     */
     public function createCheckoutSession(): array
     {
         $checkoutSession = StripeProvider::createCheckoutSession(
@@ -95,6 +113,10 @@ class PaymentServiceBuilder
         ];
     }
 
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidRequestException
+     */
     public function createSubscriptionSession(): array
     {
         $checkoutSession = StripeProvider::createSubscriptionSession(

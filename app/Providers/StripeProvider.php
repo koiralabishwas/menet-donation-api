@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Helpers\EnvHelpers;
 use App\Helpers\Helpers;
 use App\Repositories\DonorRepository;
-use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Stripe\Checkout\Session;
@@ -26,7 +25,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function createCustomer(array $customerData): object
     {
@@ -61,7 +59,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function searchCustomerFromEmail(string $email)
     {
@@ -75,7 +72,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function deleteAllCustomers(): string
     {
@@ -103,7 +99,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function searchOneTimePrice(string $productId, int $amount)
     {
@@ -121,7 +116,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function searchSubscriptionPrice(string $productId, int $amount)
     {
@@ -139,7 +133,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function createOneTimePrice(string $productId, int $amount): Price
     {
@@ -162,7 +155,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function createSubscriptionPrice(string $productId, int $amount)
     {
@@ -184,7 +176,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function searchPriceByPriceId(string $priceId)
     {
@@ -196,7 +187,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function createCheckoutSession(string $customerId, string $priceId, $paymentIntentMetaData): Session
     {
@@ -226,7 +216,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function createSubscriptionSession(string $customerId, string $priceId, $subscriptionDataMetaData): Session
     {
@@ -256,7 +245,6 @@ class StripeProvider extends ServiceProvider
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
-     * @throws Exception
      */
     public static function getProductNameFromId(string $productId): string
     {

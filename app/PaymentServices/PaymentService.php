@@ -3,6 +3,8 @@
 namespace App\PaymentServices;
 
 use App\Enums\PaymentSchedule;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\InvalidRequestException;
 
 class PaymentService
 {
@@ -13,6 +15,10 @@ class PaymentService
         $this->builder = new PaymentServiceBuilder($request);
     }
 
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidRequestException
+     */
     public function oneTimePayment(): array
     {
         return $this->builder
@@ -23,6 +29,10 @@ class PaymentService
             ->createCheckoutSession();
     }
 
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidRequestException
+     */
     public function monthlyPayment(): array
     {
         return $this->builder
