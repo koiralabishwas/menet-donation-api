@@ -17,7 +17,6 @@ class SubscriptionRepository
             'donation_project' => $stripeSubscriptionObject->metadata->donation_project,
             'amount' => $stripeSubscriptionObject->metadata->amount,
             'currency' => $stripeSubscriptionObject->metadata->currency,
-            'stripe_subscription_object' => json_encode($stripeSubscriptionObject),
         ]);
     }
 }
