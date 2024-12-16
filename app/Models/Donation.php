@@ -28,6 +28,5 @@ class Donation extends Model
         'amount',
         'currency',
         'payment_schedule',
-        'stripe_donation_object',
     ];
 }

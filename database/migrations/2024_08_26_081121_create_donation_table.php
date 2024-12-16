@@ -22,7 +22,6 @@ return new class extends Migration
             $table->unsignedInteger('amount');
             $table->string('currency', 3);
             $table->enum('payment_schedule', ['ONE_TIME', 'MONTHLY', 'YEARLY']);
-            $table->json('stripe_donation_object'); //payment_intent or invoice
             $table->foreign('donor_id')->references('donor_id')->on('donors');
             $table->foreign('donor_external_id')->references('donor_external_id')->on('donors');
             $table->foreign('subscription_external_id')->references('subscription_external_id')->on('subscriptions');
