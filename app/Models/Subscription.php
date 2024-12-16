@@ -24,7 +24,6 @@ class Subscription extends Model
         'donation_project',
         'amount',
         'currency',
-        'stripe_subscription_object',
     ];
 
     protected $casts = [
