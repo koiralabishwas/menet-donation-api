@@ -19,8 +19,9 @@ use Illuminate\Queue\SerializesModels;
 
     public string $donorExternalId;
 
-    public function __construct($donationMetadata)
+    public function __construct($donationMetadata, string $donationMailView)
     {
+        $this->donationMailView = $donationMailView;
         $this->donorName = $donationMetadata['donor_name'];
         $this->donationProject = $donationMetadata['donation_project'];
         $this->donationAmount = $donationMetadata['amount'];
@@ -38,7 +39,7 @@ use Illuminate\Queue\SerializesModels;
             $subject = '(テスト)'.$subject;
         }
 
-        return $this->subject($subject)->markdown('mail.donationRegard')->with([
+        return $this->subject($subject)->markdown($this->donationMailView)->with([
             'donorName' => $this->donorName,
             'donationProject' => $this->donationProject,
             'donationAmount' => $this->donationAmount,

@@ -80,11 +80,11 @@ class WebhookServiceBuilder
 
     // TODO Send EMAIL FUNCTION
     // メールノ内容とテンプレートをparameterでわたして、送信させるのいいかも？
-    public function sendEmail(): void
+    public function sendEmail(string $mailView): void
     {
         $receipt = $this->metaData->donor_email;
         $metaData = $this->metaData;
 
-        Mail::to($receipt)->send(new DonationRegardMailable($metaData));
+        Mail::to($receipt)->send(new DonationRegardMailable($metaData, $mailView));
     }
 }

@@ -28,7 +28,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->storeOneTimeDonation()
-            ->sendEmail();
+            ->sendEmail('mail.donationRegard');
 
         return [
             'message' => 'Success',
@@ -44,7 +44,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->storeSubscription()
-            ->sendEmail();
+            ->sendEmail('mail.SubscriptionCreatedMail');
 
         return [
             'message' => 'Success',
@@ -60,7 +60,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->storeMonthlyDonation()
-            ->sendEmail();
+            ->sendEmail('mail.SubscriptionPaidMail');
 
         return [
             'message' => 'Success',
