@@ -2,9 +2,7 @@
 {{ $donorName }}様
 
 この度は、{{ $donationProject }}にご寄付いただき、誠にありがとうございます。
-{{--TODO:メールテンプレートどうにか--}}
-Subscription型です。
-今月の寄付の支払いを受け付けました。
+SUBSCRIPTON PAID
 
 @component('mail::table')
 |         |                                        |

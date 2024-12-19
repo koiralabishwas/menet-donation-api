@@ -19,8 +19,9 @@ use Illuminate\Queue\SerializesModels;
 
     public string $donorExternalId;
 
-    public function __construct($donationMetadata, string $donationMailView)
+    public function __construct(string $subject, string $donationMailView, object $donationMetadata)
     {
+        $this->subject = $subject;
         $this->donationMailView = $donationMailView;
         $this->donorName = $donationMetadata['donor_name'];
         $this->donationProject = $donationMetadata['donation_project'];
@@ -33,7 +34,7 @@ use Illuminate\Queue\SerializesModels;
      */
     public function build(): DonationRegardMailable
     {
-        $subject = '寄付完了のお知らせ';
+        $subject = $this->subject;
 
         if (env('APP_ENV') !== 'production') {
             $subject = '(テスト)'.$subject;
