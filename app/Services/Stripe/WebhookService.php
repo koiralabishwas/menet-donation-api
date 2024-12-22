@@ -28,7 +28,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->storeOneTimeDonation()
-            ->sendEmail();
+            ->sendEmail('寄付完了のお知らせ', 'mail.donationRegard');
 
         return [
             'message' => 'Success',
@@ -44,7 +44,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->storeSubscription()
-            ->sendEmail();
+            ->sendEmail('毎月型の寄付設定完了のお知らせ', 'mail.SubscriptionCreatedMail');
 
         return [
             'message' => 'Success',
@@ -60,7 +60,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->storeMonthlyDonation()
-            ->sendEmail();
+            ->sendEmail('今月分の寄付完了のお知らせ', 'mail.SubscriptionPaidMail');
 
         return [
             'message' => 'Success',
