@@ -99,4 +99,12 @@ class DebugController extends Controller
 
         return response()->json($deleteCustomer);
     }
+
+    public function getInvoice(Request $request): JsonResponse
+    {
+        $invoiceId = $request->query('invoice-id');
+        $invoice = StripeProvider::getInvoice($invoiceId);
+
+        return response()->json($invoice);
+    }
 }

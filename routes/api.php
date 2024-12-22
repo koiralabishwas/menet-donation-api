@@ -33,4 +33,5 @@ Route::prefix('/debug')->group(function () {
     Route::get('/price', [DebugController::class, 'getStrpePriceByID']);
     Route::get('/price/subs', [DebugController::class, 'createSubscriptionPrice']);
     Route::get('/webhook', [WebhookController::class, 'create']);
+    Route::get('/invoice', [DebugController::class, 'getInvoice']);
 });

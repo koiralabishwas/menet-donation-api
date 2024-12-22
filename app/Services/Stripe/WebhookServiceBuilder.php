@@ -3,6 +3,7 @@
 namespace App\Services\Stripe;
 
 use App\Mail\DonationRegardMailable;
+use App\Providers\StripeProvider;
 use App\Repositories\DonationRepository;
 use App\Repositories\SubscriptionRepository;
 use Exception;
@@ -22,6 +23,8 @@ class WebhookServiceBuilder
     private Event $webhookEvent;
 
     private object $metaData;
+
+    private bool $isSubscription;
 
     public function __construct(Request $request, string $webhookSecret)
     {
@@ -48,11 +51,34 @@ class WebhookServiceBuilder
         return $this;
     }
 
+    public function isSubscription(): self
+    {
+        $invoiceId = $this->webhookEvent->data->object->invoice;
+        if ($invoiceId == null) {
+            $this->isSubscription = false;
+
+            return $this;
+        }
+
+        $invoice = StripeProvider::getInvoice($invoiceId);
+        if ($invoice == null) {
+            $this->isSubscription = false;
+        } else {
+            $this->isSubscription = true;
+        }
+
+        return $this;
+    }
+
     /**
      * @throws Exception
      */
     public function storeOneTimeDonation(): WebhookServiceBuilder
     {
+        if ($this->isSubscription) {
+            return $this;
+        }
+
         $paymentIntent = $this->webhookEvent->data->object;
         $this->metaData = $paymentIntent->metadata;
         DonationRepository::storeDonation($this->metaData, $paymentIntent);
@@ -78,13 +104,36 @@ class WebhookServiceBuilder
         return $this;
     }
 
-    // TODO Send EMAIL FUNCTION
-    // メールノ内容とテンプレートをparameterでわたして、送信させるのいいかも？
-    public function sendEmail(string $subject, string $mailView): void
+    public function sendOneTimeDonationEmail(string $subject, string $mailView): void
+    {
+        if ($this->isSubscription) {
+            return;
+        }
+
+        $receipt = $this->metaData->donor_email;
+        $metaData = $this->metaData;
+        Mail::to($receipt)->send(new DonationRegardMailable(
+            $subject,
+            $mailView,
+            $metaData
+        ));
+    }
+
+    public function sendMonthlyDonationConfirmationEmail(string $subject, string $mailView): void
     {
         $receipt = $this->metaData->donor_email;
         $metaData = $this->metaData;
+        Mail::to($receipt)->send(new DonationRegardMailable(
+            $subject,
+            $mailView,
+            $metaData
+        ));
+    }
 
+    public function sendMonthlyDonationEmail(string $subject, string $mailView): void
+    {
+        $receipt = $this->metaData->donor_email;
+        $metaData = $this->metaData;
         Mail::to($receipt)->send(new DonationRegardMailable(
             $subject,
             $mailView,

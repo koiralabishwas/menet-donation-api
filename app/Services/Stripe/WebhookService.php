@@ -27,8 +27,9 @@ class WebhookService
     { // TODO: subscription型のpaymentの場合はイベントが発生してしまうが、回避しなければならない。
         $this->builder
             ->constructWebhookEvent()
+            ->isSubscription()
             ->storeOneTimeDonation()
-            ->sendEmail('寄付完了のお知らせ', 'mail.donationRegard');
+            ->sendOneTimeDonationEmail('寄付完了のお知らせ', 'mail.donationRegard');
 
         return [
             'message' => 'Success',
@@ -44,7 +45,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->storeSubscription()
-            ->sendEmail('毎月型の寄付設定完了のお知らせ', 'mail.SubscriptionCreatedMail');
+            ->sendMonthlyDonationConfirmationEmail('毎月型の寄付設定完了のお知らせ', 'mail.SubscriptionCreatedMail');
 
         return [
             'message' => 'Success',
@@ -60,7 +61,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->storeMonthlyDonation()
-            ->sendEmail('今月分の寄付完了のお知らせ', 'mail.SubscriptionPaidMail');
+            ->sendMonthlyDonationEmail('今月分の寄付完了のお知らせ', 'mail.SubscriptionPaidMail');
 
         return [
             'message' => 'Success',
