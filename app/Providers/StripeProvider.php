@@ -252,4 +252,11 @@ class StripeProvider extends ServiceProvider
 
         return $stripe->products->retrieve($productId)->name;
     }
+
+    public static function getInvoice(string $invoiceId)
+    {
+        $stripe = app(StripeClient::class);
+
+        return $stripe->invoices->retrieve($invoiceId);
+    }
 }
