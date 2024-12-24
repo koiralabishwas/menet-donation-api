@@ -1,16 +1,6 @@
 TODO:
-1.trycatchも別関数で統一可能？ // => service や　builder で実現
-2.paument_intent.succeed のとき、subscription側のものをスルー
+1.subscription cancel 用のurl
+2.db subscription と donation table の relation
 
-to fix::
-1. Subscription Table と DonationTableの紐付けできてない！！！
 
-2. Mailの内容調整
-  ①支払い通知メール
-  ②毎月支払いをsubscription時の通知メール
-  ③管理者側の通知メール
-
-3.subscription が　支払いされたときに payment_intent.succeed イベントも発生してしまう。
-    しかし、subscription によって作られる payment_intent.succeed では metadataをもたせられてないため、
-    subscription で　作られた payment.intent.succeed のイベントは回避しないとエラーになる。
-
+subscription

@@ -246,6 +246,13 @@ class StripeProvider extends ServiceProvider
      * @throws ApiErrorException
      * @throws InvalidRequestException
      */
+    public static function cancelSubscription(string $subscriptionId)
+    {
+        $stripe = app(StripeClient::class);
+
+        return $stripe->subscriptions->cancel($subscriptionId);
+    }
+
     public static function getProductNameFromId(string $productId): string
     {
         $stripe = app(StripeClient::class);

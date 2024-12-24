@@ -3,6 +3,7 @@
 use App\Http\Controllers\CheckoutSessionController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\DonationImageController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SubscriptionSessionController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\XServerController;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/checkout-session', [CheckoutSessionController::class, 'create']);
 Route::post('/subscription-session', [SubscriptionSessionController::class, 'create']);
+Route::post('/subscriptions/cancel/{subscription_id}', [SubscriptionController::class, 'cancelSubscription']);
 
 Route::prefix('/webhooks')->group(function () {
     Route::post('/payment-intent-succeed', [WebhookController::class, 'paymentIntentSucceed']);
@@ -34,4 +36,5 @@ Route::prefix('/debug')->group(function () {
     Route::get('/price/subs', [DebugController::class, 'createSubscriptionPrice']);
     Route::get('/webhook', [WebhookController::class, 'create']);
     Route::get('/invoice', [DebugController::class, 'getInvoice']);
+    Route::get('/cancel-subscription/{subscription_id}', [DebugController::class, 'cancelSubscription']);
 });
