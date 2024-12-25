@@ -16,7 +16,7 @@ class WebhookController extends Controller
      * @throws UnexpectedValueException
      * @throws Exception
      */
-    public function paymentIntentSucceed(Request $request): JsonResponse // for dev and prd use
+    public function paymentIntentSucceed(Request $request): JsonResponse
     {
         $event = new WebhookService(
             $request,

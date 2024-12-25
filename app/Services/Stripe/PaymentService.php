@@ -1,6 +1,6 @@
 <?php
 
-namespace App\PaymentServices;
+namespace App\Services\Stripe;
 
 use App\Enums\PaymentSchedule;
 use Stripe\Exception\ApiErrorException;

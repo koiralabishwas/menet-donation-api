@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DonationFormRequest;
-use App\PaymentServices\PaymentService;
+use App\Services\Stripe\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
