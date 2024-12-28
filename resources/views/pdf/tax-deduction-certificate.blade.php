@@ -136,7 +136,7 @@ use App\Helpers\PdfHelpers;use Carbon\Carbon; @endphp
         <tr>
             <th>寄附年月日</th>
             <th>寄附ID</th>
-            <th>寄附事業</th>
+            <th>寄附した事業</th>
             <th>寄附種類</th>
             <th>寄附金額</th>
         </tr>
@@ -147,7 +147,7 @@ use App\Helpers\PdfHelpers;use Carbon\Carbon; @endphp
                 <td>{{ PdfHelpers::getJapaneseDate($donation['created_at']) }}</td>
                 <td>{{ $donation['donation_external_id'] }}</td>
                 <td>{{ $donation['donation_project'] }}</td>
-                <td>{{ $donation['type'] }}</td>
+                <td>{{ $donation['payment_schedule'] }}</td>
                 <td>{{ number_format($donation['amount']) }}円</td>
             </tr>
         @endforeach
