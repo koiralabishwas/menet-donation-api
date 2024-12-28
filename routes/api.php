@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/checkout-session', [CheckoutSessionController::class, 'create']);
 Route::post('/subscription-session', [SubscriptionSessionController::class, 'create']);
-Route::post('/subscriptions/cancel/{subscription_id}', [SubscriptionController::class, 'cancelSubscription']);
+Route::post('/subscriptions/cancel/{subscription_id}', [SubscriptionController::class, 'deleteSubscription']);
 
 Route::prefix('/webhooks')->group(function () {
     Route::post('/payment-intent-succeed', [WebhookController::class, 'paymentIntentSucceed']);
     Route::post('/customer-subscription-created', [WebhookController::class, 'customerSubscriptionCreated']);
+    Route::post('/customer-subscription-deleted', [WebhookController::class, 'customerSubscriptionDeleted']);
     Route::post('/invoice-paid', [WebhookController::class, 'invoicePaid']);
 });
 

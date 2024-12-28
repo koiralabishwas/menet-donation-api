@@ -39,7 +39,7 @@ class PaymentService
             ->createCustomer()
             ->storeDonor()
             ->createSubscriptionPrice()
-            ->createMetadata(PaymentSchedule::MONTHLY)
+            ->createSubscriptionMetadata()
             ->createSubscriptionSession();
     }
 }

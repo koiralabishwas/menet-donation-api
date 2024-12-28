@@ -2,7 +2,9 @@
 
 namespace App\Services\Stripe;
 
+use App\Enums\PaymentSchedule;
 use App\Enums\StripeProductID;
+use App\Helpers\Helpers;
 use App\Models\Donor;
 use App\Providers\StripeProvider;
 use App\Repositories\DonorRepository;
@@ -20,6 +22,8 @@ class PaymentServiceBuilder
     private object $stripePrice;
 
     private array $paymentIntentMetaData;
+
+    private array $subscriptionMetaData;
 
     public function __construct(array $request)
     {
@@ -93,6 +97,28 @@ class PaymentServiceBuilder
         return $this;
     }
 
+    public function createSubscriptionMetadata(): PaymentServiceBuilder
+    {
+        $this->donor['stripe_customer_object'] = json_decode($this->donor['stripe_customer_object']);
+
+        $this->subscriptionMetaData = [
+            'donor_id' => $this->donor['donor_id'],
+            'donor_name' => $this->donor['name'],
+            'donor_external_id' => $this->donor['donor_external_id'],
+            'donor_type' => $this->donor['type'],
+            'donor_email' => $this->donor['email'],
+            'donation_project' => StripeProvider::getProductNameFromId(
+                StripeProductID::getValueByLowerCaseKey($this->request['product'])
+            ),
+            'amount' => $this->request['price'],
+            'currency' => 'jpy',
+            'payment_schedule' => PaymentSchedule::MONTHLY,
+            'subscription_external_id' => Helpers::CreateExternalIdfromDate(),
+        ];
+
+        return $this;
+    }
+
     /**
      * @throws ApiErrorException
      * @throws InvalidRequestException
@@ -122,7 +148,7 @@ class PaymentServiceBuilder
         $checkoutSession = StripeProvider::createSubscriptionSession(
             $this->stripeCustomer->id,
             $this->stripePrice->id,
-            $this->paymentIntentMetaData
+            $this->subscriptionMetaData
         );
 
         return [

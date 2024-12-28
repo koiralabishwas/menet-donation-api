@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DonationFormRequest;
 use App\Services\Stripe\PaymentService;
 use Illuminate\Http\JsonResponse;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\InvalidRequestException;
 
 class SubscriptionSessionController extends Controller
 {
+    /**
+     * @throws ApiErrorException
+     * @throws InvalidRequestException
+     */
     public function create(DonationFormRequest $request): JsonResponse
     {
         $validatedRequest = $request->validated();
