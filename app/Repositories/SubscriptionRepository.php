@@ -26,7 +26,7 @@ class SubscriptionRepository
 
     public static function cancelSubscription(string $subscription_external_id): bool
     {
-        return Subscription::query()->where('')->update([
+        return Subscription::query()->where('subscription_external_id', $subscription_external_id)->update([
             'is_cancelled' => 1,
         ]);
     }

@@ -108,7 +108,7 @@ class WebhookServiceBuilder
     {
         $subscription = $this->webhookEvent->data->object;
         $this->metaData = $subscription->metadata;
-        SubscriptionRepository::cancelSubscription($subscription->id);
+        SubscriptionRepository::cancelSubscription($this->metaData->subscription_external_id);
 
         return $this;
     }
