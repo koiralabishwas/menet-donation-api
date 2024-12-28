@@ -19,6 +19,11 @@ class SubscriptionRepository
         ]);
     }
 
+    public static function getStripeSubscriptionId(string $subscription_external_id)
+    {
+        return Subscription::query()->where('subscription_external_id', $subscription_external_id)->first();
+    }
+
     public static function cancelSubscription(string $subscription_external_id): bool
     {
         return Subscription::query()->where('')->update([

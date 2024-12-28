@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/checkout-session', [CheckoutSessionController::class, 'create']);
 Route::post('/subscription-session', [SubscriptionSessionController::class, 'create']);
-Route::post('/subscriptions/{subscription_id}/cancel/', [SubscriptionController::class, 'deleteSubscription']);
+Route::post('/subscriptions/{subscription_external_id}/cancel/', [SubscriptionController::class, 'deleteSubscription']);
 
 Route::prefix('/webhooks')->group(function () {
     Route::post('/payment-intent-succeed', [WebhookController::class, 'paymentIntentSucceed']);
