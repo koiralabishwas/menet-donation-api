@@ -2,8 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Enums\WebhookSecret;
-
 class EnvHelpers
 {
     public static function getUrlByENV(string $string): string
