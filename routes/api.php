@@ -9,6 +9,12 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\XServerController;
 use Illuminate\Support\Facades\Route;
 
+//TODO: restructure routes
+// payments/
+//         /onetime
+//          /monthly
+//          /manage
+//
 Route::post('/checkout-session', [CheckoutSessionController::class, 'create']);
 Route::post('/subscription-session', [SubscriptionSessionController::class, 'create']);
 Route::post('/subscriptions/{subscription_external_id}/cancel/', [SubscriptionController::class, 'deleteSubscription']);

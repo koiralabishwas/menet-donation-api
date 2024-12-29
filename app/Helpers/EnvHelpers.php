@@ -16,13 +16,4 @@ class EnvHelpers
         return $string;
 
     }
-
-    public static function getWebhookSecret(WebhookSecret $type): string
-    {
-        if (app()->environment('local')) {
-            return config('services.stripe.webhook.local_webhook_secret');
-        }
-
-        return config("services.stripe.webhook.$type->value");
-    }
 }

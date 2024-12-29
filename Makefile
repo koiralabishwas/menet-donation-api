@@ -63,17 +63,3 @@ run-server: ## アプリを実行します
 .PHONY: run-webhook
 run-webhook: ## webhook を　実行
 	@stripe listen --forward-to localhost:8000/api/webhook
-
-#.PHONY : test-webhook-payment-intent
-#test-webhook-payment-intent: ## payment-intentのwebhook テストを実行
-#	@stripe trigger payment_intent.succeeded \
-#      --override payment_intent:amount=3000 \
-#      --override payment_intent:currency="jpy" \
-#      --override payment_intent:receipt_email="test@example.com" \
-#      --add payment_intent:metadata.payment_schedule="ONE_TIME" \
-#      --add payment_intent:metadata.donor_name="test" \
-#      --add payment_intent:metadata.currency="jpy" \
-#      --add payment_intent:metadata.donation_project="高校進学ガイダンス" \
-#      --add payment_intent:metadata.donor_id="1" \
-#      --add payment_intent:metadata.amount="3000" \
-#      --add payment_intent:metadata.donor_external_id="6c9040d0-6f78-4d0b-aa08-60092cc674ac" \

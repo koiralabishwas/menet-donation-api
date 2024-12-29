@@ -34,14 +34,4 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
-    'stripe' => [
-        'webhook' => [
-            'local_webhook_secret' => env('STRIPE_LOCAL_WEBHOOK_SECRET'),
-            'payment_intent_succeed_secret' => env('STRIPE_PAYMENT_INTENT_SUCCEED_SECRET'),
-            'customer_subscription_created_secret' => env('STRIPE_CUSTOMER_SUBSCRIPTION_CREATED_SECRET'),
-            'invoice_paid_secret' => env('STRIPE_INVOICE_PAID_SECRET'),
-        ],
-    ],
-
 ];
