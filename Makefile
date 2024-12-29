@@ -21,7 +21,7 @@ swagger: ## swaggerを生成します
 test: ## テストを実行します
 	@make clear-logs
 	@php artisan test
-	@make test-webhook-payment-intent
+	@#make test-webhook-payment-intent
 	@rm -rf .phpunit.cache .phpunit.result.cache
 
 .PHONY: format-code
@@ -64,16 +64,16 @@ run-server: ## アプリを実行します
 run-webhook: ## webhook を　実行
 	@stripe listen --forward-to localhost:8000/api/webhook
 
-.PHONY : test-webhook-payment-intent
-test-webhook-payment-intent: ## payment-intentのwebhook テストを実行
-	@stripe trigger payment_intent.succeeded \
-      --override payment_intent:amount=3000 \
-      --override payment_intent:currency="jpy" \
-      --override payment_intent:receipt_email="koiralabishwas257@gmail.com" \
-      --add payment_intent:metadata.type="ONE_TIME" \
-      --add payment_intent:metadata.donor_name="Bishwas Koirala" \
-      --add payment_intent:metadata.currency="jpy" \
-      --add payment_intent:metadata.donation_project="高校進学ガイダンス" \
-      --add payment_intent:metadata.donor_id="4" \
-      --add payment_intent:metadata.amount="123" \
-      --add payment_intent:metadata.donor_external_id="eb706ddc-8806-4afb-9825-976ccb70146e" \
+#.PHONY : test-webhook-payment-intent
+#test-webhook-payment-intent: ## payment-intentのwebhook テストを実行
+#	@stripe trigger payment_intent.succeeded \
+#      --override payment_intent:amount=3000 \
+#      --override payment_intent:currency="jpy" \
+#      --override payment_intent:receipt_email="test@example.com" \
+#      --add payment_intent:metadata.payment_schedule="ONE_TIME" \
+#      --add payment_intent:metadata.donor_name="test" \
+#      --add payment_intent:metadata.currency="jpy" \
+#      --add payment_intent:metadata.donation_project="高校進学ガイダンス" \
+#      --add payment_intent:metadata.donor_id="1" \
+#      --add payment_intent:metadata.amount="3000" \
+#      --add payment_intent:metadata.donor_external_id="6c9040d0-6f78-4d0b-aa08-60092cc674ac" \
