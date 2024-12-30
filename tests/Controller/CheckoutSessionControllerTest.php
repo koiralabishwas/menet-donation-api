@@ -32,7 +32,7 @@ class CheckoutSessionControllerTest extends TestCase
             'price' => 1000,
         ];
 
-        $response = $this->postJson('/api/checkout-session/', $donorData);
+        $response = $this->postJson('/api/payments/onetime', $donorData);
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'status',

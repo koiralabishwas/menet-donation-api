@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\CheckoutSessionController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\DonationImageController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\SubscriptionSessionController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\XServerController;
 use Illuminate\Support\Facades\Route;
@@ -13,10 +12,13 @@ use Illuminate\Support\Facades\Route;
 // payments/
 //         /onetime
 //          /monthly
-//          /manage
-//
-Route::post('/checkout-session', [CheckoutSessionController::class, 'create']);
-Route::post('/subscription-session', [SubscriptionSessionController::class, 'create']);
+//          /manage!!!!!!
+Route::prefix('/payments')->group(function () {
+    Route::post('/onetime', [PaymentController::class, 'onetime']);
+    Route::post('/monthly', [PaymentController::class, 'monthly']);
+    //    Route::post('/monthly',[])
+});
+
 Route::post('/subscriptions/{subscription_external_id}/cancel/', [SubscriptionController::class, 'deleteSubscription']);
 
 Route::prefix('/webhooks')->group(function () {

@@ -8,12 +8,12 @@ servers:
   - url: https://dev-api-donation.me-net.or.jp
     description: Development server
 paths:
-  /api/checkout-session:
+  /api/payments/onetime:
     post:
-      operationId: createCheckoutSession
-      summary: Create Checkout Session
+      operationId: CreateOnetimeCheckoutSession
+      summary: Create Onetime Checkout Session
       tags:
-        - Checkout Session
+        - Onetime Checkout Session
       requestBody:
         required: true
         content:
@@ -22,18 +22,18 @@ paths:
               $ref: "#/components/schemas/DonationRequest"
       responses:
         '201':
-          description: Checkout Session successfully created
+          description: One Time Checkout Session successfully created
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DonationResponse"
 
-  /api/subscription-session:
+  /api/payments/monthly:
     post:
-      operationId: createSubscriptionSession
-      summary: Create Subscription Session
+      operationId: CreateMonthlySubscriptionCheckoutSession
+      summary: Create Monthly Subscription Checkout Session
       tags:
-        - Subscription Session
+        - Monthly Subscription Checkout Session
       requestBody:
         required: true
         content:
@@ -42,7 +42,7 @@ paths:
               $ref: "#/components/schemas/DonationRequest"
       responses:
         '201':
-          description: Subscription Session successfully created
+          description: Monthly Subscription Session successfully created
           content:
             application/json:
               schema:
