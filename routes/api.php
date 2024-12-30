@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/payments')->group(function () {
     Route::post('/onetime', [PaymentController::class, 'onetime']);
     Route::post('/monthly', [PaymentController::class, 'monthly']);
-    //    Route::post('/monthly',[])
+    Route::post('/manage/{stripe_customer_id}', [PaymentController::class, 'managePayments']);
 });
-
 Route::post('/subscriptions/{subscription_external_id}/cancel/', [SubscriptionController::class, 'deleteSubscription']);
 
 Route::prefix('/webhooks')->group(function () {
