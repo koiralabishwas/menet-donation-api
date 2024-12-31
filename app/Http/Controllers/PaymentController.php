@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DonationFormRequest;
 use App\Providers\StripeProvider;
+use App\Repositories\DonorRepository;
 use App\Services\Stripe\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Stripe\Exception\ApiErrorException;
@@ -47,9 +48,10 @@ class PaymentController extends Controller
         ], 201);
     }
 
-    public function managePayments($stripe_customer_id): JsonResponse
+    public function managePayments($donor_external_id): JsonResponse
     {
         //TODO ; webhook event for this i.e  customer.subscription.updated
+        $stripe_customer_id = DonorRepository::getStripeCustomerId($donor_external_id);
         $portalSession = StripeProvider::createPortalSession($stripe_customer_id);
 
         return response()->json([
