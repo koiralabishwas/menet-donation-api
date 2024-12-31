@@ -119,15 +119,6 @@ class WebhookServiceBuilder
         return $this;
     }
 
-    public function deleteSubscription(): WebhookServiceBuilder
-    {
-        $subscription = $this->webhookEvent->data->object;
-        $this->metaData = $subscription->metadata;
-        SubscriptionRepository::putCancelFlag($this->metaData->subscription_external_id);
-
-        return $this;
-    }
-
     public function sendOneTimeDonationEmail(string $subject, string $mailView): void
     {
         if ($this->isSubscription) {

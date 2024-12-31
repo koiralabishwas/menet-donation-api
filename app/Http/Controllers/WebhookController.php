@@ -75,24 +75,6 @@ class WebhookController extends Controller
 
     /**
      * @throws SignatureVerificationException
-     */
-    public function customerSubscriptionDeleted(Request $request): JsonResponse
-    {
-        $event = new WebhookService(
-            $request,
-            env('STRIPE_CUSTOMER_SUBSCRIPTION_DELETED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
-        );
-        $data = $event->customerSubscriptionDeleted();
-
-        return response()->json([
-            'status' => 201,
-            'message' => 'success',
-            'data' => $data,
-        ]);
-    }
-
-    /**
-     * @throws SignatureVerificationException
      * @throws UnexpectedValueException
      * @throws Exception
      */

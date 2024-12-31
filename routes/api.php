@@ -3,7 +3,6 @@
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\DonationImageController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\XServerController;
 use Illuminate\Support\Facades\Route;
@@ -18,13 +17,11 @@ Route::prefix('/payments')->group(function () {
     Route::post('/monthly', [PaymentController::class, 'monthly']);
     Route::post('/manage/{donor_external_id}', [PaymentController::class, 'managePayments']);
 });
-Route::post('/subscriptions/{subscription_external_id}/cancel/', [SubscriptionController::class, 'deleteSubscription']);
 
 Route::prefix('/webhooks')->group(function () {
     Route::post('/payment-intent-succeed', [WebhookController::class, 'paymentIntentSucceed']);
     Route::post('/customer-subscription-created', [WebhookController::class, 'customerSubscriptionCreated']);
     Route::post('/customer-subscription-updated', [WebhookController::class, 'customerSubscriptionUpdated']);
-    Route::post('/customer-subscription-deleted', [WebhookController::class, 'customerSubscriptionDeleted']);
     Route::post('/invoice-paid', [WebhookController::class, 'invoicePaid']);
 });
 

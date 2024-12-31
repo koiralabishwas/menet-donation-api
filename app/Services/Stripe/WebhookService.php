@@ -71,22 +71,6 @@ class WebhookService
     }
 
     /**
-     * @throws SignatureVerificationException
-     */
-    public function customerSubscriptionDeleted(): array
-    {
-        $this->builder
-            ->constructWebhookEvent()
-            ->deleteSubscription();
-        //TODO: send subscription mail
-
-        return [
-            'message' => 'Success',
-            'type' => 'customer.subscription.deleted',
-        ];
-    }
-
-    /**
      * @throws Exception
      */
     public function invoicePaid(): array
