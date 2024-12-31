@@ -50,7 +50,6 @@ class PaymentController extends Controller
 
     public function managePayments($donor_external_id): JsonResponse
     {
-        //TODO ; webhook event for this i.e  customer.subscription.updated
         $stripe_customer_id = DonorRepository::getStripeCustomerId($donor_external_id);
         $portalSession = StripeProvider::createPortalSession($stripe_customer_id);
 

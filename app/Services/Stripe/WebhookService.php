@@ -10,8 +10,7 @@ use Stripe\Exception\UnexpectedValueException;
 class WebhookService
 {
     private WebhookServiceBuilder $builder;
-    // TODO :
-    // make better Exceptions
+    // TODO : make better Exceptions
 
     public function __construct(Request $request, string $webhookSecret)
     {
@@ -24,7 +23,7 @@ class WebhookService
      * @throws Exception
      */
     public function paymentIntentSucceed(): array
-    { // TODO: subscription型のpaymentの場合はイベントが発生してしまうが、回避しなければならない。
+    { // memo: subscription型のpaymentの場合はイベントが発生してしまうが、回避しなければならない。
         $this->builder
             ->constructWebhookEvent()
             ->isSubscription()
@@ -61,8 +60,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->updateSubscription();
-
-        //        TODO : updateSubscriptionInfo -> sendUpdatedInfoMail
+        //TODO : updateSubscriptionInfo -> sendUpdatedInfoMail to user
         return [
             'message' => 'Success',
             'type' => 'customer.subscription.updated',

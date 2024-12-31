@@ -7,11 +7,6 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\XServerController;
 use Illuminate\Support\Facades\Route;
 
-//TODO: restructure routes
-// payments/
-//         /onetime
-//          /monthly
-//          /manage!!!!!!
 Route::prefix('/payments')->group(function () {
     Route::post('/onetime', [PaymentController::class, 'onetime']);
     Route::post('/monthly', [PaymentController::class, 'monthly']);

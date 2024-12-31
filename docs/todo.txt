@@ -1,4 +1,1 @@
-TODO:
-1.subscription cancel 用のurl
 
-subscription
