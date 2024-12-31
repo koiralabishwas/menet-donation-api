@@ -63,6 +63,4 @@ class DonorRepository
     {
         return Donor::query()->where('donor_external_id', $donorExternalId)->first()->stripe_customer_id;
     }
-
-
 }
