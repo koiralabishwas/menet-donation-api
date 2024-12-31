@@ -60,6 +60,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->updateSubscription();
+
         //TODO : updateSubscriptionInfo -> sendUpdatedInfoMail to user
         return [
             'message' => 'Success',
