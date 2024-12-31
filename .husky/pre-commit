@@ -4,4 +4,5 @@ make test
 # コードフォーマット
 make format-code
 
-#git add .
+git add .
+
