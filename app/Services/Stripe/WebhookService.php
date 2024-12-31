@@ -56,11 +56,28 @@ class WebhookService
     /**
      * @throws SignatureVerificationException
      */
+    public function customerSubscriptionUpdated(): array
+    {
+        $this->builder
+            ->constructWebhookEvent()
+            ->updateSubscription();
+
+        //        TODO : updateSubscriptionInfo -> sendUpdatedInfoMail
+        return [
+            'message' => 'Success',
+            'type' => 'customer.subscription.updated',
+        ];
+
+    }
+
+    /**
+     * @throws SignatureVerificationException
+     */
     public function customerSubscriptionDeleted(): array
     {
         $this->builder
             ->constructWebhookEvent()
-            ->cancelSubscription();
+            ->deleteSubscription();
         //TODO: send subscription mail
 
         return [

@@ -1,7 +1,4 @@
 TODO:
 1.subscription cancel 用のurl
-2.db subscription と donation table の relation
-3.
-
 
 subscription

@@ -104,11 +104,26 @@ class WebhookServiceBuilder
         return $this;
     }
 
-    public function cancelSubscription(): WebhookServiceBuilder
+    public function updateSubscription(): WebhookServiceBuilder
     {
         $subscription = $this->webhookEvent->data->object;
         $this->metaData = $subscription->metadata;
-        SubscriptionRepository::cancelSubscription($this->metaData->subscription_external_id);
+        $cancel_at_period_end = $subscription->cancel_at_period_end;
+
+        if ($cancel_at_period_end) {
+            SubscriptionRepository::putCancelFlag($this->metaData->subscription_external_id);
+        } else {
+            SubscriptionRepository::removeCancelFlag($this->metaData->subscription_external_id);
+        }
+
+        return $this;
+    }
+
+    public function deleteSubscription(): WebhookServiceBuilder
+    {
+        $subscription = $this->webhookEvent->data->object;
+        $this->metaData = $subscription->metadata;
+        SubscriptionRepository::putCancelFlag($this->metaData->subscription_external_id);
 
         return $this;
     }

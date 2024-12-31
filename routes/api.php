@@ -23,6 +23,7 @@ Route::post('/subscriptions/{subscription_external_id}/cancel/', [SubscriptionCo
 Route::prefix('/webhooks')->group(function () {
     Route::post('/payment-intent-succeed', [WebhookController::class, 'paymentIntentSucceed']);
     Route::post('/customer-subscription-created', [WebhookController::class, 'customerSubscriptionCreated']);
+    Route::post('/customer-subscription-updated', [WebhookController::class, 'customerSubscriptionUpdated']);
     Route::post('/customer-subscription-deleted', [WebhookController::class, 'customerSubscriptionDeleted']);
     Route::post('/invoice-paid', [WebhookController::class, 'invoicePaid']);
 });
@@ -45,4 +46,5 @@ Route::prefix('/debug')->group(function () {
     Route::get('/webhook', [WebhookController::class, 'create']);
     Route::get('/invoice', [DebugController::class, 'getInvoice']);
     Route::get('/cancel-subscription/{subscription_id}', [DebugController::class, 'cancelSubscription']);
+    Route::get('/delete-all-customers', [DebugController::class, 'deleteAllCustomers']);
 });

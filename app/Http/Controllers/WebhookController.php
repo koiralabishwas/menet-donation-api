@@ -6,6 +6,7 @@ use App\Services\Stripe\WebhookService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Exception\UnexpectedValueException;
 
@@ -49,6 +50,27 @@ class WebhookController extends Controller
             'message' => 'success',
             'data' => $data,
         ]);
+    }
+
+    /**
+     * @throws SignatureVerificationException
+     */
+    public function customerSubscriptionUpdated(Request $request): JsonResponse
+    {
+        $event = new WebhookSErvice(
+            $request,
+            env('STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
+        );
+
+        $data = $event->customerSubscriptionUpdated();
+        Log::info($request);
+
+        return response()->json([
+            'status' => 201,
+            'message' => 'success',
+            'data' => $data,
+        ]);
+
     }
 
     /**
