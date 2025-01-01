@@ -24,17 +24,11 @@ class SubscriptionRepository
         return Subscription::query()->where('subscription_external_id', $subscription_external_id)->first();
     }
 
-    public static function putCancelFlag(string $subscription_external_id): bool
+    public static function setIsCancelled(string $subscription_external_id, bool $cancel_at_period_end): int
     {
+        //        NOTE : true の　場合 isCancelled が　1 , false の　場合　0
         return Subscription::query()->where('subscription_external_id', $subscription_external_id)->update([
-            'is_cancelled' => 1,
-        ]);
-    }
-
-    public static function removeCancelFlag(string $subscription_external_id): bool
-    {
-        return Subscription::query()->where('subscription_external_id', $subscription_external_id)->update([
-            'is_cancelled' => 0,
+            'is_cancelled' => $cancel_at_period_end ? 1 : 0,
         ]);
     }
 }

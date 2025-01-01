@@ -111,10 +111,10 @@ class WebhookServiceBuilder
         $cancel_at_period_end = $subscription->cancel_at_period_end;
 
         if ($cancel_at_period_end) {
-            SubscriptionRepository::putCancelFlag($this->metaData->subscription_external_id);
+            SubscriptionRepository::setIsCancelled($this->metaData->subscription_external_id, $cancel_at_period_end);
             $this->sendMonthlyDonationUpdatedEmail('毎月の寄付キャンセルのお知らせ', 'mail.SubscriptionCancelledMail');
         } else {
-            SubscriptionRepository::removeCancelFlag($this->metaData->subscription_external_id);
+            SubscriptionRepository::setIsCancelled($this->metaData->subscription_external_id, $cancel_at_period_end);
         }
 
         return $this;
