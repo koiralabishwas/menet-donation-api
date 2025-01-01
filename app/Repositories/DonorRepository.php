@@ -58,4 +58,9 @@ class DonorRepository
     {
         return Donor::query()->where('donor_external_id', $externalId)->first();
     }
+
+    public static function getStripeCustomerId(string $donorExternalId)
+    {
+        return Donor::query()->where('donor_external_id', $donorExternalId)->first()->stripe_customer_id;
+    }
 }

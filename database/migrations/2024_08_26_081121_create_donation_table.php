@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('donor_id');
             $table->string('donor_external_id', 36)->comment('uuid')->index();
             $table->string('subscription_external_id', 36)->comment('uuid')->nullable();
-            $table->string('stripe_subscription_id', 100)->nullable();
             $table->string('donation_project', 50);
             $table->unsignedInteger('amount');
             $table->string('currency', 3);
@@ -25,11 +24,9 @@ return new class extends Migration
             $table->foreign('donor_id')->references('donor_id')->on('donors');
             $table->foreign('donor_external_id')->references('donor_external_id')->on('donors');
             $table->foreign('subscription_external_id')->references('subscription_external_id')->on('subscriptions');
-            $table->foreign('stripe_subscription_id')->references('stripe_subscription_id')->on('subscriptions');
             $table->charset('utf8mb4');
             $table->collation('utf8mb4_general_ci');
             $table->timestamps();
-
         });
     }
 

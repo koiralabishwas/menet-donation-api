@@ -32,7 +32,7 @@ class SubscriptionSessionControllerTest extends TestCase
             'price' => 1000,
         ];
 
-        $response = $this->postJson('/api/subscription-session/', $donorData);
+        $response = $this->postJson('/api/payments/monthly', $donorData);
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'status',

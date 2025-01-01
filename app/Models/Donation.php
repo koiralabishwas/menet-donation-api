@@ -23,7 +23,6 @@ class Donation extends Model
         'donor_id',
         'donor_external_id',
         'subscription_external_id',
-        'stripe_subscription_id',
         'donation_project',
         'amount',
         'currency',

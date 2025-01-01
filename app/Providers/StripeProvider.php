@@ -7,6 +7,7 @@ use App\Helpers\Helpers;
 use App\Repositories\DonorRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Stripe\BillingPortal\Session as PortalSession;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
@@ -246,6 +247,13 @@ class StripeProvider extends ServiceProvider
      * @throws ApiErrorException
      * @throws InvalidRequestException
      */
+    public static function cancelSubscription(string $subscriptionId)
+    {
+        $stripe = app(StripeClient::class);
+
+        return $stripe->subscriptions->cancel($subscriptionId);
+    }
+
     public static function getProductNameFromId(string $productId): string
     {
         $stripe = app(StripeClient::class);
@@ -258,5 +266,15 @@ class StripeProvider extends ServiceProvider
         $stripe = app(StripeClient::class);
 
         return $stripe->invoices->retrieve($invoiceId);
+    }
+
+    public static function createPortalSession(string $stripeCustomerId): PortalSession
+    {
+        $stripe = app(StripeClient::class);
+
+        return $stripe->billingPortal->sessions->create([
+            'customer' => $stripeCustomerId,
+            'return_url' => env('FRONT_END_URL'),
+        ]);
     }
 }

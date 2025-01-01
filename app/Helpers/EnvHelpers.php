@@ -2,8 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Enums\WebhookSecret;
-
 class EnvHelpers
 {
     public static function getUrlByENV(string $string): string
@@ -15,14 +13,5 @@ class EnvHelpers
 
         return $string;
 
-    }
-
-    public static function getWebhookSecret(WebhookSecret $type): string
-    {
-        if (app()->environment('local')) {
-            return config('services.stripe.webhook.local_webhook_secret');
-        }
-
-        return config("services.stripe.webhook.$type->value");
     }
 }
