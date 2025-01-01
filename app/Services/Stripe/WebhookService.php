@@ -61,7 +61,7 @@ class WebhookService
             ->constructWebhookEvent()
             ->updateSubscription();
 
-        //TODO : updateSubscriptionInfo -> sendUpdatedInfoMail to user
+        // TODO : updateSubscriptionInfo -> sendUpdatedInfoMail to user
         return [
             'message' => 'Success',
             'type' => 'customer.subscription.updated',

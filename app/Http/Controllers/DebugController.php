@@ -35,7 +35,7 @@ class DebugController extends Controller
                 if ($metaData->type === 'ONE_TIME') {
                     Log::info($metaData->type);
                     Log::info($paymentIntent['object']); // テスㇳでつかうため　、必要
-                    //ここで残りのonetime時の処理
+                    // ここで残りのonetime時の処理
                     DonationRepository::storeDonation($metaData, $paymentIntent['object']);
                     Mail::to($paymentIntent['object']->receipt_email)->send(new DonationRegardMailable($metaData));
                 }
