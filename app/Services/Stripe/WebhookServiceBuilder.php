@@ -91,7 +91,7 @@ class WebhookServiceBuilder
 
         if ($cancel_at_period_end) {
             SubscriptionRepository::setIsCancelled($this->metaData->subscription_external_id, $cancel_at_period_end);
-            $this->sendMonthlyDonationUpdatedEmail('毎月の寄付キャンセルのお知らせ', 'mail.SubscriptionCancelledMail');
+            $this->sendMail('毎月の寄付キャンセルのお知らせ', 'mail.SubscriptionCancelledMail');
         } else {
             SubscriptionRepository::setIsCancelled($this->metaData->subscription_external_id, $cancel_at_period_end);
         }
@@ -100,37 +100,6 @@ class WebhookServiceBuilder
     }
 
     public function sendMail(string $subject, string $mailView): void
-    {
-        $receipt = $this->metaData->donor_email;
-        $metaData = $this->metaData;
-        Mail::to($receipt)->send(new DonationRegardMailable(
-            $subject,
-            $mailView,
-            $metaData
-        ));
-    }
-
-    public function sendMonthlyDonationConfirmationEmail(string $subject, string $mailView): void
-    {
-        $receipt = $this->metaData->donor_email;
-        Mail::to($receipt)->send(new DonationRegardMailable(
-            $subject,
-            $mailView,
-            $this->metaData
-        ));
-    }
-
-    public function sendMonthlyDonationUpdatedEmail(string $subject, string $mailView): void
-    {
-        $receipt = $this->metaData->donor_email;
-        Mail::to($receipt)->send(new DonationRegardMailable(
-            $subject,
-            $mailView,
-            $this->metaData
-        ));
-    }
-
-    public function sendMonthlyDonationPaidEmail(string $subject, string $mailView): void
     {
         $receipt = $this->metaData->donor_email;
         $metaData = $this->metaData;
