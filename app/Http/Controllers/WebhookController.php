@@ -17,26 +17,6 @@ class WebhookController extends Controller
      * @throws UnexpectedValueException
      * @throws Exception
      */
-    public function paymentIntentSucceed(Request $request): JsonResponse
-    {
-        $event = new WebhookService(
-            $request,
-            env('STRIPE_PAYMENT_INTENT_SUCCEED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
-        );
-        $data = $event->paymentIntentSucceed();
-
-        return response()->json([
-            'status' => 201,
-            'message' => 'success',
-            'data' => $data,
-        ]);
-    }
-
-    /**
-     * @throws SignatureVerificationException
-     * @throws UnexpectedValueException
-     * @throws Exception
-     */
     public function customerSubscriptionCreated(Request $request): JsonResponse
     {
         $event = new WebhookService(
@@ -70,7 +50,6 @@ class WebhookController extends Controller
             'message' => 'success',
             'data' => $data,
         ]);
-
     }
 
     /**
@@ -80,6 +59,7 @@ class WebhookController extends Controller
      */
     public function invoicePaid(Request $request): JsonResponse
     {
+        Log::info($request);
         $event = new WebhookService(
             $request,
             env('STRIPE_INVOICE_PAID_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))

@@ -10,7 +10,7 @@ class DonationRepository
     /**
      *  store donation record in database
      */
-    public static function storeDonation(object $DonationData, object $stripeObject): Donation
+    public static function storeDonation(object $DonationData): Donation
     {
         return Donation::create(
             [

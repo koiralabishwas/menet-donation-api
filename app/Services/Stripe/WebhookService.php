@@ -5,7 +5,6 @@ namespace App\Services\Stripe;
 use Exception;
 use Illuminate\Http\Request;
 use Stripe\Exception\SignatureVerificationException;
-use Stripe\Exception\UnexpectedValueException;
 
 class WebhookService
 {
@@ -15,25 +14,6 @@ class WebhookService
     public function __construct(Request $request, string $webhookSecret)
     {
         $this->builder = new WebhookServiceBuilder($request, $webhookSecret);
-    }
-
-    /**
-     * @throws SignatureVerificationException
-     * @throws UnexpectedValueException
-     * @throws Exception
-     */
-    public function paymentIntentSucceed(): array
-    { // memo: subscription型のpaymentの場合はイベントが発生してしまうが、回避しなければならない。
-        $this->builder
-            ->constructWebhookEvent()
-            ->isSubscription()
-            ->storeOneTimeDonation()
-            ->sendOneTimeDonationEmail('寄付完了のお知らせ', 'mail.donationRegard');
-
-        return [
-            'message' => 'Success',
-            'type' => 'payment_intent.succeeded',
-        ];
     }
 
     /**
@@ -76,8 +56,8 @@ class WebhookService
     {
         $this->builder
             ->constructWebhookEvent()
-            ->storeMonthlyDonation()
-            ->sendMonthlyDonationEmail('今月分の寄付完了のお知らせ', 'mail.SubscriptionPaidMail');
+            ->storeDonation()
+            ->sendMonthlyDonationPaidEmail('invoicePaid', 'mail.SubscriptionPaidMail');
 
         return [
             'message' => 'Success',
