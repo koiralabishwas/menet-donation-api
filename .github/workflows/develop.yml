@@ -32,6 +32,10 @@ jobs:
         with:
           node-version: 20
 
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
