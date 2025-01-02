@@ -52,10 +52,20 @@ class WebhookServiceBuilder
         $invoice = $this->webhookEvent->data->object;
         if (! empty($invoice->subscription)) {
             $this->metaData = $invoice->subscription_details->metadata;
+            DonationRepository::storeDonation($this->metaData);
+            $this->sendMail(
+                '今月分の寄付完了のお知らせ',
+                'mail.SubscriptionPaidMail'
+            );
         } else {
             $this->metaData = $invoice->metadata;
+            DonationRepository::storeDonation($this->metaData);
+            $this->sendMail(
+                '寄付完了のお知らせ',
+                'mail.donationRegard'
+
+            );
         }
-        DonationRepository::storeDonation($this->metaData);
 
         return $this;
     }
@@ -65,6 +75,10 @@ class WebhookServiceBuilder
         $subscription = $this->webhookEvent->data->object;
         $this->metaData = $subscription->metadata;
         SubscriptionRepository::storeSubscription($subscription);
+        $this->sendMail(
+            '毎月型の寄付設定完了のお知らせ',
+            'mail.SubscriptionCreatedMail'
+        );
 
         return $this;
     }
@@ -83,6 +97,17 @@ class WebhookServiceBuilder
         }
 
         return $this;
+    }
+
+    public function sendMail(string $subject, string $mailView): void
+    {
+        $receipt = $this->metaData->donor_email;
+        $metaData = $this->metaData;
+        Mail::to($receipt)->send(new DonationRegardMailable(
+            $subject,
+            $mailView,
+            $metaData
+        ));
     }
 
     public function sendMonthlyDonationConfirmationEmail(string $subject, string $mailView): void
