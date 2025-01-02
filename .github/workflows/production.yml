@@ -4,12 +4,12 @@ on:
     branches: main
 jobs:
   build:
-    name: Install, check, build and deploy to Xserver
+    name: Install, check, build and test
     runs-on: ubuntu-latest
     environment: api-donation.me-net.or.jp
     services:
       db:
-        image: mysql:5.7
+        image: mysql:8.0
         ports:
           - 3306:3306
         env:
@@ -27,14 +27,17 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          # XServerのNodeJSの最新バージョンは16.20.2
-          node-version: 16.20.2
-          cache: "npm"
+          node-version: 20
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: mbstring, pdo_mysql, bcmath
           coverage: none
 
@@ -48,7 +51,7 @@ jobs:
           HUSKY: 0
 
       - name: Build
-        run: npm run build
+        run: bun run build
 
       - name: Migrate Database
         run: php artisan migrate:fresh --force
@@ -59,33 +62,3 @@ jobs:
         run: php artisan test
         env:
           DB_HOST: 127.0.0.1
-
-      - name: Deploy exported folder to Xserver through FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.SERVER }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          server-dir: laravel-project/api-donation.me-net.or.jp/
-          local-dir: ./
-          exclude: |
-            .git*
-            .git*/**
-            .vscode/**
-            node_modules/**
-            vendor/**
-
-      - name: Install and clear cache
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSWORD }}
-          script: |
-            cd laravel-project/api-donation.me-net.or.jp/
-            cp .env.production .env
-            make install
-            make update
-            make clear
