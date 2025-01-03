@@ -20,9 +20,10 @@
   },
   "dependencies": {
     "@inertiajs/react": "^2.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@tailwindcss/typography": "^0.5.15",
     "husky": "^9.1.6",
-    "puppeteer": "^23.5.3"
+    "puppeteer": "^23.5.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }

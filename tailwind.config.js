@@ -19,5 +19,5 @@ export default {
             "neutral-light": "#e5e5e5",
         },
     },
-    plugins: [],
+    plugins: [require("@tailwindcss/typography")],
 };
