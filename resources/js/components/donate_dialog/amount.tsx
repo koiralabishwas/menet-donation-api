@@ -4,7 +4,7 @@ export default function Amount() {
     return (
         <div className="flex items-center justify-center p-1">
             <select
-                className="rounded-r-none md:text-3xl select select-lg select-bordered border-neutral-light focus:outline-neutral-light focus:border-neutral-light"
+                className="text-xl rounded-r-none md:text-3xl select select-lg select-bordered border-neutral-light focus:outline-neutral-light focus:border-neutral-light"
                 required
             >
                 <option disabled selected hidden>
@@ -14,7 +14,7 @@ export default function Amount() {
                 <option value="monthly">毎月</option>
             </select>
             <select
-                className="text-center rounded-l-none md:text-3xl select select-lg select-bordered border-neutral-light focus:outline-neutral-light focus:border-neutral-light"
+                className="text-xl text-center rounded-l-none md:text-3xl select select-lg select-bordered border-neutral-light focus:outline-neutral-light focus:border-neutral-light"
                 required
             >
                 <option disabled selected hidden>
