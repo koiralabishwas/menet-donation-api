@@ -1,6 +1,6 @@
 export default function Header() {
     return (
-        <header className="flex items-center h-16 bg-white border-b xl:h-24 border-neutral-light dark:bg-neutral">
+        <header className="sticky top-0 flex items-center h-16 bg-white border-b xl:h-24 border-neutral-light dark:bg-neutral">
             <img
                 src="/svg/logo.svg"
                 alt="ME-net Logo"
