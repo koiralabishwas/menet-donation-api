@@ -20,19 +20,23 @@ export default function Amount() {
                 <option disabled selected hidden>
                     寄付額
                 </option>
-                <option value="3000">3000円</option>
-                <option value="5000">5000円</option>
-                <option value="6000">6000円</option>
-                <option value="7000">7000円</option>
-                <option value="8000">8000円</option>
-                <option value="9000">9000円</option>
-                <option value="10000">10000円</option>
-                <option value="15000">15000円</option>
-                <option value="20000">20000円</option>
-                <option value="25000">25000円</option>
-                <option value="30000">30000円</option>
-                <option value="50000">50000円</option>
-                <option value="100000">100000円</option>
+                <option value="3000">3,000円</option>
+                <option value="5000">5,000円</option>
+                <option value="6000">6,000円</option>
+                <option value="7000">7,000円</option>
+                <option value="8000">8,000円</option>
+                <option value="9000">9,000円</option>
+                <option value="10000">10,000円</option>
+                <option value="15000">15,000円</option>
+                <option value="20000">20,000円</option>
+                <option value="25000">25,000円</option>
+                <option value="30000">30,000円</option>
+                <option value="50000">50,000円</option>
+                <option value="100000">100,000円</option>
+                <option value="150000">150,000円</option>
+                <option value="200000">200,000円</option>
+                <option value="250000">250,000円</option>
+                <option value="300000">300,000円</option>
             </select>
         </div>
     );
