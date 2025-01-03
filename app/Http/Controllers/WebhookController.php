@@ -19,6 +19,7 @@ class WebhookController extends Controller
      */
     public function customerSubscriptionCreated(Request $request): JsonResponse
     {
+        //        FIXME: customerSubscriptioncreated時に、customerSubscrioptionUpdatedも実行されているため、初回のsubscriptionを作ったときにも、どっちも動いてしまう。！！
         $event = new WebhookService(
             $request,
             env('STRIPE_CUSTOMER_SUBSCRIPTION_CREATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
@@ -51,6 +52,9 @@ class WebhookController extends Controller
             'data' => $data,
         ]);
     }
+
+    //    TODO: customer 自身の情報が更新されたときのdb保存のものがほしい
+    //    public static function customerUpdated??
 
     /**
      * @throws SignatureVerificationException

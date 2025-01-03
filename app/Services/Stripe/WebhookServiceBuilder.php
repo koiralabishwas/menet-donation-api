@@ -94,6 +94,10 @@ class WebhookServiceBuilder
             $this->sendMail('毎月の寄付キャンセルのお知らせ', 'mail.SubscriptionCancelledMail');
         } else {
             SubscriptionRepository::setIsCancelled($this->metaData->subscription_external_id, $cancel_at_period_end);
+            $this->sendMail(
+                '寄付再開のお知らせ',
+                'mail.SubscriptionCreatedMail'
+            );
         }
 
         return $this;
