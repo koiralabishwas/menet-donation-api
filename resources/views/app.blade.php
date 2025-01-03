@@ -12,7 +12,7 @@
     @inertiaHead
 </head>
 
-<body class="bg-neutral-50 text-neutral">
+<body class="bg-neutral-50 text-neutral dark:text-neutral-light">
     @inertia
 </body>
 
