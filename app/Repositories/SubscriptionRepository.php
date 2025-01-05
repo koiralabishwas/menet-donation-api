@@ -9,7 +9,7 @@ class SubscriptionRepository
     public static function StoreOrUpdate(object $stripeSubscriptionObject, bool $cancel_at_period_end): Subscription
     {
         return Subscription::updateOrCreate(
-            ['subscription_external_id' => $stripeSubscriptionObject->metada->subscription_external_id],
+            ['subscription_external_id' => $stripeSubscriptionObject->metadata->subscription_external_id],
             [
                 'subscription_external_id' => $stripeSubscriptionObject->metadata->subscription_external_id,
                 'stripe_subscription_id' => $stripeSubscriptionObject->id,
