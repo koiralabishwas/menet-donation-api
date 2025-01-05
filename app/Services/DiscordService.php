@@ -30,6 +30,8 @@ class DiscordService
         self::sendMessage($message);
     }
 
+    //    FIXME: make sendSuccessMessage
+
     public static function sendMessage(array $payload): void
     {
         $webhookUrl = env('DISCORD_WEBHOOK_URL');

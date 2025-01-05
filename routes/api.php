@@ -14,8 +14,7 @@ Route::prefix('/payments')->group(function () {
 });
 
 Route::prefix('/webhooks')->group(function () {
-    Route::post('/payment-intent-succeed', [WebhookController::class, 'paymentIntentSucceed']);
-    Route::post('/customer-subscription-created', [WebhookController::class, 'customerSubscriptionCreated']);
+    Route::post('/customer-updated', [WebhookController::class, 'customerUpdated']);
     Route::post('/customer-subscription-updated', [WebhookController::class, 'customerSubscriptionUpdated']);
     Route::post('/invoice-paid', [WebhookController::class, 'invoicePaid']);
 });

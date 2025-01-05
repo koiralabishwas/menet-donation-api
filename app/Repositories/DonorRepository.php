@@ -42,6 +42,23 @@ class DonorRepository
         );
     }
 
+    public static function updateDonor(object $stripeCustomer): int
+    {
+        //        NOTE : stripe no portal sessionより, name , mail , phone , address が変更可能
+        return Donor::query()->where('donor_external_id', $stripeCustomer->metadata->donor_external_id)->update([
+            'name' => $stripeCustomer->name,
+            'email' => $stripeCustomer->email,
+            'phone' => $stripeCustomer->phone,
+            'postal_code' => $stripeCustomer->address->postal_code,
+            'address' => implode(', ', [
+                $stripeCustomer->address->city,
+                $stripeCustomer->address->state,
+                $stripeCustomer->address->line1,
+                $stripeCustomer->address->line2,
+            ]),
+        ]);
+    }
+
     public static function getDonorByEmail(string $email)
     {
         $donor = Donor::query()->where('email', $email)->first();

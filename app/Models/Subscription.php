@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @method static create(array $array)
+ * @method static updateOrCreate(array $attributes, array $values)
  */
 class Subscription extends Model
 {
@@ -24,6 +24,7 @@ class Subscription extends Model
         'donation_project',
         'amount',
         'currency',
+        'is_cancelled',
     ];
 
     protected $casts = [

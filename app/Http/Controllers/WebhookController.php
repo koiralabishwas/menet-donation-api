@@ -14,16 +14,14 @@ class WebhookController extends Controller
 {
     /**
      * @throws SignatureVerificationException
-     * @throws UnexpectedValueException
-     * @throws Exception
      */
-    public function paymentIntentSucceed(Request $request): JsonResponse
+    public function customerUpdated(Request $request): JsonResponse
     {
         $event = new WebhookService(
             $request,
-            env('STRIPE_PAYMENT_INTENT_SUCCEED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
+            env('STRIPE_CUSTOMER_UPDATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
         );
-        $data = $event->paymentIntentSucceed();
+        $data = $event->customerUpdated();
 
         return response()->json([
             'status' => 201,
@@ -33,26 +31,8 @@ class WebhookController extends Controller
     }
 
     /**
-     * @throws SignatureVerificationException
-     * @throws UnexpectedValueException
-     * @throws Exception
-     */
-    public function customerSubscriptionCreated(Request $request): JsonResponse
-    {
-        $event = new WebhookService(
-            $request,
-            env('STRIPE_CUSTOMER_SUBSCRIPTION_CREATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
-        );
-        $data = $event->customerSubscriptionCreated();
-
-        return response()->json([
-            'status' => 201,
-            'message' => 'success',
-            'data' => $data,
-        ]);
-    }
-
-    /**
+     * CustomerSubscriptionCreatedもこの関数が対応している。
+     *
      * @throws SignatureVerificationException
      */
     public function customerSubscriptionUpdated(Request $request): JsonResponse
@@ -70,7 +50,6 @@ class WebhookController extends Controller
             'message' => 'success',
             'data' => $data,
         ]);
-
     }
 
     /**
@@ -80,6 +59,7 @@ class WebhookController extends Controller
      */
     public function invoicePaid(Request $request): JsonResponse
     {
+        Log::info($request);
         $event = new WebhookService(
             $request,
             env('STRIPE_INVOICE_PAID_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
