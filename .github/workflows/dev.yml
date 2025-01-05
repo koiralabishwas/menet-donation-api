@@ -61,14 +61,14 @@ jobs:
         env:
           DB_HOST: 127.0.0.1
 
-      - name: Set Repository Name in Lowercase
-        id: vars
-        run: |
-          REPO_NAME="${GITHUB_REPOSITORY,,}"
-          echo "REPO_NAME=${REPO_NAME}" >> $GITHUB_ENV
+      # - name: Set Repository Name in Lowercase
+      #   id: vars
+      #   run: |
+      #     REPO_NAME="${GITHUB_REPOSITORY,,}"
+      #     echo "REPO_NAME=${REPO_NAME}" >> $GITHUB_ENV
 
-      - name: Build the Docker image
-        run: docker build -t ghcr.io/${REPO_NAME}:prd-latest .
+      # - name: Build the Docker image
+      #   run: docker build -t ghcr.io/${REPO_NAME}:prd-latest .
 
-      - name: Push the Docker image
-        run: docker push ghcr.io/${REPO_NAME}:prd-latest
+      # - name: Push the Docker image
+      #   run: docker push ghcr.io/${REPO_NAME}:prd-latest
