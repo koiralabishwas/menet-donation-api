@@ -48,6 +48,14 @@ class WebhookServiceBuilder
         return $this;
     }
 
+    public function updateCustomer(): WebhookServiceBuilder
+    {
+        $customer = $this->webhookEvent->data->object;
+        DonorRepository::updateDonor($customer);
+
+        return $this;
+    }
+
     public function storeDonation(): WebhookServiceBuilder
     {
         $invoice = $this->webhookEvent->data->object;

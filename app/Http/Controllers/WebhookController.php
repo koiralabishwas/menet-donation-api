@@ -12,19 +12,18 @@ use Stripe\Exception\UnexpectedValueException;
 
 class WebhookController extends Controller
 {
+    //    TODO: customer 自身の情報が更新されたときのdb保存のものがほしい
+    //    public static function customerUpdated??
     /**
      * @throws SignatureVerificationException
-     * @throws UnexpectedValueException
-     * @throws Exception
      */
-    public function customerSubscriptionCreated(Request $request): JsonResponse
+    public function customerUpdated(Request $request): JsonResponse
     {
-        //        FIXME: customerSubscriptioncreated時に、customerSubscrioptionUpdatedも実行されているため、初回のsubscriptionを作ったときにも、どっちも動いてしまう。！！
         $event = new WebhookService(
             $request,
-            env('STRIPE_CUSTOMER_SUBSCRIPTION_CREATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
+            env('STRIPE_CUSTOMER_UPDATED_SECRET', env('STRIPE_LOCAL_WEBHOOK_SECRET'))
         );
-        $data = $event->customerSubscriptionCreated();
+        $data = $event->customerUpdated();
 
         return response()->json([
             'status' => 201,
@@ -54,9 +53,6 @@ class WebhookController extends Controller
             'data' => $data,
         ]);
     }
-
-    //    TODO: customer 自身の情報が更新されたときのdb保存のものがほしい
-    //    public static function customerUpdated??
 
     /**
      * @throws SignatureVerificationException

@@ -17,17 +17,17 @@ class WebhookService
     }
 
     /**
-     * @throws Exception
+     * @throws SignatureVerificationException
      */
-    public function customerSubscriptionCreated(): array
+    public function customerUpdated(): array
     {
         $this->builder
             ->constructWebhookEvent()
-            ->storeSubscription();
+            ->updateCustomer();
 
         return [
             'message' => 'Success',
-            'type' => 'customer.subscription.created',
+            'type' => 'customer.updated',
         ];
     }
 
