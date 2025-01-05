@@ -12,8 +12,6 @@ use Stripe\Exception\UnexpectedValueException;
 
 class WebhookController extends Controller
 {
-    //    TODO: customer 自身の情報が更新されたときのdb保存のものがほしい
-    //    public static function customerUpdated??
     /**
      * @throws SignatureVerificationException
      */
