@@ -1,12 +1,13 @@
 name: production
 on:
   push:
-    branches: main
+    branches:
+      - main
 jobs:
   build:
-    name: Install, check, build and test
+    name: Install, build, test and deploy to Github Container Registry
     runs-on: ubuntu-latest
-    environment: api-donation.me-net.or.jp
+    environment: prd
     services:
       db:
         image: mysql:8.0
@@ -27,7 +28,8 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.x # LTS
+          cache: "npm"
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
@@ -37,12 +39,12 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: "8.4"
           extensions: mbstring, pdo_mysql, bcmath
           coverage: none
 
       - name: Copy .env
-        run: cp .env.github_actions .env
+        run: cp .env.example .env
 
       - name: Install
         run: make install
@@ -51,7 +53,7 @@ jobs:
           HUSKY: 0
 
       - name: Build
-        run: bun run build
+        run: npm run build
 
       - name: Migrate Database
         run: php artisan migrate:fresh --force
@@ -62,3 +64,16 @@ jobs:
         run: php artisan test
         env:
           DB_HOST: 127.0.0.1
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the Docker image
+        run: docker build --build-arg -t ghcr.io/${{ github.repository }}:prd-latest .
+
+      - name: Push the Docker image
+        run: docker push ghcr.io/${{ github.repository }}:prd-latest
