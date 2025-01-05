@@ -56,14 +56,14 @@ run: ## アプリを実行します
 
 
 .PHONY: run-server-with-webhook
-run-server-webhook: ## webhookを受けてサーバーを起動します
-	@php artisan serve \
-	& stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded \
-	& stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-created --events=customer.subscription.created \
+run-server-webhook:
+	php artisan serve \
+	& stripe listen --forward-to localhost:8000/api/webhooks/customer-updated --events=customer.updated \
 	& stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-updated --events=customer.subscription.updated \
 	& stripe listen --forward-to localhost:8000/api/webhooks/invoice-paid --events=invoice.paid
+	# & stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-created --events=customer.subscription.created \
+  #	& stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded \
 
 .PHONY: run-server
 run-server: ## アプリのサーバーのみを実行します
 	@php artisan serve
-

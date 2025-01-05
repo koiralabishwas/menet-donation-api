@@ -208,8 +208,11 @@ class StripeProvider extends ServiceProvider
             ]],
             'automatic_tax' => ['enabled' => false],
             'mode' => 'payment',
-            'payment_intent_data' => [
-                'metadata' => $paymentIntentMetaData,
+            'invoice_creation' => [
+                'enabled' => true,
+                'invoice_data' => [
+                    'metadata' => $paymentIntentMetaData,
+                ],
             ],
         ]);
     }

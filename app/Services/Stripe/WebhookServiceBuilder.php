@@ -3,10 +3,9 @@
 namespace App\Services\Stripe;
 
 use App\Mail\DonationRegardMailable;
-use App\Providers\StripeProvider;
 use App\Repositories\DonationRepository;
+use App\Repositories\DonorRepository;
 use App\Repositories\SubscriptionRepository;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Event;
@@ -23,8 +22,6 @@ class WebhookServiceBuilder
     private Event $webhookEvent;
 
     private object $metaData;
-
-    private bool $isSubscription;
 
     public function __construct(Request $request, string $webhookSecret)
     {
@@ -51,111 +48,54 @@ class WebhookServiceBuilder
         return $this;
     }
 
-    public function isSubscription(): self
+    public function updateCustomer(): WebhookServiceBuilder
     {
-        $invoiceId = $this->webhookEvent->data->object->invoice;
-        if ($invoiceId == null) {
-            $this->isSubscription = false;
-
-            return $this;
-        }
-
-        $invoice = StripeProvider::getInvoice($invoiceId);
-        if ($invoice == null) {
-            $this->isSubscription = false;
-        } else {
-            $this->isSubscription = true;
-        }
+        $customer = $this->webhookEvent->data->object;
+        DonorRepository::updateDonor($customer);
 
         return $this;
     }
 
-    /**
-     * @throws Exception
-     */
-    public function storeOneTimeDonation(): WebhookServiceBuilder
-    {
-        if ($this->isSubscription) {
-            return $this;
-        }
-
-        $paymentIntent = $this->webhookEvent->data->object;
-        $this->metaData = $paymentIntent->metadata;
-        DonationRepository::storeDonation($this->metaData, $paymentIntent);
-
-        return $this;
-    }
-
-    public function storeMonthlyDonation(): WebhookServiceBuilder
+    public function storeDonation(): WebhookServiceBuilder
     {
         $invoice = $this->webhookEvent->data->object;
-        $this->metaData = $invoice->subscription_details->metadata;
-        DonationRepository::storeDonation($this->metaData, $invoice);
+        if (! empty($invoice->subscription)) {
+            $this->metaData = $invoice->subscription_details->metadata;
+            DonationRepository::storeDonation($this->metaData);
+            $this->sendMail(
+                '今月分の寄付完了のお知らせ',
+                'mail.SubscriptionPaidMail'
+            );
+        } else {
+            $this->metaData = $invoice->metadata;
+            DonationRepository::storeDonation($this->metaData);
+            $this->sendMail(
+                '寄付完了のお知らせ',
+                'mail.donationRegard'
+
+            );
+        }
 
         return $this;
     }
 
-    public function storeSubscription(): WebhookServiceBuilder
-    {
-        $subscription = $this->webhookEvent->data->object;
-        $this->metaData = $subscription->metadata;
-        SubscriptionRepository::storeSubscription($subscription);
-
-        return $this;
-    }
-
-    public function updateSubscription(): WebhookServiceBuilder
+    public function createOrUpdateSubscription(): WebhookServiceBuilder
     {
         $subscription = $this->webhookEvent->data->object;
         $this->metaData = $subscription->metadata;
         $cancel_at_period_end = $subscription->cancel_at_period_end;
 
+        SubscriptionRepository::StoreOrUpdate($subscription, $cancel_at_period_end);
         if ($cancel_at_period_end) {
-            SubscriptionRepository::putCancelFlag($this->metaData->subscription_external_id);
-            $this->sendMonthlyDonationUpdatedEmail('毎月の寄付キャンセルのお知らせ', 'mail.SubscriptionCancelledMail');
+            $this->sendMail('毎月型寄付のキャンセルのお知らせ', 'mail.SubscriptionCancelledMail');
         } else {
-            SubscriptionRepository::removeCancelFlag($this->metaData->subscription_external_id);
+            $this->sendMail('毎月型寄付確定のお知らせ', 'mail.SubscriptionCreatedMail');
         }
 
         return $this;
     }
 
-    public function sendOneTimeDonationEmail(string $subject, string $mailView): void
-    {
-        if ($this->isSubscription) {
-            return;
-        }
-
-        $receipt = $this->metaData->donor_email;
-        $metaData = $this->metaData;
-        Mail::to($receipt)->send(new DonationRegardMailable(
-            $subject,
-            $mailView,
-            $metaData
-        ));
-    }
-
-    public function sendMonthlyDonationConfirmationEmail(string $subject, string $mailView): void
-    {
-        $receipt = $this->metaData->donor_email;
-        Mail::to($receipt)->send(new DonationRegardMailable(
-            $subject,
-            $mailView,
-            $this->metaData
-        ));
-    }
-
-    public function sendMonthlyDonationUpdatedEmail(string $subject, string $mailView): void
-    {
-        $receipt = $this->metaData->donor_email;
-        Mail::to($receipt)->send(new DonationRegardMailable(
-            $subject,
-            $mailView,
-            $this->metaData
-        ));
-    }
-
-    public function sendMonthlyDonationEmail(string $subject, string $mailView): void
+    public function sendMail(string $subject, string $mailView): void
     {
         $receipt = $this->metaData->donor_email;
         $metaData = $this->metaData;

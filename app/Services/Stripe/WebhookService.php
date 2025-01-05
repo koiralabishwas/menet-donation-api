@@ -5,7 +5,6 @@ namespace App\Services\Stripe;
 use Exception;
 use Illuminate\Http\Request;
 use Stripe\Exception\SignatureVerificationException;
-use Stripe\Exception\UnexpectedValueException;
 
 class WebhookService
 {
@@ -19,36 +18,16 @@ class WebhookService
 
     /**
      * @throws SignatureVerificationException
-     * @throws UnexpectedValueException
-     * @throws Exception
      */
-    public function paymentIntentSucceed(): array
-    { // memo: subscription型のpaymentの場合はイベントが発生してしまうが、回避しなければならない。
-        $this->builder
-            ->constructWebhookEvent()
-            ->isSubscription()
-            ->storeOneTimeDonation()
-            ->sendOneTimeDonationEmail('寄付完了のお知らせ', 'mail.donationRegard');
-
-        return [
-            'message' => 'Success',
-            'type' => 'payment_intent.succeeded',
-        ];
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function customerSubscriptionCreated(): array
+    public function customerUpdated(): array
     {
         $this->builder
             ->constructWebhookEvent()
-            ->storeSubscription()
-            ->sendMonthlyDonationConfirmationEmail('毎月型の寄付設定完了のお知らせ', 'mail.SubscriptionCreatedMail');
+            ->updateCustomer();
 
         return [
             'message' => 'Success',
-            'type' => 'customer.subscription.created',
+            'type' => 'customer.updated',
         ];
     }
 
@@ -59,9 +38,8 @@ class WebhookService
     {
         $this->builder
             ->constructWebhookEvent()
-            ->updateSubscription();
-
-        // TODO : updateSubscriptionInfo -> sendUpdatedInfoMail to user
+            ->createOrUpdateSubscription();
+      
         return [
             'message' => 'Success',
             'type' => 'customer.subscription.updated',
@@ -76,8 +54,7 @@ class WebhookService
     {
         $this->builder
             ->constructWebhookEvent()
-            ->storeMonthlyDonation()
-            ->sendMonthlyDonationEmail('今月分の寄付完了のお知らせ', 'mail.SubscriptionPaidMail');
+            ->storeDonation();
 
         return [
             'message' => 'Success',
