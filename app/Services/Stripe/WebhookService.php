@@ -38,7 +38,7 @@ class WebhookService
     {
         $this->builder
             ->constructWebhookEvent()
-            ->updateSubscription();
+            ->createOrUpdateSubscription();
 
         return [
             'message' => 'Success',

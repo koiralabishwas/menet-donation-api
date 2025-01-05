@@ -24,6 +24,7 @@ class Subscription extends Model
         'donation_project',
         'amount',
         'currency',
+        'is_cancelled',
     ];
 
     protected $casts = [

@@ -4,6 +4,7 @@ namespace App\Services\Stripe;
 
 use App\Mail\DonationRegardMailable;
 use App\Repositories\DonationRepository;
+use App\Repositories\DonorRepository;
 use App\Repositories\SubscriptionRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -70,20 +71,7 @@ class WebhookServiceBuilder
         return $this;
     }
 
-    public function storeSubscription(): WebhookServiceBuilder
-    {
-        $subscription = $this->webhookEvent->data->object;
-        $this->metaData = $subscription->metadata;
-        SubscriptionRepository::storeSubscription($subscription);
-        $this->sendMail(
-            '毎月型の寄付設定完了のお知らせ',
-            'mail.SubscriptionCreatedMail'
-        );
-
-        return $this;
-    }
-
-    public function updateSubscription(): WebhookServiceBuilder
+    public function createOrUpdateSubscription(): WebhookServiceBuilder
     {
         $subscription = $this->webhookEvent->data->object;
         $this->metaData = $subscription->metadata;
@@ -91,14 +79,9 @@ class WebhookServiceBuilder
 
         SubscriptionRepository::StoreOrUpdate($subscription, $cancel_at_period_end);
         if ($cancel_at_period_end) {
-            //            SubscriptionRepository::setIsCancelled($this->metaData->subscription_external_id, $cancel_at_period_end);
-            $this->sendMail('毎月の寄付キャンセルのお知らせ', 'mail.SubscriptionCancelledMail');
+            $this->sendMail('毎月型寄付のキャンセルのお知らせ', 'mail.SubscriptionCancelledMail');
         } else {
-            //            SubscriptionRepository::setIsCancelled($this->metaData->subscription_external_id, $cancel_at_period_end);
-            $this->sendMail(
-                '寄付再開のお知らせ',
-                'mail.SubscriptionCreatedMail'
-            );
+            $this->sendMail('毎月型寄付確定のお知らせ', 'mail.SubscriptionCreatedMail');
         }
 
         return $this;

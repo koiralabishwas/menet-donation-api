@@ -34,6 +34,8 @@ class WebhookController extends Controller
     }
 
     /**
+     * CustomerSubscriptionCreatedもこの関数が対応している。
+     *
      * @throws SignatureVerificationException
      */
     public function customerSubscriptionUpdated(Request $request): JsonResponse
