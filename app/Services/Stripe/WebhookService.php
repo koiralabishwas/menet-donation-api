@@ -39,7 +39,7 @@ class WebhookService
         $this->builder
             ->constructWebhookEvent()
             ->createOrUpdateSubscription();
-      
+
         return [
             'message' => 'Success',
             'type' => 'customer.subscription.updated',

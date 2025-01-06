@@ -5,7 +5,7 @@ help: ## help 表示 `make help` でタスクの一覧を確認できます
 
 .PHONY: install
 install: ## インストールします
-	@npm install
+	@bun install
 	@composer install
 
 .PHONY: update
@@ -48,16 +48,22 @@ show-logs: ## show laravel.log
 	@echo "!!laravel-Logs!! => check for error"
 	@cat storage/logs/laravel.log
 
+.PHONY: run
+run: ## アプリを実行します
+	@bun install
+	@bun run build
+	@composer run dev
+
+
 .PHONY: run-server-with-webhook
 run-server-webhook:
 	php artisan serve \
 	& stripe listen --forward-to localhost:8000/api/webhooks/customer-updated --events=customer.updated \
 	& stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-updated --events=customer.subscription.updated \
 	& stripe listen --forward-to localhost:8000/api/webhooks/invoice-paid --events=invoice.paid
-	#& stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-created --events=customer.subscription.created \
-#	& stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded \
+	# & stripe listen --forward-to localhost:8000/api/webhooks/customer-subscription-created --events=customer.subscription.created \
+  #	& stripe listen --forward-to localhost:8000/api/webhooks/payment-intent-succeed --events=payment_intent.succeeded \
 
 .PHONY: run-server
-run-server: ## アプリを実行します
+run-server: ## アプリのサーバーのみを実行します
 	@php artisan serve
-

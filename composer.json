@@ -9,6 +9,7 @@
         "bensampo/laravel-enum": "^6.11",
         "darkaonline/l5-swagger": "^8.6",
         "google/apiclient": "^2.18",
+        "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^11.9",
         "laravel/pail": "^1.2",
         "laravel/sanctum": "^4.0",

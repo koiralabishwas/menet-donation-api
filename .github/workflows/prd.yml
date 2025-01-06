@@ -1,0 +1,79 @@
+name: production
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Install, build, test and deploy to Github Container Registry
+    runs-on: ubuntu-latest
+    environment: prd
+    services:
+      db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: ""
+          MYSQL_DATABASE: donation
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, pdo_mysql, bcmath
+          coverage: none
+
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Install
+        run: make install
+        env:
+          # CI上では husky を動かさないようにする
+          HUSKY: 0
+
+      - name: Build
+        run: npm run build
+
+      - name: Migrate Database
+        run: php artisan migrate:fresh --force
+        env:
+          DB_HOST: 127.0.0.1
+
+      - name: Test
+        run: php artisan test
+        env:
+          DB_HOST: 127.0.0.1
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Set Repository Name in Lowercase
+      #   id: vars
+      #   run: |
+      #     REPO_NAME="${GITHUB_REPOSITORY,,}"
+      #     echo "REPO_NAME=${REPO_NAME}" >> $GITHUB_ENV
+
+      # - name: Build the Docker image
+      #   run: docker build -t ghcr.io/${REPO_NAME}:prd-latest .
+
+      # - name: Push the Docker image
+      #   run: docker push ghcr.io/${REPO_NAME}:prd-latest
